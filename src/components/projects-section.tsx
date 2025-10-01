@@ -45,10 +45,12 @@ const projects: Project[] = [
   },
   {
     id: 4,
-    title: 'Project Four',
-    description: 'A collaborative workspace app with real-time features.',
+    title: 'Kids in Motion',
+    description: 'A full-stack sports program management system for children\'s sports programs. Features event management, participant registration, volunteer coordination, and an admin dashboard with Firebase authentication and Spring Boot backend.',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDkuQKlxgbvdvYr9Ag9hzbz0CftKXqNsxzzzJzGjDPpvGUY9cYtYWQoTBxrgmDyfThzkCOmljVkwLF82mboylBallQKDqmbDPTx61quNkUrY6Xapk8WOcUG7_U1Czwi-twKwIc2dTUSCsvkwJw3B_VrJ1g4xkci0zqPyNAu0D38jhFiClN_ECFo_Mvmicl0awpNugUb-U2hHugNKYlD9bBXtoOid2ELT0DfFSdPYdH5Rnsc1GPe2fyF5SYRalr4Kw22iQLhzVnbSciV',
-    technologies: ['Vue.js', 'Socket.io', 'PostgreSQL'],
+    technologies: ['Spring Boot', 'React', 'Firebase', 'PostgreSQL', 'Java', 'Tailwind CSS'],
+    liveUrl: 'https://kidsinmotionpa.org',
+    githubUrl: 'https://github.com/ZuhaadRathore/KidsInMotion',
   }
 ]
 
