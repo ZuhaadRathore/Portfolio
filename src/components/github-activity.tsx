@@ -42,9 +42,6 @@ interface ContributionDay {
 }
 
 const GITHUB_USERNAME = 'ZuhaadRathore'
-// Add your GitHub Personal Access Token here (with read permissions)
-// Create one at: https://github.com/settings/tokens
-const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN
 
 const fetchContributionData = async (username: string): Promise<ContributionDay[]> => {
   const query = `
@@ -66,10 +63,17 @@ const fetchContributionData = async (username: string): Promise<ContributionDay[
   `
 
   try {
+    const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN
+
+    if (!token) {
+      console.error('GitHub token is not configured')
+      throw new Error('GitHub token is not configured')
+    }
+
     const response = await fetch('https://api.github.com/graphql', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${GITHUB_TOKEN}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
