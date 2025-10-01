@@ -32,37 +32,37 @@ export default function AboutSection() {
   return (
     <section
       ref={ref}
-      className="mb-24"
+      className="mb-16 md:mb-24"
     >
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate={isVisible ? "visible" : "hidden"}
-        className="space-y-12"
+        className="space-y-8 md:space-y-12"
       >
         <motion.div variants={itemVariants}>
-          <h2 className="font-display text-4xl sm:text-6xl uppercase tracking-tighter mb-8 text-text-light dark:text-text-dark">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl uppercase tracking-tighter mb-6 md:mb-8 text-text-light dark:text-text-dark">
             About Me
           </h2>
         </motion.div>
 
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12"
         >
           <div className="space-y-6">
             <motion.div
-              className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark p-8"
+              className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark p-5 sm:p-6 md:p-8"
               whileHover={{
                 scale: 1.02,
                 rotate: 1
               }}
               transition={{ duration: 0.2 }}
             >
-              <h3 className="font-display text-2xl uppercase tracking-tight mb-4 text-primary">
+              <h3 className="font-display text-xl sm:text-2xl uppercase tracking-tight mb-3 md:mb-4 text-primary">
                 Bio
               </h3>
-              <div className="text-text-light/80 dark:text-text-dark/80">
+              <div className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80">
                 <p>
                   I&apos;m a passionate full-stack developer who creates beautiful, functional,
                   and user-centered digital experiences. I specialize in modern web technologies
@@ -76,17 +76,17 @@ export default function AboutSection() {
 
           <div className="space-y-6">
             <motion.div
-              className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark p-8"
+              className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark p-5 sm:p-6 md:p-8"
               whileHover={{
                 scale: 1.02,
                 rotate: -1
               }}
               transition={{ duration: 0.2 }}
             >
-              <h3 className="font-display text-2xl uppercase tracking-tight mb-4 text-primary">
+              <h3 className="font-display text-xl sm:text-2xl uppercase tracking-tight mb-3 md:mb-4 text-primary">
                 What I Do
               </h3>
-              <div className="text-text-light/80 dark:text-text-dark/80 space-y-4">
+              <div className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80 space-y-3 md:space-y-4">
                 <p>
                   I create responsive, accessible, and performant user interfaces with modern frameworks
                   and best practices. I build robust APIs, databases, and server-side applications that

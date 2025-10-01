@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { Sun, Moon, Download } from 'lucide-react'
+import { Sun, Moon, Download, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navItems = [
@@ -26,6 +26,7 @@ export default function Header() {
   const [activeSection, setActiveSection] = useState('home')
   const [isScrolled, setIsScrolled] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -108,6 +109,9 @@ export default function Header() {
   const scrollToSection = (href: string) => {
     const targetId = href.replace('#', '')
 
+    // Close mobile menu when navigating
+    setIsMobileMenuOpen(false)
+
     if (targetId === 'home') {
       window.scrollTo({
         top: 0,
@@ -143,9 +147,9 @@ export default function Header() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         <div className="container mx-auto flex items-center justify-between whitespace-nowrap px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
             <motion.a
-              className="text-3xl font-display text-text-light dark:text-text-dark"
+              className="text-2xl md:text-3xl font-display text-text-light dark:text-text-dark"
               href="/"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
@@ -176,7 +180,7 @@ export default function Header() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <motion.div
               className="hidden md:flex flex-col text-right"
               initial={{ opacity: 0, x: 20 }}
@@ -194,7 +198,7 @@ export default function Header() {
             <motion.a
               href="/resume.pdf"
               download="Zuhaad_Resume.pdf"
-              className="flex items-center gap-2 px-3 py-2 bg-primary text-black font-bold uppercase text-sm border-3 border-border-light dark:border-border-dark hover:bg-yellow-300 transition-colors duration-200 shadow-brutal-light dark:shadow-brutal-dark"
+              className="hidden sm:flex items-center gap-2 px-3 py-2 bg-primary text-black font-bold uppercase text-sm border-3 border-border-light dark:border-border-dark hover:bg-yellow-300 transition-colors duration-200 shadow-brutal-light dark:shadow-brutal-dark"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, x: 20 }}
@@ -203,7 +207,7 @@ export default function Header() {
               title="Download Resume"
             >
               <Download className="h-4 w-4" />
-              <span className="hidden sm:inline">Resume</span>
+              <span>Resume</span>
             </motion.a>
 
             <motion.button
@@ -246,8 +250,89 @@ export default function Header() {
                 )}
               </AnimatePresence>
             </motion.button>
+
+            {/* Mobile Menu Toggle */}
+            <motion.button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden flex h-10 w-10 items-center justify-center bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark text-text-light dark:text-text-dark shadow-brutal-light dark:shadow-brutal-dark"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="Toggle mobile menu"
+            >
+              <AnimatePresence mode="wait">
+                {isMobileMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="h-5 w-5" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="h-5 w-5" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="md:hidden overflow-hidden border-t-3 border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark"
+            >
+              <nav className="container mx-auto px-4 py-6 space-y-4">
+                {navItems.map((item, index) => (
+                  <motion.button
+                    key={item.name}
+                    onClick={() => scrollToSection(item.href)}
+                    className="block w-full text-left py-3 px-4 font-bold uppercase tracking-wider text-text-light dark:text-text-dark hover:bg-primary hover:text-black border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200"
+                    initial={{ x: -50, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: -50, opacity: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {item.name}
+                    {activeSection === item.href.replace('#', '') && (
+                      <motion.span className="ml-2 text-primary">●</motion.span>
+                    )}
+                  </motion.button>
+                ))}
+
+                {/* Mobile Resume Button */}
+                <motion.a
+                  href="/resume.pdf"
+                  download="Zuhaad_Resume.pdf"
+                  className="sm:hidden flex items-center justify-center gap-2 w-full py-3 px-4 bg-primary text-black font-bold uppercase border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark"
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -50, opacity: 0 }}
+                  transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Download className="h-4 w-4" />
+                  Download Resume
+                </motion.a>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.header>
     </>
   )

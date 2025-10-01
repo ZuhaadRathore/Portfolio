@@ -96,7 +96,7 @@ function ProjectCard({ project }: ProjectCardProps) {
         }}
       />
       <motion.div
-        className="relative bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-3 rounded-none shadow-brutal-light dark:shadow-brutal-dark"
+        className="relative bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-2 sm:p-3 rounded-none shadow-brutal-light dark:shadow-brutal-dark"
         whileHover={{
           x: -8,
           y: -8,
@@ -116,17 +116,17 @@ function ProjectCard({ project }: ProjectCardProps) {
           <Link
             href={`/projects/${project.id}`}
             aria-label={`Open ${project.title} details`}
-            className="absolute top-3 right-3 z-10"
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10"
           >
             <motion.span
-              className="inline-flex bg-surface-light dark:bg-surface-dark border-2 border-border-light dark:border-border-dark p-2 hover:bg-primary hover:text-black shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200"
+              className="inline-flex bg-surface-light dark:bg-surface-dark border-2 border-border-light dark:border-border-dark p-1.5 sm:p-2 hover:bg-primary hover:text-black shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200"
               whileHover={{
                 scale: 1.1,
                 rotate: 5
               }}
               whileTap={{ scale: 0.95 }}
             >
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </motion.span>
           </Link>
         </div>
@@ -138,10 +138,10 @@ function ProjectCard({ project }: ProjectCardProps) {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="block"
           >
-            <h3 className="font-display text-xl uppercase text-primary mb-1 hover:text-yellow-300 transition-colors">
+            <h3 className="font-display text-lg sm:text-xl uppercase text-primary mb-1 hover:text-yellow-300 transition-colors">
               {project.title}
             </h3>
-            <p className="font-body text-sm text-text-light/70 dark:text-text-dark/70 mb-2">
+            <p className="font-body text-xs sm:text-sm text-text-light/70 dark:text-text-dark/70 mb-2 line-clamp-3">
               {project.description}
             </p>
             {project.technologies && (
@@ -195,24 +195,24 @@ export default function ProjectsSection() {
   return (
     <section
       ref={ref}
-      className="py-16"
+      className="py-8 md:py-16"
     >
       <h2
-        className="font-display text-5xl md:text-7xl uppercase tracking-tighter text-center mb-12 text-text-light dark:text-text-dark"
+        className="font-display text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-center mb-8 md:mb-12 text-text-light dark:text-text-dark"
       >
         Featured Projects
       </h2>
-      <div className="relative flex items-center justify-center gap-8 max-w-7xl mx-auto">
+      <div className="relative flex items-center justify-center gap-2 sm:gap-4 md:gap-8 max-w-7xl mx-auto">
         <button
           onClick={prevProject}
           disabled={currentIndex === 0}
-          className={`bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-4 shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200 ${
+          className={`hidden sm:flex bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-3 md:p-4 shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200 ${
             currentIndex === 0
               ? 'opacity-30 cursor-not-allowed'
               : 'hover:bg-primary hover:text-black'
           }`}
         >
-          <ChevronLeft className="h-8 w-8" />
+          <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
         </button>
 
         <div className="flex-1 max-w-4xl">
@@ -225,13 +225,41 @@ export default function ProjectsSection() {
         <button
           onClick={nextProject}
           disabled={currentIndex === projects.length - 1}
-          className={`bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-4 shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200 ${
+          className={`hidden sm:flex bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-3 md:p-4 shadow-brutal-light dark:shadow-brutal-dark transition-colors duration-200 ${
             currentIndex === projects.length - 1
               ? 'opacity-30 cursor-not-allowed'
               : 'hover:bg-primary hover:text-black'
           }`}
         >
-          <ChevronRight className="h-8 w-8" />
+          <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
+        </button>
+      </div>
+
+      {/* Mobile Navigation Buttons */}
+      <div className="sm:hidden flex justify-center gap-4 mt-6">
+        <button
+          onClick={prevProject}
+          disabled={currentIndex === 0}
+          className={`flex items-center gap-2 px-4 py-2 bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark font-bold uppercase text-sm transition-colors duration-200 ${
+            currentIndex === 0
+              ? 'opacity-30 cursor-not-allowed'
+              : 'hover:bg-primary hover:text-black'
+          }`}
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Prev
+        </button>
+        <button
+          onClick={nextProject}
+          disabled={currentIndex === projects.length - 1}
+          className={`flex items-center gap-2 px-4 py-2 bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark font-bold uppercase text-sm transition-colors duration-200 ${
+            currentIndex === projects.length - 1
+              ? 'opacity-30 cursor-not-allowed'
+              : 'hover:bg-primary hover:text-black'
+          }`}
+        >
+          Next
+          <ChevronRight className="h-4 w-4" />
         </button>
       </div>
 

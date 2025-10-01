@@ -60,7 +60,7 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center mb-24"
+      className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center"
     >
       <motion.div
         variants={containerVariants}
@@ -70,7 +70,7 @@ export default function HeroSection() {
       >
       <div className="md:col-span-2">
         <motion.h1
-          className="font-display text-6xl sm:text-8xl lg:text-9xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark"
+          className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-9xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark leading-tight"
           variants={itemVariants}
         >
           <motion.span
@@ -92,13 +92,13 @@ export default function HeroSection() {
           </motion.span>
         </motion.h1>
         <motion.p
-          className="text-lg text-text-light/80 dark:text-text-dark/80 max-w-2xl"
+          className="text-base sm:text-lg text-text-light/80 dark:text-text-dark/80 max-w-2xl"
           variants={itemVariants}
         >
           I build exceptional and accessible digital experiences for the web.
         </motion.p>
       </div>
-      <div className="relative w-full max-w-xs mx-auto md:mx-0">
+      <div className="relative w-full max-w-[250px] sm:max-w-xs mx-auto md:mx-0">
         <motion.div
           className="absolute top-2 left-2 w-full h-full bg-primary rounded-full"
           initial={{ scale: 0, rotate: 45 }}
