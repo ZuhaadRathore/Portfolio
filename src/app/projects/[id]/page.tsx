@@ -26,7 +26,7 @@ const projects: Project[] = [
     title: 'ez-tauri',
     description: 'A production-ready Tauri boilerplate with database integration, caching, authentication, and CLI tooling.',
     detailedDescription: 'ez-tauri is a production-ready boilerplate that eliminates the complexity of setting up modern desktop applications. Built with Tauri v2, it provides a complete foundation featuring PostgreSQL database integration with SQLx, Redis caching for performance optimization, robust authentication with Argon2 password hashing, comprehensive logging and tracing, rate limiting, and modular architecture. The accompanying ez-tauri-cli tool enables rapid project scaffolding with React, TypeScript, and Rust components pre-configured. Features include Docker containerization, automated testing suites, linting and formatting tools, and deployment scripts - everything needed to build scalable desktop applications.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBVPQt-SeRFPjgIqJcOmerdZV6FUh9k_blC8cIO_99GIB7jsj4-pdZISn6Zf8bfNAyd1G9BNFDshLQBtWz7sH0dcWOO3pVUvqBatrMRGmD3c8eZTjUSEH7KHDIu2DzFOXWpqr7xnSsTjzfPdebhM5PE6l8oI-_BW0gD9zXv_KHrnnUy-WftrJ1N--GJ_i4F-vJ6xsJbu73fD5_XX11z2BPBgNGPW2YkmE19mg5tcxFmbIF9J5hLCQx-pDHoL9uRg2v3D9j9CCB48IyD',
+    image: '/images/ez-tauri-cli.png',
     technologies: ['Rust', 'Tauri', 'React', 'TypeScript', 'PostgreSQL', 'Redis', 'Vite', 'TailwindCSS', 'Zustand', 'Node.js'],
     date: '2024',
     role: 'Open Source Author',
@@ -36,31 +36,30 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    title: 'Social Media Dashboard',
-    description: 'A fully functional e-commerce platform with a user-friendly interface.',
-    detailedDescription: 'A comprehensive social media management dashboard that allows users to manage multiple social platforms from a single interface. Features include post scheduling, analytics tracking, engagement monitoring, and team collaboration tools.',
+    title: 'Tetris',
+    description: 'A fully cross-platform Tetris game with native Android and iOS mobile support alongside desktop builds. Built with Tauri, React, and TypeScript for seamless gameplay across all devices.',
+    detailedDescription: 'A modern implementation of the classic Tetris game built as a truly cross-platform application using Tauri v2. The game features smooth gameplay mechanics, intuitive touch and keyboard controls, and a polished user interface built with React and TypeScript. The Tauri framework enables the application to run efficiently on Windows, macOS, and Linux desktop platforms, with full native mobile support for both Android and iOS devices. The mobile builds are fully configured and tested, providing a native app experience on smartphones and tablets with optimized touch controls. The frontend is powered by Vite for fast development and optimized builds, while the Rust backend handles system-level operations and ensures seamless cross-platform compatibility across all six platforms.',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDkuQKlxgbvdvYr9Ag9hzbz0CftKXqNsxzzzJzGjDPpvGUY9cYtYWQoTBxrgmDyfThzkCOmljVkwLF82mboylBallQKDqmbDPTx61quNkUrY6Xapk8WOcUG7_U1Czwi-twKwIc2dTUSCsvkwJw3B_VrJ1g4xkci0zqPyNAu0D38jhFiClN_ECFo_Mvmicl0awpNugUb-U2hHugNKYlD9bBXtoOid2ELT0DfFSdPYdH5Rnsc1GPe2fyF5SYRalr4Kw22iQLhzVnbSciV',
-    technologies: ['Next.js', 'MongoDB', 'Stripe', 'Chart.js', 'Socket.io'],
+    technologies: ['Tauri', 'Rust', 'React', 'TypeScript', 'Vite'],
     date: '2024',
-    role: 'Frontend Lead',
-    client: 'Social Media Agency',
-    overview: 'A comprehensive social media management platform.',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com/example/project'
+    role: 'Developer',
+    client: 'Personal Project',
+    overview: 'Classic Tetris game with native mobile support for Android & iOS, plus desktop builds.',
+    githubUrl: 'https://github.com/ZuhaadRathore/Tetris'
   },
   {
     id: 3,
-    title: 'Mobile Analytics App',
-    description: 'A mobile-first social media dashboard with analytics.',
-    detailedDescription: 'A mobile-first analytics application designed to provide comprehensive insights into user behavior and app performance. The app features real-time data visualization, custom dashboard creation, and automated reporting capabilities.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBVPQt-SeRFPjgIqJcOmerdZV6FUh9k_blC8cIO_99GIB7jsj4-pdZISn6Zf8bfNAyd1G9BNFDshLQBtWz7sH0dcWOO3pVUvqBatrMRGmD3c8eZTjUSEH7KHDIu2DzFOXWpqr7xnSsTjzfPdebhM5PE6l8oI-_BW0gD9zXv_KHrnnUy-WftrJ1N--GJ_i4F-vJ6xsJbu73fD5_XX11z2BPBgNGPW2YkmE19mg5tcxFmbIF9J5hLCQx-pDHoL9uRg2v3D9j9CCB48IyD',
-    technologies: ['React Native', 'Firebase', 'Chart.js', 'Redux'],
-    date: '2023',
-    role: 'Mobile Developer',
-    client: 'Tech Startup',
-    overview: 'Real-time analytics for mobile applications.',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com/example/project'
+    title: 'Portfolio Website',
+    description: 'Personal site built to showcase projects, writing, and live GitHub activity.',
+    detailedDescription: 'An immersive personal portfolio built with Next.js 14 that showcases selected work, GitHub activity, and interactive scroll-based animations. Features a high-contrast design, responsive layout, dynamic project filtering, and server-rendered GitHub activity powered by the GraphQL API.',
+    image: '/images/portfolio-site.svg',
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'GitHub GraphQL API', 'Vercel'],
+    date: '2024',
+    role: 'Full-Stack Developer',
+    client: 'Personal Brand',
+    overview: 'Interactive portfolio with animated sections, project deep-dives, and automated GitHub highlights.',
+    liveUrl: 'https://zuhaad.com',
+    githubUrl: 'https://github.com/ZuhaadRathore/Portfolio'
   },
   {
     id: 4,
@@ -121,16 +120,9 @@ export default function ProjectDetailsPage() {
                 alt={project.title}
                 fill
                 sizes="(max-width: 768px) 100vw, 896px"
-                className="object-cover"
+                className="object-cover object-top"
                 priority
               />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <button className="w-20 h-20 bg-black/50 backdrop-blur-sm flex items-center justify-center text-white border-3 border-white hover:bg-primary/50 transition-colors">
-                  <svg fill="currentColor" height="36px" viewBox="0 0 256 256" width="36px" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"></path>
-                  </svg>
-                </button>
-              </div>
             </div>
           </motion.div>
 

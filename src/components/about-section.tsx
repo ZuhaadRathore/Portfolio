@@ -64,7 +64,7 @@ export default function AboutSection() {
               </h3>
               <div className="text-text-light/80 dark:text-text-dark/80">
                 <p>
-                  I'm a passionate full-stack developer who creates beautiful, functional,
+                  I&apos;m a passionate full-stack developer who creates beautiful, functional,
                   and user-centered digital experiences. I specialize in modern web technologies
                   including React, Next.js, TypeScript, and Node.js, always staying current
                   with industry best practices.
