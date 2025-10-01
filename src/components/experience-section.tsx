@@ -46,10 +46,10 @@ const experiences: Experience[] = [
     id: 4,
     role: 'Freelance Software Developer',
     company: 'Self-Employed',
-    period: '2021 - Present',
+    period: '2021 - 2024',
     startYear: 2021,
-    description: 'Building custom web applications, desktop solutions, and providing technical consulting for diverse clients.',
-    current: true
+    description: 'Built custom web applications, desktop solutions, and provided technical consulting for diverse clients.',
+    current: false
   }
 ]
 
