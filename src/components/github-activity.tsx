@@ -44,72 +44,17 @@ interface ContributionDay {
 const GITHUB_USERNAME = 'ZuhaadRathore'
 
 const fetchContributionData = async (username: string): Promise<ContributionDay[]> => {
-  const query = `
-    query($username: String!) {
-      user(login: $username) {
-        contributionsCollection {
-          contributionCalendar {
-            weeks {
-              contributionDays {
-                date
-                contributionCount
-                contributionLevel
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-
   try {
-    const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN
-
-    if (!token) {
-      console.error('GitHub token is not configured')
-      throw new Error('GitHub token is not configured')
-    }
-
-    const response = await fetch('https://api.github.com/graphql', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        variables: { username }
-      })
-    })
+    const response = await fetch(`/api/github/contributions?username=${encodeURIComponent(username)}`)
 
     if (!response.ok) {
-      throw new Error(`GraphQL request failed: ${response.status}`)
+      const errorData = await response.json()
+      console.error('API error:', errorData)
+      throw new Error(`API request failed: ${response.status}`)
     }
 
     const data = await response.json()
-
-    if (data.errors) {
-      console.error('GraphQL errors:', data.errors)
-      throw new Error('GraphQL query failed')
-    }
-
-    const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks
-    const contributionDays: ContributionDay[] = []
-
-    weeks.forEach((week: any) => {
-      week.contributionDays.forEach((day: any) => {
-        contributionDays.push({
-          date: day.date,
-          count: day.contributionCount,
-          level: day.contributionLevel === 'NONE' ? 0 :
-                 day.contributionLevel === 'FIRST_QUARTILE' ? 1 :
-                 day.contributionLevel === 'SECOND_QUARTILE' ? 2 :
-                 day.contributionLevel === 'THIRD_QUARTILE' ? 3 : 4
-        })
-      })
-    })
-
-    return contributionDays
+    return data.contributionDays || []
   } catch (error) {
     console.error('Failed to fetch contribution data:', error)
     return []
