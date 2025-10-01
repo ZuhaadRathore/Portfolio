@@ -9,6 +9,7 @@ const navItems = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
   { name: 'Skills', href: '#skills' },
+  { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' }
 ]
 
@@ -57,7 +58,7 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
 
-      const sections = ['home', 'about', 'skills', 'projects']
+      const sections = ['home', 'about', 'skills', 'experience', 'projects']
       const headerOffset = 160
       const scrollPosition = window.scrollY + headerOffset
 
