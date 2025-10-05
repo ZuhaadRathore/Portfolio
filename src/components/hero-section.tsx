@@ -110,31 +110,17 @@ export default function HeroSection() {
           variants={profileVariants}
         >
           <motion.div
-            className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center"
+            className="relative w-full h-full"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           >
-            <motion.div
-              className="w-20 h-20 border-4 border-primary rounded-full flex items-center justify-center"
-              animate={{
-                rotate: [0, 5, -5, 0],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut"
-              }}
-            >
-              <svg
-                className="w-12 h-12 text-primary"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-            </motion.div>
+            <Image
+              src="/images/pfp.jpg"
+              alt="Profile Picture"
+              fill
+              className="object-cover"
+              priority
+            />
           </motion.div>
         </motion.div>
         <motion.div
