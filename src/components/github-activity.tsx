@@ -200,7 +200,7 @@ export default function GitHubActivity() {
             </h4>
             <div className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-2 sm:p-4 overflow-x-auto">
               {/* Month labels */}
-              <div className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-2 min-w-max ml-8 sm:ml-14">
+              <div className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-2 min-w-max ml-[42px] sm:ml-[58px]">
                 {(() => {
                   const weeks: ContributionDay[][] = []
                   let currentWeek: ContributionDay[] = []
