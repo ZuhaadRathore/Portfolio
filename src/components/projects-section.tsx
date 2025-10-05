@@ -38,7 +38,7 @@ const projects: Project[] = [
     id: 3,
     title: 'Portfolio Website',
     description: 'This site: a minimalist, high-contrast portfolio with animated interactions and live GitHub activity.',
-    image: '/images/portfolio-site.svg',
+    image: '/images/portfolio-page-screenshot.png',
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     liveUrl: 'https://zuhaad.com',
     githubUrl: 'https://github.com/ZuhaadRathore/Portfolio',

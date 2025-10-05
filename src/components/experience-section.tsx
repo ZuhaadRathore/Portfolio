@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { Briefcase, Calendar } from 'lucide-react'
+import { Briefcase, Calendar, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 
 interface Experience {
   id: number
@@ -12,6 +13,7 @@ interface Experience {
   startYear: number
   description: string
   current?: boolean
+  websiteUrl?: string
 }
 
 const experiences: Experience[] = [
@@ -31,7 +33,8 @@ const experiences: Experience[] = [
     period: '2024 - Present',
     startYear: 2024,
     description: 'Built and architected full-stack sports program management system using Spring Boot, React, and Firebase. Managing technical operations and infrastructure.',
-    current: true
+    current: true,
+    websiteUrl: 'https://kidsinmotionpa.org'
   },
   {
     id: 3,
@@ -40,7 +43,8 @@ const experiences: Experience[] = [
     period: '2024 - Present',
     startYear: 2024,
     description: 'Overseeing technology development and engineering teams. Driving innovation in digital product development.',
-    current: true
+    current: true,
+    websiteUrl: 'https://mythofy.net'
   },
   {
     id: 4,
@@ -149,9 +153,21 @@ export default function ExperienceSection() {
                         <h3 className="font-display text-xl sm:text-2xl md:text-3xl uppercase text-primary leading-tight">
                           {experience.role}
                         </h3>
-                        <p className="font-body font-bold text-base sm:text-lg text-text-light dark:text-text-dark">
-                          {experience.company}
-                        </p>
+                        {experience.websiteUrl ? (
+                          <Link
+                            href={experience.websiteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-body font-bold text-base sm:text-lg text-text-light dark:text-text-dark hover:text-primary transition-colors inline-flex items-center gap-1 group"
+                          >
+                            {experience.company}
+                            <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </Link>
+                        ) : (
+                          <p className="font-body font-bold text-base sm:text-lg text-text-light dark:text-text-dark">
+                            {experience.company}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -13,14 +13,13 @@ A modern, animation-rich developer portfolio built with Next.js 14, TypeScript, 
 - [Content & Customization](#content--customization)
 - [Deployment](#deployment)
 - [Accessibility & Performance](#accessibility--performance)
-- [Troubleshooting](#troubleshooting)
 - [License](#license)
 
 ## Overview
 
 The portfolio leverages Next.js 14''s App Router and TypeScript-first tooling to deliver a responsive, accessible, and immersive browsing experience. Motion design is powered by Framer Motion, while Tailwind CSS drives a cohesive visual language across light and dark modes.
 
-> Add a fresh screenshot of the live site (e.g., `public/preview.png`) and embed it here to give visitors a quick visual overview.
+![Portfolio Screenshot](public/images/portfolio-page-screenshot.png)
 
 ## Key Features
 - Modern single-page layout with anchored navigation and smooth section transitions.
@@ -124,12 +123,7 @@ For self-managed servers, build locally (`npm run build`) and serve with `npm ru
 ## Accessibility & Performance
 - Animations gracefully respect `prefers-reduced-motion` via global CSS fallbacks.
 - Semantic landmarks (header, main, footer) and keyboard-focused navigation enhance usability.
-- Optimize images in `projects-section.tsx` for faster loads, and consider replacing remote URLs with locally hosted assets when finalizing the portfolio.
-
-## Troubleshooting
-- **GitHub data missing:** Verify the token scopes, confirm the username in `src/components/github-activity.tsx`, and ensure the GitHub GraphQL API is reachable.
-- **Theme toggle lagging:** The toggle intentionally debounces transitions for 300ms; confirm `next-themes` is initialized in `src/app/layout.tsx`.
-- **Broken resume link:** Make sure a `resume.pdf` file exists in `public/`.
+- Optimized images with Next.js Image component for faster loads and better performance.
 
 ## License
 
