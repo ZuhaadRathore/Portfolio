@@ -171,36 +171,36 @@ export default function GitHubActivity() {
   return (
     <div className="space-y-6">
       <motion.div
-        className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark p-8"
+        className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark p-4 sm:p-6 md:p-8"
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-display text-2xl uppercase tracking-tight text-primary">
+        <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+          <h3 className="font-display text-lg sm:text-xl md:text-2xl uppercase tracking-tight text-primary">
             GitHub Activity
           </h3>
           <motion.a
             href={`https://github.com/${GITHUB_USERNAME}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+            className="flex items-center gap-1 sm:gap-2 text-primary hover:text-primary/80 transition-colors flex-shrink-0"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span className="text-sm font-semibold">View Profile</span>
-            <ExternalLink className="w-4 h-4" />
+            <span className="text-xs sm:text-sm font-semibold">View Profile</span>
+            <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
           </motion.a>
         </div>
 
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
-            <h4 className="font-display text-lg uppercase tracking-tight mb-4 text-text-light dark:text-text-dark">
+            <h4 className="font-display text-base sm:text-lg uppercase tracking-tight mb-3 sm:mb-4 text-text-light dark:text-text-dark">
               Contribution Activity
             </h4>
-            <div className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-4 overflow-x-auto">
+            <div className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-2 sm:p-4 overflow-x-auto">
               {/* Month labels */}
-              <div className="flex gap-1 mb-2 min-w-max ml-14">
+              <div className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-2 min-w-max ml-8 sm:ml-14">
                 {(() => {
                   const weeks: ContributionDay[][] = []
                   let currentWeek: ContributionDay[] = []
@@ -222,14 +222,14 @@ export default function GitHubActivity() {
 
                   return weeks.map((week, weekIndex) => {
                     const firstDay = week[0]
-                    if (!firstDay) return <div key={weekIndex} className="w-2.5"></div>
+                    if (!firstDay) return <div key={weekIndex} className="w-1.5 sm:w-2.5"></div>
 
                     const weekDate = new Date(firstDay.date)
                     const isFirstWeekOfMonth = weekDate.getDate() <= 7
                     const monthName = weekDate.toLocaleString('default', { month: 'short' })
 
                     return (
-                      <div key={weekIndex} className="w-2.5 text-xs text-text-light/60 dark:text-text-dark/60 text-center">
+                      <div key={weekIndex} className="w-1.5 sm:w-2.5 text-[8px] sm:text-xs text-text-light/60 dark:text-text-dark/60 text-center">
                         {isFirstWeekOfMonth ? monthName : ''}
                       </div>
                     )
@@ -238,18 +238,18 @@ export default function GitHubActivity() {
               </div>
 
               {/* Day labels */}
-              <div className="flex mb-2">
-                <div className="flex flex-col gap-1 mr-2 text-xs text-text-light/60 dark:text-text-dark/60">
-                  <div className="h-2.5"></div>
-                  <div className="h-2.5 flex items-center">Mon</div>
-                  <div className="h-2.5"></div>
-                  <div className="h-2.5 flex items-center">Wed</div>
-                  <div className="h-2.5"></div>
-                  <div className="h-2.5 flex items-center">Fri</div>
-                  <div className="h-2.5"></div>
+              <div className="flex mb-1 sm:mb-2">
+                <div className="flex flex-col gap-0.5 sm:gap-1 mr-1 sm:mr-2 text-[8px] sm:text-xs text-text-light/60 dark:text-text-dark/60">
+                  <div className="h-1.5 sm:h-2.5"></div>
+                  <div className="h-1.5 sm:h-2.5 flex items-center">Mon</div>
+                  <div className="h-1.5 sm:h-2.5"></div>
+                  <div className="h-1.5 sm:h-2.5 flex items-center">Wed</div>
+                  <div className="h-1.5 sm:h-2.5"></div>
+                  <div className="h-1.5 sm:h-2.5 flex items-center">Fri</div>
+                  <div className="h-1.5 sm:h-2.5"></div>
                 </div>
 
-                <div className="flex gap-1 min-w-max">
+                <div className="flex gap-0.5 sm:gap-1 min-w-max">
                   {/* Group contributions by weeks as GitHub does */}
                   {(() => {
                     // GitHub returns data already organized by weeks
@@ -258,7 +258,7 @@ export default function GitHubActivity() {
                     const weeks = Math.ceil(totalDays / 7)
 
                     return Array.from({ length: weeks }, (_, weekIndex) => (
-                      <div key={weekIndex} className="flex flex-col gap-1">
+                      <div key={weekIndex} className="flex flex-col gap-0.5 sm:gap-1">
                         {Array.from({ length: 7 }, (_, dayIndex) => {
                           const dataIndex = weekIndex * 7 + dayIndex
                           const day = contributions[dataIndex]
@@ -276,7 +276,7 @@ export default function GitHubActivity() {
                             return (
                               <div
                                 key={`empty-${weekIndex}-${dayIndex}`}
-                                className="w-2.5 h-2.5"
+                                className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5"
                               />
                             )
                           }
@@ -284,7 +284,7 @@ export default function GitHubActivity() {
                           return (
                             <motion.div
                               key={day.date}
-                              className={`w-2.5 h-2.5 ${levelColors[day.level]} transition-colors duration-200`}
+                              className={`w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 ${levelColors[day.level]} transition-colors duration-200`}
                               title={`${day.date}: ${day.count} contributions`}
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
@@ -302,40 +302,40 @@ export default function GitHubActivity() {
           </div>
 
           <div>
-            <h4 className="font-display text-lg uppercase tracking-tight mb-4 text-text-light dark:text-text-dark">
+            <h4 className="font-display text-base sm:text-lg uppercase tracking-tight mb-3 sm:mb-4 text-text-light dark:text-text-dark">
               Recent Repositories
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {repos.map((repo) => (
                 <motion.a
                   key={repo.id}
                   href={repo.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-4 hover:border-primary transition-colors"
+                  className="block bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 hover:border-primary transition-colors"
                   whileHover={{ scale: 1.02, y: -2 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <h5 className="font-semibold text-primary truncate">{repo.name}</h5>
-                    <div className="flex items-center gap-2 text-xs text-text-light/60 dark:text-text-dark/60">
-                      <div className="flex items-center gap-1">
+                  <div className="flex justify-between items-start mb-2 gap-2">
+                    <h5 className="font-semibold text-primary truncate text-sm sm:text-base">{repo.name}</h5>
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-xs text-text-light/60 dark:text-text-dark/60 flex-shrink-0">
+                      <div className="flex items-center gap-0.5 sm:gap-1">
                         <Star className="w-3 h-3" />
-                        {repo.stargazers_count}
+                        <span className="hidden xs:inline">{repo.stargazers_count}</span>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-0.5 sm:gap-1">
                         <GitFork className="w-3 h-3" />
-                        {repo.forks_count}
+                        <span className="hidden xs:inline">{repo.forks_count}</span>
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-text-light/70 dark:text-text-dark/70 mb-2 line-clamp-2">
+                  <p className="text-xs sm:text-sm text-text-light/70 dark:text-text-dark/70 mb-2 line-clamp-2">
                     {repo.description || 'No description available'}
                   </p>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-primary">{repo.language}</span>
-                    <span className="text-text-light/60 dark:text-text-dark/60">
-                      Updated {formatDate(repo.updated_at)}
+                  <div className="flex justify-between items-center text-xs gap-2">
+                    <span className="text-primary truncate">{repo.language}</span>
+                    <span className="text-text-light/60 dark:text-text-dark/60 flex-shrink-0 text-[10px] sm:text-xs">
+                      {formatDate(repo.updated_at)}
                     </span>
                   </div>
                 </motion.a>
@@ -344,32 +344,33 @@ export default function GitHubActivity() {
           </div>
 
           <div>
-            <h4 className="font-display text-lg uppercase tracking-tight mb-4 text-text-light dark:text-text-dark">
+            <h4 className="font-display text-base sm:text-lg uppercase tracking-tight mb-3 sm:mb-4 text-text-light dark:text-text-dark">
               Recent Activity
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {events.map((event) => (
                 <motion.div
                   key={event.id}
-                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
+                  className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <GitCommit className="w-4 h-4 text-primary flex-shrink-0" />
+                  <GitCommit className="w-3 h-3 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-text-light dark:text-text-dark">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                      <span className="text-xs sm:text-sm font-medium text-text-light dark:text-text-dark">
                         {getEventDescription(event)}
                       </span>
-                      <span className="text-xs text-primary">
+                      <span className="text-xs text-primary truncate">
                         {event.repo.name.split('/')[1]}
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-text-light/60 dark:text-text-dark/60">
-                    <Calendar className="w-3 h-3" />
-                    {formatDate(event.created_at)}
+                  <div className="flex items-center gap-0.5 sm:gap-1 text-[10px] sm:text-xs text-text-light/60 dark:text-text-dark/60 flex-shrink-0">
+                    <Calendar className="w-3 h-3 hidden sm:block" />
+                    <span className="hidden sm:inline">{formatDate(event.created_at)}</span>
+                    <span className="sm:hidden">{new Date(event.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                   </div>
                 </motion.div>
               ))}
