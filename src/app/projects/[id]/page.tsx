@@ -52,7 +52,7 @@ const projects: Project[] = [
     title: 'Portfolio Website',
     description: 'Personal site built to showcase projects, writing, and live GitHub activity.',
     detailedDescription: 'An immersive personal portfolio built with Next.js 14 that showcases selected work, GitHub activity, and interactive scroll-based animations. Features a high-contrast design, responsive layout, dynamic project filtering, and server-rendered GitHub activity powered by the GraphQL API.',
-    image: '/images/portfolio-site.svg',
+    image: '/images/portfolio-page-screenshot.png',
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'GitHub GraphQL API', 'Vercel'],
     date: '2024',
     role: 'Full-Stack Developer',
