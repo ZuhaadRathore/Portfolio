@@ -5,6 +5,7 @@ import AboutSection from '@/components/about-section'
 import SkillsSection from '@/components/skills-section'
 import ExperienceSection from '@/components/experience-section'
 import ProjectsSection from '@/components/projects-section'
+import GitHubActivity from '@/components/github-activity'
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
         </section>
         <section id="skills" className="mb-12 sm:mb-16 md:mb-20">
           <SkillsSection />
+        </section>
+        <section id="github" className="mb-12 sm:mb-16 md:mb-20">
+          <GitHubActivity />
         </section>
         <section id="projects">
           <ProjectsSection />
