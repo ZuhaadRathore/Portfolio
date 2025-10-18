@@ -23,7 +23,7 @@ const experiences: Experience[] = [
     company: 'Aequitas STEM',
     period: '2025 - Present',
     startYear: 2025,
-    description: 'Leading technical strategy and development initiatives for STEM education platform.',
+    description: 'Leading technical strategy and development initiatives for STEM education platform serving 1000+ students across 5+ schools.',
     current: true
   },
   {
@@ -32,7 +32,7 @@ const experiences: Experience[] = [
     company: 'Kids in Motion',
     period: '2024 - Present',
     startYear: 2024,
-    description: 'Built and architected full-stack sports program management system using Spring Boot, React, and Firebase. Managing technical operations and infrastructure.',
+    description: 'Built and architected full-stack sports program management system using Spring Boot, React, and Firebase. Platform has successfully hosted numerous sports drives, engaging nearly 100 kids while managing technical operations and infrastructure.',
     current: true,
     websiteUrl: 'https://kidsinmotionpa.org'
   },
@@ -42,7 +42,7 @@ const experiences: Experience[] = [
     company: 'Mythofy Inc',
     period: '2024 - Present',
     startYear: 2024,
-    description: 'Overseeing technology development and engineering teams. Driving innovation in digital product development.',
+    description: 'Leading a team of 5 developers to revolutionize the gaming space for creators and gamers. Built MythoPay, a multi-platform currency exchange service enabling creators to host stores and seamlessly connect with their favorite games.',
     current: true,
     websiteUrl: 'https://mythofy.net'
   },

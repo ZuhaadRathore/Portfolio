@@ -7,21 +7,27 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex gap-4">
             <a
-              href="#"
+              href="https://twitter.com/zuhaad_rathore"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Twitter"
               className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
             >
               <Twitter className="w-6 h-6" />
             </a>
             <a
-              href="#"
+              href="https://linkedin.com/in/zuhaad-rathore"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="LinkedIn"
               className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
             >
               <Linkedin className="w-6 h-6" />
             </a>
             <a
-              href="#"
+              href="https://github.com/ZuhaadRathore"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="GitHub"
               className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
             >

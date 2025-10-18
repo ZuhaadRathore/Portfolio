@@ -63,10 +63,11 @@ export default function AboutSection() {
               </h3>
               <div className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80">
                 <p>
-                  I&apos;m a passionate full-stack developer who creates beautiful, functional,
-                  and user-centered digital experiences. I specialize in modern web technologies
-                  including React, Next.js, TypeScript, and Node.js, always staying current
-                  with industry best practices.
+                  With over 4 years of experience, I&apos;m a passionate full-stack developer who thrives on
+                  turning complex problems into elegant solutions. My expertise spans React, Next.js, TypeScript,
+                  Rust, and Node.js—but what truly drives me is building products that make a real impact.
+                  Whether it&apos;s serving 1000+ students or empowering gaming creators, I focus on crafting
+                  digital experiences that are both technically excellent and genuinely useful.
                 </p>
               </div>
             </motion.div>
@@ -87,13 +88,16 @@ export default function AboutSection() {
               </h3>
               <div className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80 space-y-3 md:space-y-4">
                 <p>
-                  I create responsive, accessible, and performant user interfaces with modern frameworks
-                  and best practices. I build robust APIs, databases, and server-side applications that
-                  power seamless user experiences.
+                  From pixel-perfect UIs to high-performance backends, I build complete systems.
+                  My frontend work prioritizes accessibility and responsiveness, while my backend
+                  expertise includes designing robust APIs, optimizing databases, and architecting
+                  scalable infrastructure with PostgreSQL, Redis, and modern cloud platforms.
                 </p>
                 <p>
-                  My approach focuses on end-to-end development from concept to deployment, ensuring
-                  cohesive and scalable applications that meet both user needs and business objectives.
+                  I believe in owning projects end-to-end. This means not just writing code, but
+                  understanding business requirements, making architectural decisions, and shipping
+                  products that solve real problems. Currently leading technical teams and building
+                  platforms that serve thousands of users daily.
                 </p>
               </div>
             </motion.div>

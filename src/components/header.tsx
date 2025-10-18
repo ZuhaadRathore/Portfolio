@@ -2,12 +2,14 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { Sun, Moon, Download, Menu, X } from 'lucide-react'
+import { Sun, Moon, Download, Menu, X, Github, Linkedin, Twitter } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 
 const navItems = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
+  { name: 'GitHub', href: '#github' },
   { name: 'Experience', href: '#experience' },
   { name: 'Skills', href: '#skills' },
   { name: 'Projects', href: '#projects' }
@@ -18,6 +20,21 @@ const logThemeTransition = (...args: unknown[]) => {
 }
 
 const TRANSITION_DURATION = 300
+
+// Helper function to get scroll position across all browsers/devices
+const getScrollPosition = (): number => {
+  return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0
+}
+
+// Helper function to scroll to position across all browsers/devices
+const setScrollPosition = (position: number): void => {
+  window.scrollTo({ top: position, behavior: 'smooth' })
+  // Fallback for browsers that don't support scrollTo with options
+  if (getScrollPosition() === 0 && position > 0) {
+    document.documentElement.scrollTop = position
+    document.body.scrollTop = position
+  }
+}
 
 export default function Header() {
   const { theme, setTheme } = useTheme()
@@ -56,11 +73,12 @@ export default function Header() {
     const interval = setInterval(updateTime, 1000)
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      const currentScroll = getScrollPosition()
+      setIsScrolled(currentScroll > 50)
 
-      const sections = ['home', 'about', 'experience', 'skills', 'projects']
+      const sections = ['home', 'about', 'github', 'experience', 'skills', 'projects']
       const headerOffset = 160
-      const scrollPosition = window.scrollY + headerOffset
+      const scrollPosition = currentScroll + headerOffset
 
       for (const section of sections) {
         const element = document.getElementById(section)
@@ -114,22 +132,16 @@ export default function Header() {
     setIsMobileMenuOpen(false)
 
     if (targetId === 'home') {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      })
+      setScrollPosition(0)
       return
     }
 
     const element = document.getElementById(targetId)
     if (element) {
-      const headerOffset = 160
-      const elementPosition = element.offsetTop - headerOffset
-
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      })
+      const headerOffset = 100
+      const currentScroll = getScrollPosition()
+      const elementPosition = element.getBoundingClientRect().top + currentScroll - headerOffset
+      setScrollPosition(elementPosition)
     }
   }
 
@@ -182,6 +194,41 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
+            <motion.div
+              className="hidden lg:flex items-center gap-3"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Link
+                href="https://github.com/ZuhaadRathore"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+              >
+                <Github className="w-4 h-4" />
+              </Link>
+              <Link
+                href="https://linkedin.com/in/zuhaad-rathore"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+              >
+                <Linkedin className="w-4 h-4" />
+              </Link>
+              <Link
+                href="https://twitter.com/zuhaad_rathore"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+                className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+              >
+                <Twitter className="w-4 h-4" />
+              </Link>
+            </motion.div>
+
             <motion.div
               className="hidden md:flex flex-col text-right"
               initial={{ opacity: 0, x: 20 }}
@@ -330,6 +377,43 @@ export default function Header() {
                   <Download className="h-4 w-4" />
                   Download Resume
                 </motion.a>
+
+                {/* Mobile Social Links */}
+                <motion.div
+                  className="flex justify-center gap-6 pt-4 border-t-3 border-border-light dark:border-border-dark"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 20, opacity: 0 }}
+                  transition={{ duration: 0.3, delay: (navItems.length + 1) * 0.1 }}
+                >
+                  <Link
+                    href="https://github.com/ZuhaadRathore"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub"
+                    className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+                  >
+                    <Github className="w-6 h-6" />
+                  </Link>
+                  <Link
+                    href="https://linkedin.com/in/zuhaad-rathore"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+                  >
+                    <Linkedin className="w-6 h-6" />
+                  </Link>
+                  <Link
+                    href="https://twitter.com/zuhaad_rathore"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Twitter"
+                    className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+                  >
+                    <Twitter className="w-6 h-6" />
+                  </Link>
+                </motion.div>
               </nav>
             </motion.div>
           )}

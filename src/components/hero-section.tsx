@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { Github, Linkedin, Twitter } from 'lucide-react'
+import Link from 'next/link'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -79,7 +81,7 @@ export default function HeroSection() {
             animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            Digital Craftsman
+            Full-Stack
           </motion.span>
           <br />
           <motion.span
@@ -88,15 +90,62 @@ export default function HeroSection() {
             animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            &amp; Code Artisan
+            Developer
           </motion.span>
         </motion.h1>
         <motion.p
-          className="text-base sm:text-lg text-text-light/80 dark:text-text-dark/80 max-w-2xl"
+          className="text-base sm:text-lg text-text-light/80 dark:text-text-dark/80 max-w-2xl mb-6"
           variants={itemVariants}
         >
           I build exceptional and accessible digital experiences for the web.
         </motion.p>
+        <motion.div
+          className="flex gap-4"
+          variants={itemVariants}
+        >
+          <Link
+            href="https://github.com/ZuhaadRathore"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+          >
+            <motion.div
+              whileHover={{ scale: 1.2, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Github className="w-6 h-6" />
+            </motion.div>
+          </Link>
+          <Link
+            href="https://linkedin.com/in/zuhaad-rathore"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+          >
+            <motion.div
+              whileHover={{ scale: 1.2, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Linkedin className="w-6 h-6" />
+            </motion.div>
+          </Link>
+          <Link
+            href="https://twitter.com/zuhaad_rathore"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
+            className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+          >
+            <motion.div
+              whileHover={{ scale: 1.2, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Twitter className="w-6 h-6" />
+            </motion.div>
+          </Link>
+        </motion.div>
       </div>
       <div className="relative w-full max-w-[250px] sm:max-w-xs mx-auto md:mx-0">
         <motion.div

@@ -111,7 +111,7 @@ export default function GitHubActivity() {
     return (
       <div className="bg-red-50 dark:bg-red-900/20 border-3 border-red-500 p-6">
         <h3 className="font-display text-lg uppercase tracking-tight mb-2 text-red-600 dark:text-red-400">
-          GitHub Contributions
+          Recent Activity
         </h3>
         <p className="text-red-600 dark:text-red-400 text-sm">
           {error || 'No contribution data available'}
@@ -128,7 +128,7 @@ export default function GitHubActivity() {
     >
       <div className="flex items-center justify-between mb-4 gap-2">
         <h3 className="font-display text-lg sm:text-xl uppercase tracking-tight text-primary">
-          GitHub Contributions
+          Recent Activity
         </h3>
         <motion.a
           href={`https://github.com/${GITHUB_USERNAMES[0]}`}
