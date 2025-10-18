@@ -39,7 +39,7 @@ const projects: Project[] = [
     title: 'Tetris',
     description: 'A fully cross-platform Tetris game with native Android and iOS mobile support alongside desktop builds. Built with Tauri, React, and TypeScript for seamless gameplay across all devices.',
     detailedDescription: 'A modern implementation of the classic Tetris game built as a truly cross-platform application using Tauri v2. The game features smooth gameplay mechanics, intuitive touch and keyboard controls, and a polished user interface built with React and TypeScript. The Tauri framework enables the application to run efficiently on Windows, macOS, and Linux desktop platforms, with full native mobile support for both Android and iOS devices. The mobile builds are fully configured and tested, providing a native app experience on smartphones and tablets with optimized touch controls. The frontend is powered by Vite for fast development and optimized builds, while the Rust backend handles system-level operations and ensures seamless cross-platform compatibility across all six platforms.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDkuQKlxgbvdvYr9Ag9hzbz0CftKXqNsxzzzJzGjDPpvGUY9cYtYWQoTBxrgmDyfThzkCOmljVkwLF82mboylBallQKDqmbDPTx61quNkUrY6Xapk8WOcUG7_U1Czwi-twKwIc2dTUSCsvkwJw3B_VrJ1g4xkci0zqPyNAu0D38jhFiClN_ECFo_Mvmicl0awpNugUb-U2hHugNKYlD9bBXtoOid2ELT0DfFSdPYdH5Rnsc1GPe2fyF5SYRalr4Kw22iQLhzVnbSciV',
+    image: '/images/tetris.png',
     technologies: ['Tauri', 'Rust', 'React', 'TypeScript', 'Vite'],
     date: '2024',
     role: 'Developer',
@@ -290,7 +290,15 @@ export default function ProjectDetailsPage() {
             transition={{ duration: 0.6, delay: 0.9 }}
           >
             <motion.button
-              onClick={() => router.push('/#projects')}
+              onClick={() => {
+                router.push('/')
+                setTimeout(() => {
+                  const projectsSection = document.getElementById('projects')
+                  if (projectsSection) {
+                    projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }
+                }, 100)
+              }}
               className="inline-flex items-center gap-2 text-text-light/60 dark:text-text-dark/60 hover:text-primary underline underline-offset-4 decoration-text-light/30 dark:decoration-text-dark/30 hover:decoration-primary transition-all font-body"
               whileHover={{ x: -5 }}
             >

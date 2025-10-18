@@ -30,7 +30,7 @@ const projects: Project[] = [
     id: 2,
     title: 'Tetris',
     description: 'A fully cross-platform Tetris game with native Android and iOS mobile support alongside desktop builds. Built with Tauri, React, and TypeScript for seamless gameplay across all devices.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDkuQKlxgbvdvYr9Ag9hzbz0CftKXqNsxzzzJzGjDPpvGUY9cYtYWQoTBxrgmDyfThzkCOmljVkwLF82mboylBallQKDqmbDPTx61quNkUrY6Xapk8WOcUG7_U1Czwi-twKwIc2dTUSCsvkwJw3B_VrJ1g4xkci0zqPyNAu0D38jhFiClN_ECFo_Mvmicl0awpNugUb-U2hHugNKYlD9bBXtoOid2ELT0DfFSdPYdH5Rnsc1GPe2fyF5SYRalr4Kw22iQLhzVnbSciV',
+    image: '/images/tetris.png',
     technologies: ['Tauri', 'Rust', 'React', 'TypeScript', 'Vite'],
     githubUrl: 'https://github.com/ZuhaadRathore/Tetris',
   },
