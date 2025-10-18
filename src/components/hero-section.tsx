@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { Github, Linkedin, Twitter } from 'lucide-react'
+import { Github, Linkedin, Twitter, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 
 const containerVariants = {
@@ -59,10 +59,21 @@ const badgeVariants = {
 export default function HeroSection() {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.2 })
 
+  const scrollToAbout = () => {
+    const aboutSection = document.getElementById('about')
+    if (aboutSection) {
+      const headerOffset = 100
+      const elementPosition = aboutSection.getBoundingClientRect().top + window.scrollY - headerOffset
+      window.scrollTo({ top: elementPosition, behavior: 'smooth' })
+    }
+  }
+
   return (
     <section
       ref={ref}
-      className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-center"
+      className="min-h-screen flex flex-col justify-center items-center relative py-20"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-center w-full"
     >
       <motion.div
         variants={containerVariants}
@@ -187,6 +198,31 @@ export default function HeroSection() {
         </motion.div>
       </div>
       </motion.div>
+      </div>
+
+      {/* Scroll Down Indicator */}
+      <motion.button
+        onClick={scrollToAbout}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-light dark:text-text-dark hover:text-primary transition-colors cursor-pointer"
+        initial={{ opacity: 0, y: -20 }}
+        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        aria-label="Scroll to About section"
+      >
+        <span className="text-xs uppercase tracking-wider font-bold">Scroll Down</span>
+        <motion.div
+          animate={{
+            y: [0, 8, 0],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <ChevronDown className="w-6 h-6" />
+        </motion.div>
+      </motion.button>
     </section>
   )
 }
