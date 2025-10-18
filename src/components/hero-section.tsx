@@ -62,7 +62,7 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center"
+      className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-center"
     >
       <motion.div
         variants={containerVariants}
@@ -72,7 +72,7 @@ export default function HeroSection() {
       >
       <div className="md:col-span-2">
         <motion.h1
-          className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-9xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark leading-tight"
+          className="font-display text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark leading-tight"
           variants={itemVariants}
         >
           <motion.span
