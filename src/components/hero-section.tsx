@@ -73,7 +73,7 @@ export default function HeroSection() {
       ref={ref}
       className="min-h-screen flex flex-col justify-center items-center relative py-20"
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-center w-full"
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-start w-full"
     >
       <motion.div
         variants={containerVariants}
