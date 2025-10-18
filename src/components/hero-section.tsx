@@ -83,7 +83,7 @@ export default function HeroSection() {
       >
       <div className="md:col-span-2">
         <motion.h1
-          className="font-display text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark leading-tight"
+          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] uppercase tracking-tighter mb-6 text-text-light dark:text-text-dark leading-[0.9]"
           variants={itemVariants}
         >
           <motion.span
@@ -105,7 +105,7 @@ export default function HeroSection() {
           </motion.span>
         </motion.h1>
         <motion.p
-          className="text-base sm:text-lg text-text-light/80 dark:text-text-dark/80 max-w-2xl mb-6"
+          className="text-lg sm:text-xl md:text-2xl text-text-light/80 dark:text-text-dark/80 max-w-3xl mb-8"
           variants={itemVariants}
         >
           I build exceptional and accessible digital experiences for the web.
