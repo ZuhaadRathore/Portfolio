@@ -195,41 +195,6 @@ export default function Header() {
 
           <div className="flex items-center gap-2 md:gap-4">
             <motion.div
-              className="hidden lg:flex items-center gap-3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Link
-                href="https://github.com/ZuhaadRathore"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
-              >
-                <Github className="w-4 h-4" />
-              </Link>
-              <Link
-                href="https://linkedin.com/in/zuhaad-rathore"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
-              >
-                <Linkedin className="w-4 h-4" />
-              </Link>
-              <Link
-                href="https://twitter.com/zuhaad_rathore"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
-              >
-                <Twitter className="w-4 h-4" />
-              </Link>
-            </motion.div>
-
-            <motion.div
               className="hidden md:flex flex-col text-right"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
