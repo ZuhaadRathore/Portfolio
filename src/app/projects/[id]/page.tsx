@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, ExternalLink, Github, Calendar, User, Building } from 'lucide-react'
 import { motion } from 'framer-motion'
-import MermaidDiagram from '@/components/mermaid-diagram'
+import InfrastructureDiagramViewer from '@/components/infrastructure-diagram-viewer'
 import { getProjectInfrastructure } from '@/data/infrastructure-diagrams'
 
 interface Project {
@@ -253,21 +253,10 @@ export default function ProjectDetailsPage() {
                   <h3 className="font-display text-2xl md:text-3xl uppercase tracking-widest text-primary mb-6">
                     Infrastructure Architecture
                   </h3>
-                  <div className="space-y-8">
-                    {infrastructureDiagrams.map((diagram, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.8 + index * 0.2 }}
-                      >
-                        <MermaidDiagram
-                          chart={diagram.chart}
-                          title={diagram.title}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
+                  <p className="text-sm text-text-light/60 dark:text-text-dark/60 mb-4 font-body">
+                    Click the diagram to view all {infrastructureDiagrams.length} infrastructure diagrams
+                  </p>
+                  <InfrastructureDiagramViewer diagrams={infrastructureDiagrams} />
                 </div>
               )}
             </motion.div>
