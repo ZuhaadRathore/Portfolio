@@ -4,6 +4,8 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, ExternalLink, Github, Calendar, User, Building } from 'lucide-react'
 import { motion } from 'framer-motion'
+import MermaidDiagram from '@/components/mermaid-diagram'
+import { getProjectInfrastructure } from '@/data/infrastructure-diagrams'
 
 interface Project {
   id: number
@@ -83,6 +85,7 @@ export default function ProjectDetailsPage() {
   const projectId = parseInt(params.id as string)
 
   const project = projects.find(p => p.id === projectId)
+  const infrastructureDiagrams = getProjectInfrastructure(projectId)
 
   if (!project) {
     return (
@@ -239,6 +242,30 @@ export default function ProjectDetailsPage() {
                       >
                         {tech}
                       </motion.span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Infrastructure Diagrams */}
+              {infrastructureDiagrams.length > 0 && (
+                <div>
+                  <h3 className="font-display text-2xl md:text-3xl uppercase tracking-widest text-primary mb-6">
+                    Infrastructure Architecture
+                  </h3>
+                  <div className="space-y-8">
+                    {infrastructureDiagrams.map((diagram, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.8 + index * 0.2 }}
+                      >
+                        <MermaidDiagram
+                          chart={diagram.chart}
+                          title={diagram.title}
+                        />
+                      </motion.div>
                     ))}
                   </div>
                 </div>
