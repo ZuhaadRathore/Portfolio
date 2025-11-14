@@ -196,7 +196,7 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     end
 
     subgraph "Build"
-        Build[Production Build<br/>cargo tauri build]
+        BuildProd[Production Build<br/>cargo tauri build]
         Bundle[Platform Bundles<br/>.exe/.dmg/.AppImage]
     end
 
@@ -216,15 +216,15 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     Lint --> Format
     Format --> Tests
 
-    Tests --> Build
-    Build --> Bundle
+    Tests --> BuildProd
+    BuildProd --> Bundle
 
     Code --> DockerFile
     DockerFile --> DockerCompose
     DockerCompose --> Container
 
     style CLI fill:#FDC435,color:#000
-    style Build fill:#ce422b,color:#fff
+    style BuildProd fill:#ce422b,color:#fff
     style Container fill:#2496ed,color:#fff`,
       },
     ],
