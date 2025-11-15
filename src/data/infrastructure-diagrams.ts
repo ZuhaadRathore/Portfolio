@@ -3,71 +3,76 @@ export interface InfrastructureDiagram {
   chart: string
 }
 
+export interface ExpandableSection {
+  id: string
+  title: string
+  buttonLabel: string
+  description?: string
+  diagrams: InfrastructureDiagram[]
+}
+
 export interface ProjectInfrastructure {
   projectId: number
-  diagrams: InfrastructureDiagram[]
+  mainDiagram: InfrastructureDiagram
+  expandableSections: ExpandableSection[]
 }
 
 export const projectInfrastructure: ProjectInfrastructure[] = [
   // ez-tauri Infrastructure
   {
     projectId: 1,
-    diagrams: [
-      {
-        title: 'System Architecture Overview',
-        chart: `graph TB
+    mainDiagram: {
+      title: 'System Architecture Overview',
+      chart: `graph TB
     subgraph "Desktop Environment"
         User[User Desktop<br/>Windows/macOS/Linux]
     end
 
-    subgraph "Tauri Application Layer"
+    subgraph "Tauri Application"
         Frontend[React Frontend<br/>TypeScript + Vite]
         Backend[Rust Backend<br/>Tauri Core]
-        IPC[IPC Bridge<br/>Command System]
     end
 
-    subgraph "Database & Caching"
-        PostgreSQL[(PostgreSQL<br/>SQLx ORM)]
-        Redis[(Redis<br/>Caching Layer)]
+    subgraph "Data Layer"
+        PostgreSQL[(PostgreSQL<br/>Database)]
+        Redis[(Redis<br/>Cache)]
     end
 
-    subgraph "Core Features"
-        Auth[Authentication<br/>Argon2 Hashing]
-        Logger[Logging & Tracing<br/>System Monitoring]
-        RateLimit[Rate Limiting<br/>Request Control]
-    end
-
-    subgraph "Development Tools"
-        CLI[ez-tauri-cli<br/>Project Scaffolding]
-        Docker[Docker<br/>Containerization]
-        Tests[Testing Suite<br/>Automated Tests]
+    subgraph "Development"
+        CLI[ez-tauri-cli<br/>Scaffolding]
+        Docker[Docker<br/>Deployment]
     end
 
     User --> Frontend
-    Frontend <--> IPC
-    IPC <--> Backend
-
+    Frontend <--> Backend
     Backend --> PostgreSQL
     Backend --> Redis
-    Backend --> Auth
-    Backend --> Logger
-    Backend --> RateLimit
-
     CLI -.Generates.-> Frontend
     CLI -.Generates.-> Backend
     Docker -.Contains.-> PostgreSQL
     Docker -.Contains.-> Redis
-    Tests -.Validates.-> Backend
 
-    style Frontend fill:#61dafb,color:#000
-    style Backend fill:#ce422b,color:#fff
-    style PostgreSQL fill:#336791,color:#fff
-    style Redis fill:#dc382d,color:#fff
-    style CLI fill:#FDC435,color:#000`,
-      },
+    style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
+    style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style PostgreSQL fill:#336791,color:#fff,stroke:#000,stroke-width:3px
+    style Redis fill:#dc382d,color:#fff,stroke:#000,stroke-width:3px
+    style CLI fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
+    style Docker fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px
+
+    click Frontend "javascript:alert('frontend')" "Click to explore Frontend Architecture"
+    click Backend "javascript:alert('backend')" "Click to explore Backend Architecture"
+    click CLI "javascript:alert('development')" "Click to explore Development Workflow"`,
+    },
+    expandableSections: [
       {
+        id: 'frontend',
         title: 'Frontend Architecture',
-        chart: `graph TB
+        buttonLabel: 'Frontend',
+        description: 'Explore the React frontend architecture, components, and state management',
+        diagrams: [
+          {
+            title: 'Component Structure',
+            chart: `graph TB
     subgraph "React Application"
         App[App Component<br/>Main Entry]
         Router[React Router<br/>Navigation]
@@ -90,12 +95,6 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         Components[Component Styles<br/>Custom CSS]
     end
 
-    subgraph "Build System"
-        Vite[Vite<br/>Build Tool]
-        TypeScript[TypeScript<br/>Type Safety]
-        ESLint[ESLint<br/>Code Quality]
-    end
-
     App --> Router
     App --> Store
     Router --> Auth
@@ -111,17 +110,52 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     App --> Tailwind
     Dashboard --> Components
 
-    Vite --> TypeScript
-    Vite --> ESLint
+    style App fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
+    style Store fill:#443e38,color:#fff,stroke:#000,stroke-width:3px
+    style Tailwind fill:#06b6d4,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+          {
+            title: 'Build System',
+            chart: `graph LR
+    subgraph "Source"
+        TS[TypeScript Files]
+        TSX[React Components]
+        CSS[Styles]
+    end
 
-    style App fill:#61dafb,color:#000
-    style Store fill:#443e38,color:#fff
-    style Vite fill:#646cff,color:#fff
-    style Tailwind fill:#06b6d4,color:#fff`,
+    subgraph "Build Tools"
+        Vite[Vite<br/>Build Tool]
+        TypeScript[TypeScript Compiler]
+        ESLint[ESLint<br/>Linter]
+    end
+
+    subgraph "Output"
+        Bundle[JavaScript Bundle]
+        Assets[Static Assets]
+    end
+
+    TS --> TypeScript
+    TSX --> TypeScript
+    CSS --> Vite
+    TypeScript --> Vite
+    Vite --> ESLint
+    ESLint --> Bundle
+    Vite --> Assets
+
+    style Vite fill:#646cff,color:#fff,stroke:#000,stroke-width:3px
+    style TypeScript fill:#3178c6,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
       {
+        id: 'backend',
         title: 'Backend Architecture',
-        chart: `graph TB
+        buttonLabel: 'Backend',
+        description: 'Deep dive into the Rust backend, database connections, and authentication',
+        diagrams: [
+          {
+            title: 'Core Backend Services',
+            chart: `graph TB
     subgraph "Tauri Core"
         Main[Main Process<br/>Rust Entry Point]
         Commands[Command Handlers<br/>IPC Endpoints]
@@ -139,93 +173,107 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         CacheOps[Cache Operations<br/>Get/Set/Delete]
     end
 
-    subgraph "Authentication"
-        AuthService[Auth Service<br/>User Management]
-        PasswordHash[Password Hashing<br/>Argon2]
-        Sessions[Session Management<br/>Token Storage]
-    end
-
-    subgraph "Middleware"
-        Logging[Logging Middleware<br/>tracing crate]
-        RateLimiter[Rate Limiter<br/>Request Throttling]
-        ErrorHandler[Error Handler<br/>Centralized Errors]
-    end
-
     Main --> Commands
     Main --> State
     Commands --> SQLx
     Commands --> RedisClient
-    Commands --> AuthService
 
     SQLx --> Models
     Migrations --> SQLx
 
     RedisClient --> CacheOps
 
-    AuthService --> PasswordHash
-    AuthService --> Sessions
-    Sessions --> RedisClient
-
-    Commands --> Logging
-    Commands --> RateLimiter
-    Commands --> ErrorHandler
-
-    style Main fill:#ce422b,color:#fff
-    style SQLx fill:#336791,color:#fff
-    style RedisClient fill:#dc382d,color:#fff
-    style AuthService fill:#28a745,color:#fff`,
-      },
-      {
-        title: 'Development Workflow',
-        chart: `graph LR
-    subgraph "Developer"
-        Dev[Developer]
-        CLI[ez-tauri-cli<br/>Scaffolding Tool]
+    style Main fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style SQLx fill:#336791,color:#fff,stroke:#000,stroke-width:3px
+    style RedisClient fill:#dc382d,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+          {
+            title: 'Authentication System',
+            chart: `graph LR
+    subgraph "Auth Flow"
+        Login[Login Request]
+        Validate[Validate Credentials]
+        Hash[Argon2 Hashing]
+        Session[Create Session]
+        Token[JWT Token]
     end
 
-    subgraph "Local Development"
-        Code[Write Code<br/>TypeScript/Rust]
-        DevServer[Vite Dev Server<br/>localhost:5173]
-        TauriDev[Tauri Dev<br/>cargo tauri dev]
+    subgraph "Storage"
+        DB[(PostgreSQL<br/>User Data)]
+        Cache[(Redis<br/>Sessions)]
+    end
+
+    Login --> Validate
+    Validate --> DB
+    Validate --> Hash
+    Hash --> Session
+    Session --> Token
+    Session --> Cache
+
+    style Hash fill:#28a745,color:#fff,stroke:#000,stroke-width:3px
+    style Token fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
+      {
+        id: 'development',
+        title: 'Development Workflow',
+        buttonLabel: 'Development',
+        description: 'See the complete development workflow from CLI scaffolding to deployment',
+        diagrams: [
+          {
+            title: 'CLI Scaffolding',
+            chart: `graph LR
+    Dev[Developer] --> CLI[ez-tauri-cli]
+    CLI --> Init[Initialize Project]
+    Init --> Template[Choose Template]
+    Template --> Generate[Generate Files]
+
+    subgraph "Generated Structure"
+        SrcFE[src/ Frontend]
+        SrcBE[src-tauri/ Backend]
+        Config[Configuration Files]
+    end
+
+    Generate --> SrcFE
+    Generate --> SrcBE
+    Generate --> Config
+
+    style CLI fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+          {
+            title: 'Build & Deploy Pipeline',
+            chart: `graph TB
+    subgraph "Development"
+        Code[Write Code]
+        DevServer[Dev Server<br/>Vite + Tauri]
     end
 
     subgraph "Quality Assurance"
-        Lint[ESLint + Clippy<br/>Code Linting]
-        Format[Prettier + rustfmt<br/>Code Formatting]
+        Lint[Linting<br/>ESLint + Clippy]
         Tests[Tests<br/>cargo test + vitest]
     end
 
-    subgraph "Build"
-        BuildProd[Production Build<br/>cargo tauri build]
+    subgraph "Production"
+        Build[Production Build<br/>cargo tauri build]
         Bundle[Platform Bundles<br/>.exe/.dmg/.AppImage]
     end
 
-    subgraph "Docker Deployment"
-        DockerFile[Dockerfile<br/>Container Definition]
-        DockerCompose[docker-compose.yml<br/>Services Orchestration]
-        Container[Running Container<br/>PostgreSQL + Redis + App]
+    subgraph "Docker"
+        Container[Docker Container<br/>PostgreSQL + Redis]
     end
 
-    Dev --> CLI
-    CLI -.Generates.-> Code
     Code --> DevServer
-    Code --> TauriDev
-
     DevServer --> Lint
-    TauriDev --> Lint
-    Lint --> Format
-    Format --> Tests
+    Lint --> Tests
+    Tests --> Build
+    Build --> Bundle
+    Code --> Container
 
-    Tests --> BuildProd
-    BuildProd --> Bundle
-
-    Code --> DockerFile
-    DockerFile --> DockerCompose
-    DockerCompose --> Container
-
-    style CLI fill:#FDC435,color:#000
-    style BuildProd fill:#ce422b,color:#fff
-    style Container fill:#2496ed,color:#fff`,
+    style Build fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style Container fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
     ],
   },
@@ -233,227 +281,203 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
   // Tetris Infrastructure
   {
     projectId: 2,
-    diagrams: [
-      {
-        title: 'System Architecture Overview',
-        chart: `graph TB
-    subgraph "Platform Support"
-        Desktop[Desktop Platforms<br/>Windows/macOS/Linux]
-        Mobile[Mobile Platforms<br/>Android/iOS]
+    mainDiagram: {
+      title: 'System Architecture Overview',
+      chart: `graph TB
+    subgraph "Platforms"
+        Desktop[Desktop<br/>Win/Mac/Linux]
+        Mobile[Mobile<br/>Android/iOS]
     end
 
-    subgraph "Tauri Application"
-        Frontend[React Frontend<br/>Game UI + Logic]
-        Backend[Rust Backend<br/>System Integration]
-        IPC[IPC Bridge<br/>Commands & Events]
+    subgraph "Application"
+        Frontend[React Game UI<br/>TypeScript]
+        Backend[Rust Backend<br/>Tauri]
+        GameEngine[Game Engine<br/>Physics + Logic]
     end
 
-    subgraph "Game Engine"
-        GameState[Game State<br/>Board + Score]
-        GameLoop[Game Loop<br/>60 FPS Rendering]
-        Physics[Physics Engine<br/>Block Movement]
-        Collision[Collision Detection<br/>Boundary Checks]
-    end
-
-    subgraph "Input Handling"
-        Keyboard[Keyboard Input<br/>Desktop Controls]
-        Touch[Touch Input<br/>Mobile Controls]
-        Gestures[Gesture Recognition<br/>Swipe/Tap]
-    end
-
-    subgraph "Rendering"
-        Canvas[Canvas Rendering<br/>HTML5 Canvas]
-        Animation[Animation Loop<br/>requestAnimationFrame]
+    subgraph "Input"
+        Keyboard[Keyboard Controls]
+        Touch[Touch Controls]
     end
 
     Desktop --> Frontend
     Mobile --> Frontend
-
-    Frontend <--> IPC
-    IPC <--> Backend
-
-    Frontend --> GameState
-    GameState --> GameLoop
-    GameLoop --> Physics
-    Physics --> Collision
-
     Desktop --> Keyboard
     Mobile --> Touch
-    Touch --> Gestures
 
-    Keyboard --> GameState
-    Gestures --> GameState
+    Frontend <--> Backend
+    Frontend --> GameEngine
+    Keyboard --> GameEngine
+    Touch --> GameEngine
 
-    GameLoop --> Canvas
-    Canvas --> Animation
-
-    style Frontend fill:#61dafb,color:#000
-    style Backend fill:#ce422b,color:#fff
-    style GameLoop fill:#FDC435,color:#000
-    style Mobile fill:#3ddc84,color:#000`,
-      },
+    style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
+    style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style GameEngine fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
+    style Mobile fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px`,
+    },
+    expandableSections: [
       {
-        title: 'Game Architecture',
-        chart: `graph TB
-    subgraph "Game Components"
-        Board[Game Board<br/>10x20 Grid]
-        Tetromino[Tetromino<br/>Active Piece]
-        NextPiece[Next Piece<br/>Preview]
-        Score[Score System<br/>Points + Level]
+        id: 'game-engine',
+        title: 'Game Engine',
+        buttonLabel: 'Game Engine',
+        description: 'Explore the game logic, physics, and rendering system',
+        diagrams: [
+          {
+            title: 'Game State Machine',
+            chart: `graph LR
+    Start[Start Game] --> Playing[Playing State]
+    Playing --> Pause[Paused State]
+    Pause --> Playing
+    Playing --> GameOver[Game Over State]
+    GameOver --> Start
+
+    subgraph "Playing State"
+        Spawn[Spawn Piece]
+        Move[Move Piece]
+        Rotate[Rotate Piece]
+        Lock[Lock Piece]
+        Clear[Clear Lines]
     end
 
-    subgraph "Game Logic"
-        SpawnPiece[Spawn Piece<br/>Random Generation]
-        MovePiece[Move Piece<br/>Left/Right/Down]
-        RotatePiece[Rotate Piece<br/>90° Rotation]
-        LockPiece[Lock Piece<br/>Fix to Board]
-        ClearLines[Clear Lines<br/>Row Completion]
-    end
+    Playing --> Spawn
+    Spawn --> Move
+    Move --> Rotate
+    Rotate --> Lock
+    Lock --> Clear
+    Clear --> Spawn
 
+    style Playing fill:#28a745,color:#fff,stroke:#000,stroke-width:3px
+    style GameOver fill:#dc3545,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+          {
+            title: 'Rendering Pipeline',
+            chart: `graph TB
     subgraph "Game State"
-        Playing[Playing State]
-        Paused[Paused State]
-        GameOver[Game Over State]
+        Board[Game Board<br/>10x20 Grid]
+        Piece[Active Tetromino]
+        Next[Next Piece]
+        Score[Score Data]
     end
 
     subgraph "Rendering"
-        DrawBoard[Draw Board<br/>Grid + Cells]
-        DrawPiece[Draw Active Piece<br/>Current Position]
-        DrawGhost[Draw Ghost<br/>Landing Preview]
-        DrawUI[Draw UI<br/>Score + Next Piece]
+        Canvas[HTML5 Canvas]
+        DrawBoard[Draw Board]
+        DrawPiece[Draw Active Piece]
+        DrawGhost[Draw Ghost Piece]
+        DrawUI[Draw UI Elements]
     end
 
     Board --> DrawBoard
-    Tetromino --> DrawPiece
-    Tetromino --> DrawGhost
+    Piece --> DrawPiece
+    Piece --> DrawGhost
+    Next --> DrawUI
     Score --> DrawUI
-    NextPiece --> DrawUI
 
-    SpawnPiece --> Tetromino
-    Tetromino --> MovePiece
-    Tetromino --> RotatePiece
-    MovePiece --> LockPiece
-    LockPiece --> Board
-    Board --> ClearLines
-    ClearLines --> Score
-    Score --> SpawnPiece
+    DrawBoard --> Canvas
+    DrawPiece --> Canvas
+    DrawGhost --> Canvas
+    DrawUI --> Canvas
 
-    Playing --> MovePiece
-    Paused -.Resume.-> Playing
-    Playing -.Pause.-> Paused
-    LockPiece -.Check.-> GameOver
-
-    style Tetromino fill:#FDC435,color:#000
-    style Playing fill:#28a745,color:#fff
-    style GameOver fill:#dc3545,color:#fff`,
+    style Canvas fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
       {
-        title: 'Cross-Platform Build System',
-        chart: `graph TB
-    subgraph "Source Code"
-        React[React Components<br/>TypeScript]
-        Rust[Rust Backend<br/>Tauri Core]
-        Assets[Game Assets<br/>Images/Sounds]
+        id: 'cross-platform',
+        title: 'Cross-Platform Build',
+        buttonLabel: 'Build System',
+        description: 'See how the game builds for 6 different platforms',
+        diagrams: [
+          {
+            title: 'Platform Build Matrix',
+            chart: `graph TB
+    Source[Source Code<br/>React + Rust]
+
+    subgraph "Desktop Targets"
+        Win[Windows<br/>.exe + .msi]
+        Mac[macOS<br/>.app + .dmg]
+        Lin[Linux<br/>.AppImage + .deb]
+    end
+
+    subgraph "Mobile Targets"
+        And[Android<br/>.apk + .aab]
+        iOS_[iOS<br/>.ipa]
     end
 
     subgraph "Build Tools"
-        Vite[Vite<br/>Frontend Bundler]
-        Cargo[Cargo<br/>Rust Compiler]
-        TauriBuild[Tauri CLI<br/>Build Orchestrator]
+        Tauri[Tauri CLI]
+        Cargo[Cargo]
+        Vite[Vite]
     end
 
-    subgraph "Desktop Builds"
-        Windows[Windows Build<br/>.exe + .msi]
-        MacOS[macOS Build<br/>.app + .dmg]
-        Linux[Linux Build<br/>.AppImage + .deb]
-    end
+    Source --> Tauri
+    Tauri --> Cargo
+    Tauri --> Vite
 
-    subgraph "Mobile Builds"
-        Android[Android Build<br/>.apk + .aab]
-        iOS[iOS Build<br/>.ipa]
-    end
+    Tauri --> Win
+    Tauri --> Mac
+    Tauri --> Lin
+    Tauri --> And
+    Tauri --> iOS_
 
-    subgraph "Platform-Specific"
-        AndroidSDK[Android SDK<br/>NDK + Tools]
-        XcodeSDK[Xcode SDK<br/>iOS Toolchain]
-        WinSDK[Windows SDK<br/>MSVC Toolchain]
-    end
-
-    React --> Vite
-    Rust --> Cargo
-    Assets --> Vite
-
-    Vite --> TauriBuild
-    Cargo --> TauriBuild
-
-    TauriBuild --> Windows
-    TauriBuild --> MacOS
-    TauriBuild --> Linux
-    TauriBuild --> Android
-    TauriBuild --> iOS
-
-    Windows --> WinSDK
-    Android --> AndroidSDK
-    iOS --> XcodeSDK
-
-    style TauriBuild fill:#FFC131,color:#000
-    style Android fill:#3ddc84,color:#000
-    style iOS fill:#147efb,color:#fff
-    style Windows fill:#0078d4,color:#fff`,
+    style Tauri fill:#FFC131,color:#000,stroke:#000,stroke-width:3px
+    style And fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
+    style iOS_ fill:#147efb,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
       {
+        id: 'input-system',
         title: 'Input Control System',
-        chart: `graph LR
-    subgraph "Desktop Input"
-        ArrowKeys[Arrow Keys<br/>Move/Rotate]
-        SpaceBar[Space Bar<br/>Hard Drop]
-        PKey[P Key<br/>Pause]
-        EscKey[Esc Key<br/>Exit]
+        buttonLabel: 'Controls',
+        description: 'Unified input handling for keyboard and touch',
+        diagrams: [
+          {
+            title: 'Input Mapping',
+            chart: `graph LR
+    subgraph "Desktop"
+        Left[Arrow Left]
+        Right[Arrow Right]
+        Down[Arrow Down]
+        Up[Arrow Up]
+        Space[Space Bar]
     end
 
-    subgraph "Mobile Input"
-        SwipeLeft[Swipe Left<br/>Move Left]
-        SwipeRight[Swipe Right<br/>Move Right]
-        SwipeDown[Swipe Down<br/>Soft Drop]
-        Tap[Tap<br/>Rotate]
-        DoubleTap[Double Tap<br/>Hard Drop]
+    subgraph "Mobile"
+        SwipeL[Swipe Left]
+        SwipeR[Swipe Right]
+        SwipeD[Swipe Down]
+        Tap[Tap]
+        DoubleTap[Double Tap]
     end
 
-    subgraph "Input Handler"
-        EventListener[Event Listener<br/>Unified Handler]
-        InputQueue[Input Queue<br/>Command Buffer]
+    subgraph "Actions"
+        MoveLeft[Move Left]
+        MoveRight[Move Right]
+        SoftDrop[Soft Drop]
+        Rotate[Rotate]
+        HardDrop[Hard Drop]
     end
 
-    subgraph "Game Actions"
-        MoveLeft[Move Left Action]
-        MoveRight[Move Right Action]
-        RotateAction[Rotate Action]
-        DropAction[Drop Action]
-        PauseAction[Pause Action]
-    end
+    Left --> MoveLeft
+    SwipeL --> MoveLeft
 
-    ArrowKeys --> EventListener
-    SpaceBar --> EventListener
-    PKey --> EventListener
-    EscKey --> EventListener
+    Right --> MoveRight
+    SwipeR --> MoveRight
 
-    SwipeLeft --> EventListener
-    SwipeRight --> EventListener
-    SwipeDown --> EventListener
-    Tap --> EventListener
-    DoubleTap --> EventListener
+    Down --> SoftDrop
+    SwipeD --> SoftDrop
 
-    EventListener --> InputQueue
+    Up --> Rotate
+    Tap --> Rotate
 
-    InputQueue --> MoveLeft
-    InputQueue --> MoveRight
-    InputQueue --> RotateAction
-    InputQueue --> DropAction
-    InputQueue --> PauseAction
+    Space --> HardDrop
+    DoubleTap --> HardDrop
 
-    style EventListener fill:#FDC435,color:#000
-    style SwipeLeft fill:#3ddc84,color:#000
-    style ArrowKeys fill:#0078d4,color:#fff`,
+    style MoveLeft fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
+    style Rotate fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
     ],
   },
@@ -461,233 +485,175 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
   // Portfolio Website Infrastructure
   {
     projectId: 3,
-    diagrams: [
-      {
-        title: 'System Architecture Overview',
-        chart: `graph TB
-    subgraph "Client Layer"
+    mainDiagram: {
+      title: 'System Architecture Overview',
+      chart: `graph TB
+    subgraph "Users"
         Browser[Web Browser]
-        Mobile[Mobile Browser]
     end
 
-    subgraph "CDN & Hosting"
-        Vercel[Vercel CDN<br/>Primary Hosting]
-        GHPages[GitHub Pages<br/>Static Hosting]
+    subgraph "Hosting"
+        Vercel[Vercel CDN]
     end
 
-    subgraph "Application Layer"
-        NextJS[Next.js Application<br/>React 18 + TypeScript]
-        SSG[Static Site Generation<br/>Build-time Rendering]
-        API[API Routes<br/>/api/github/contributions]
+    subgraph "Application"
+        NextJS[Next.js App<br/>React + TypeScript]
+        API[API Routes]
     end
 
     subgraph "External Services"
-        GitHub[GitHub GraphQL API<br/>Contribution Data]
-        GoogleFonts[Google Fonts CDN<br/>Typography Assets]
-        Devicons[Devicons CDN<br/>Technology Icons]
-    end
-
-    subgraph "CI/CD Pipeline"
-        Actions[GitHub Actions<br/>Automated Deployment]
-        Cache[Build Cache<br/>.next/cache]
+        GitHub[GitHub API<br/>Contributions]
+        Fonts[Google Fonts]
     end
 
     Browser --> Vercel
-    Mobile --> Vercel
-    Browser -.Fallback.-> GHPages
-
     Vercel --> NextJS
-    GHPages --> SSG
-
-    NextJS --> SSG
     NextJS --> API
-
     API --> GitHub
-    NextJS --> GoogleFonts
-    NextJS --> Devicons
+    NextJS --> Fonts
 
-    Actions --> Vercel
-    Actions --> GHPages
-    Actions --> Cache
-
-    style NextJS fill:#0070f3,color:#fff
-    style Vercel fill:#000,color:#fff
-    style GitHub fill:#333,color:#fff
-    style Actions fill:#2088ff,color:#fff`,
-      },
+    style NextJS fill:#0070f3,color:#fff,stroke:#000,stroke-width:3px
+    style Vercel fill:#000,color:#fff,stroke:#FDC435,stroke-width:3px
+    style GitHub fill:#333,color:#fff,stroke:#000,stroke-width:3px`,
+    },
+    expandableSections: [
       {
+        id: 'frontend',
         title: 'Frontend Architecture',
-        chart: `graph TB
-    subgraph "App Router"
-        Layout[app/layout.tsx<br/>Root Layout]
-        Home[app/page.tsx<br/>Home Page]
-        ProjectDetail[app/projects/[id]/page.tsx<br/>Dynamic Project Pages]
-        APIRoute[app/api/github/contributions/route.ts<br/>GitHub API Proxy]
+        buttonLabel: 'Frontend',
+        description: 'Component structure and styling system',
+        diagrams: [
+          {
+            title: 'Page Structure',
+            chart: `graph TB
+    Layout[Root Layout<br/>Metadata + Themes]
+
+    subgraph "Home Page"
+        Header[Header<br/>Nav + Theme Toggle]
+        Hero[Hero Section]
+        About[About Section]
+        Skills[Skills Section]
+        Experience[Experience Section]
+        Projects[Projects Section]
+        GitHub[GitHub Activity]
+        Footer[Footer]
     end
 
-    subgraph "Component Tree"
-        ThemeProvider[ThemeProvider<br/>next-themes Context]
-        Header[Header Component<br/>Navigation + Theme Toggle]
-        Hero[Hero Section<br/>Full-screen Landing]
-        About[About Section<br/>Developer Bio]
-        Skills[Skills Section<br/>Technology Grid]
-        Experience[Experience Section<br/>Timeline Carousel]
-        Projects[Projects Section<br/>Featured Projects Gallery]
-        GitHubActivity[GitHub Activity<br/>Contribution Heatmap]
-        Footer[Footer<br/>Social Links]
+    subgraph "Project Pages"
+        ProjectDetail[Project Detail Page<br/>Dynamic Routes]
     end
 
-    subgraph "Hooks & Utilities"
-        ScrollReveal[useScrollReveal Hook<br/>Intersection Observer]
-        FramerMotion[Framer Motion<br/>Animation Engine]
+    Layout --> Header
+    Layout --> Hero
+    Layout --> About
+    Layout --> Skills
+    Layout --> Experience
+    Layout --> Projects
+    Layout --> GitHub
+    Layout --> Footer
+    Layout --> ProjectDetail
+
+    style Layout fill:#0070f3,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+          {
+            title: 'Styling System',
+            chart: `graph LR
+    subgraph "Theme"
+        Light[Light Mode]
+        Dark[Dark Mode]
+        Toggle[Theme Toggle]
     end
 
-    subgraph "Styling Layer"
+    subgraph "Styling"
         Tailwind[Tailwind CSS<br/>Utility Classes]
-        GlobalCSS[globals.css<br/>Custom Styles]
-        Theme[Theme Config<br/>Light/Dark Mode]
+        Custom[Custom Styles<br/>globals.css]
     end
 
-    Layout --> ThemeProvider
-    ThemeProvider --> Home
-    ThemeProvider --> ProjectDetail
+    subgraph "Design Tokens"
+        Colors[Color Palette<br/>Yellow Primary]
+        Fonts[Typography<br/>Bebas + Roboto Mono]
+        Shadows[Brutal Shadows]
+    end
 
-    Home --> Header
-    Home --> Hero
-    Home --> About
-    Home --> Skills
-    Home --> Experience
-    Home --> Projects
-    Home --> GitHubActivity
-    Home --> Footer
+    Toggle --> Light
+    Toggle --> Dark
 
-    GitHubActivity --> APIRoute
+    Light --> Tailwind
+    Dark --> Tailwind
 
-    Hero --> ScrollReveal
-    About --> ScrollReveal
-    Skills --> ScrollReveal
-    Experience --> ScrollReveal
-    Projects --> ScrollReveal
+    Tailwind --> Colors
+    Tailwind --> Fonts
+    Tailwind --> Shadows
 
-    ScrollReveal --> FramerMotion
+    Custom --> Tailwind
 
-    Header --> Theme
-    ThemeProvider --> Theme
-    Theme --> Tailwind
-    GlobalCSS --> Tailwind
-
-    style Layout fill:#0070f3,color:#fff
-    style ThemeProvider fill:#61dafb,color:#000
-    style Tailwind fill:#06b6d4,color:#fff`,
+    style Tailwind fill:#06b6d4,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
       {
-        title: 'Build & Deployment Pipeline',
-        chart: `graph TB
-    subgraph "Source Control"
-        Dev[Developer]
-        Git[Git Repository]
-        MainBranch[main branch]
-    end
+        id: 'deployment',
+        title: 'Build & Deployment',
+        buttonLabel: 'Deployment',
+        description: 'CI/CD pipeline and hosting infrastructure',
+        diagrams: [
+          {
+            title: 'GitHub Actions Pipeline',
+            chart: `graph TB
+    Push[Push to main] --> Actions[GitHub Actions]
 
-    subgraph "CI/CD Triggers"
-        PushTrigger[Push to main]
-    end
+    Actions --> Checkout[Checkout Code]
+    Checkout --> Setup[Setup Node.js]
+    Setup --> Cache[Restore Cache]
+    Cache --> Install[npm ci]
+    Install --> Build[next build]
+    Build --> Upload[Upload Artifact]
 
-    subgraph "GitHub Actions Workflow"
-        Checkout[Checkout Code<br/>actions/checkout@v4]
-        SetupNode[Setup Node.js 20<br/>with npm cache]
-        RestoreCache[Restore Build Cache<br/>.next/cache]
-        InstallDeps[Install Dependencies<br/>npm ci]
-        Build[Build Application<br/>next build]
-        Upload[Upload Artifact<br/>./out directory]
-    end
+    Upload --> Vercel[Deploy to Vercel]
+    Upload --> GHPages[Deploy to GitHub Pages]
 
-    subgraph "Deployment Targets"
-        GHPagesDeploy[Deploy to GitHub Pages<br/>actions/deploy-pages@v4]
-        VercelDeploy[Deploy to Vercel<br/>Automatic Integration]
-    end
-
-    subgraph "Build Outputs"
-        NextBuild[.next/ directory<br/>Next.js build artifacts]
-        StaticExport[out/ directory<br/>Static HTML/CSS/JS]
-    end
-
-    subgraph "Production Environments"
-        GHPages[GitHub Pages]
-        Vercel[Vercel Production<br/>zuhaad.com]
-    end
-
-    Dev --> Git
-    Git --> MainBranch
-    MainBranch --> PushTrigger
-    PushTrigger --> Checkout
-
-    Checkout --> SetupNode
-    SetupNode --> RestoreCache
-    RestoreCache --> InstallDeps
-    InstallDeps --> Build
-
-    Build --> NextBuild
-    Build --> StaticExport
-
-    NextBuild --> Upload
-    StaticExport --> Upload
-
-    Upload --> GHPagesDeploy
-    Upload --> VercelDeploy
-
-    GHPagesDeploy --> GHPages
-    VercelDeploy --> Vercel
-
-    style Build fill:#0070f3,color:#fff
-    style Vercel fill:#000,color:#fff
-    style Checkout fill:#2088ff,color:#fff`,
+    style Actions fill:#2088ff,color:#fff,stroke:#000,stroke-width:3px
+    style Vercel fill:#000,color:#fff,stroke:#FDC435,stroke-width:3px`,
+          },
+        ],
       },
       {
+        id: 'integrations',
         title: 'External Integrations',
-        chart: `graph LR
-    subgraph "Portfolio Application"
-        App[Next.js Application]
-        APIProxy[API Route<br/>/api/github/contributions]
-        Components[React Components]
+        buttonLabel: 'Integrations',
+        description: 'GitHub API and external services',
+        diagrams: [
+          {
+            title: 'GitHub Integration',
+            chart: `graph LR
+    subgraph "Application"
+        Component[GitHub Activity Component]
+        API[API Route<br/>/api/github/contributions]
     end
 
-    subgraph "GitHub Integration"
-        GitHubAPI[GitHub GraphQL API<br/>api.github.com/graphql]
-        Auth[Bearer Token Auth<br/>GITHUB_TOKEN]
-        Account1[ZuhaadRathore<br/>Primary Account]
-        Account2[Archontas123<br/>Secondary Account]
-        ContribData[Contribution Calendar<br/>Weekly Breakdown]
+    subgraph "GitHub"
+        GraphQL[GraphQL API]
+        Account1[ZuhaadRathore]
+        Account2[Archontas123]
     end
 
-    subgraph "CDN Services"
-        GoogleFonts[Google Fonts CDN<br/>Typography]
-        Devicons[Devicons CDN<br/>Technology Icons]
-    end
+    Component --> API
+    API --> GraphQL
+    GraphQL --> Account1
+    GraphQL --> Account2
 
-    Components --> APIProxy
-    APIProxy --> Auth
-    Auth --> GitHubAPI
+    Account1 --> Component
+    Account2 --> Component
 
-    GitHubAPI --> Account1
-    GitHubAPI --> Account2
-    Account1 --> ContribData
-    Account2 --> ContribData
-    ContribData --> Components
-
-    Components --> GoogleFonts
-    Components --> Devicons
-
-    style GitHubAPI fill:#333,color:#fff
-    style GoogleFonts fill:#4285f4,color:#fff
-    style Auth fill:#28a745,color:#fff`,
+    style GraphQL fill:#333,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+        ],
       },
     ],
   },
 ]
 
-// Helper function to get infrastructure diagrams for a project
-export function getProjectInfrastructure(projectId: number): InfrastructureDiagram[] {
-  const project = projectInfrastructure.find((p) => p.projectId === projectId)
-  return project?.diagrams || []
+// Helper function to get infrastructure for a project
+export function getProjectInfrastructure(projectId: number): ProjectInfrastructure | undefined {
+  return projectInfrastructure.find((p) => p.projectId === projectId)
 }
