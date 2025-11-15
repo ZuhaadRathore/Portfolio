@@ -98,39 +98,49 @@ export default function ClickableMermaidDiagram({
       setExpandedSection((current) => (current === sectionId ? null : sectionId))
     }
 
-    const listeners: Array<{ element: Element; handler: EventListener }> = []
+    // Small delay to ensure SVG is fully rendered in DOM
+    const timeoutId = setTimeout(() => {
+      if (!containerRef.current) return
 
-    clickableSections.forEach((section) => {
-      // Try multiple selectors to find the node
-      const selectors = [
-        `#${diagramIdRef.current} .node[id$="${section.id}"]`,
-        `#${diagramIdRef.current} [id*="flowchart-${section.id}"]`,
-        `#${diagramIdRef.current} g[id*="${section.id}"]`,
-      ]
+      const listeners: Array<{ element: Element; handler: EventListener }> = []
 
-      for (const selector of selectors) {
-        const nodeElement = containerRef.current?.querySelector(selector)
-        if (nodeElement) {
-          const handler = (e: Event) => {
-            e.stopPropagation()
-            handleNodeClick(section.id)
+      clickableSections.forEach((section) => {
+        // Try multiple selectors to find the node
+        const selectors = [
+          `#${diagramIdRef.current} .node[id$="${section.id}"]`,
+          `#${diagramIdRef.current} [id*="flowchart-${section.id}"]`,
+          `#${diagramIdRef.current} g[id*="${section.id}"]`,
+        ]
+
+        for (const selector of selectors) {
+          const nodeElement = containerRef.current?.querySelector(selector)
+          if (nodeElement) {
+            const handler = (e: Event) => {
+              e.stopPropagation()
+              e.preventDefault()
+              handleNodeClick(section.id)
+            }
+
+            nodeElement.addEventListener('click', handler, { capture: false })
+            ;(nodeElement as HTMLElement).style.cursor = 'pointer'
+            listeners.push({ element: nodeElement, handler })
+            break // Found the element, no need to try other selectors
           }
-
-          nodeElement.addEventListener('click', handler)
-          ;(nodeElement as HTMLElement).style.cursor = 'pointer'
-          listeners.push({ element: nodeElement, handler })
-          break // Found the element, no need to try other selectors
         }
-      }
-    })
-
-    // Cleanup function
-    return () => {
-      listeners.forEach(({ element, handler }) => {
-        element.removeEventListener('click', handler)
       })
+
+      // Store listeners in a ref so they persist
+      return () => {
+        listeners.forEach(({ element, handler }) => {
+          element.removeEventListener('click', handler)
+        })
+      }
+    }, 100)
+
+    return () => {
+      clearTimeout(timeoutId)
     }
-  }, [svg, clickableSections])
+  }, [svg, clickableSections, expandedSection])
 
   if (error) {
     return (
