@@ -3,18 +3,19 @@ export interface InfrastructureDiagram {
   chart: string
 }
 
-export interface ExpandableSection {
-  id: string
+export interface ClickableSection {
+  id: string // Must match node ID in the main diagram
   title: string
-  buttonLabel: string
-  description?: string
   diagrams: InfrastructureDiagram[]
 }
 
 export interface ProjectInfrastructure {
   projectId: number
-  mainDiagram: InfrastructureDiagram
-  expandableSections: ExpandableSection[]
+  mainDiagram: {
+    title: string
+    chart: string
+  }
+  clickableSections: ClickableSection[]
 }
 
 export const projectInfrastructure: ProjectInfrastructure[] = [
@@ -52,23 +53,17 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     Docker -.Contains.-> PostgreSQL
     Docker -.Contains.-> Redis
 
-    style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
-    style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
+    style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
+    style CLI fill:#FDC435,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
     style PostgreSQL fill:#336791,color:#fff,stroke:#000,stroke-width:3px
     style Redis fill:#dc382d,color:#fff,stroke:#000,stroke-width:3px
-    style CLI fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
-    style Docker fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px
-
-    click Frontend "javascript:alert('frontend')" "Click to explore Frontend Architecture"
-    click Backend "javascript:alert('backend')" "Click to explore Backend Architecture"
-    click CLI "javascript:alert('development')" "Click to explore Development Workflow"`,
+    style Docker fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px`,
     },
-    expandableSections: [
+    clickableSections: [
       {
-        id: 'frontend',
+        id: 'Frontend',
         title: 'Frontend Architecture',
-        buttonLabel: 'Frontend',
-        description: 'Explore the React frontend architecture, components, and state management',
         diagrams: [
           {
             title: 'Component Structure',
@@ -148,10 +143,8 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         ],
       },
       {
-        id: 'backend',
+        id: 'Backend',
         title: 'Backend Architecture',
-        buttonLabel: 'Backend',
-        description: 'Deep dive into the Rust backend, database connections, and authentication',
         diagrams: [
           {
             title: 'Core Backend Services',
@@ -216,10 +209,8 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         ],
       },
       {
-        id: 'development',
+        id: 'CLI',
         title: 'Development Workflow',
-        buttonLabel: 'Development',
-        description: 'See the complete development workflow from CLI scaffolding to deployment',
         diagrams: [
           {
             title: 'CLI Scaffolding',
@@ -255,7 +246,7 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     end
 
     subgraph "Production"
-        Build[Production Build<br/>cargo tauri build]
+        BuildProd[Production Build<br/>cargo tauri build]
         Bundle[Platform Bundles<br/>.exe/.dmg/.AppImage]
     end
 
@@ -266,11 +257,11 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     Code --> DevServer
     DevServer --> Lint
     Lint --> Tests
-    Tests --> Build
-    Build --> Bundle
+    Tests --> BuildProd
+    BuildProd --> Bundle
     Code --> Container
 
-    style Build fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style BuildProd fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
     style Container fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px`,
           },
         ],
@@ -312,15 +303,15 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
 
     style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
     style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
-    style GameEngine fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
-    style Mobile fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px`,
+    style GameEngine fill:#FDC435,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
+    style Mobile fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
+    style Keyboard fill:#0078d4,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
+    style Touch fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px,cursor:pointer`,
     },
-    expandableSections: [
+    clickableSections: [
       {
-        id: 'game-engine',
-        title: 'Game Engine',
-        buttonLabel: 'Game Engine',
-        description: 'Explore the game logic, physics, and rendering system',
+        id: 'GameEngine',
+        title: 'Game Engine Architecture',
         diagrams: [
           {
             title: 'Game State Machine',
@@ -383,67 +374,51 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         ],
       },
       {
-        id: 'cross-platform',
-        title: 'Cross-Platform Build',
-        buttonLabel: 'Build System',
-        description: 'See how the game builds for 6 different platforms',
+        id: 'Keyboard',
+        title: 'Desktop Input Controls',
         diagrams: [
           {
-            title: 'Platform Build Matrix',
-            chart: `graph TB
-    Source[Source Code<br/>React + Rust]
-
-    subgraph "Desktop Targets"
-        Win[Windows<br/>.exe + .msi]
-        Mac[macOS<br/>.app + .dmg]
-        Lin[Linux<br/>.AppImage + .deb]
-    end
-
-    subgraph "Mobile Targets"
-        And[Android<br/>.apk + .aab]
-        iOS_[iOS<br/>.ipa]
-    end
-
-    subgraph "Build Tools"
-        Tauri[Tauri CLI]
-        Cargo[Cargo]
-        Vite[Vite]
-    end
-
-    Source --> Tauri
-    Tauri --> Cargo
-    Tauri --> Vite
-
-    Tauri --> Win
-    Tauri --> Mac
-    Tauri --> Lin
-    Tauri --> And
-    Tauri --> iOS_
-
-    style Tauri fill:#FFC131,color:#000,stroke:#000,stroke-width:3px
-    style And fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
-    style iOS_ fill:#147efb,color:#fff,stroke:#000,stroke-width:3px`,
-          },
-        ],
-      },
-      {
-        id: 'input-system',
-        title: 'Input Control System',
-        buttonLabel: 'Controls',
-        description: 'Unified input handling for keyboard and touch',
-        diagrams: [
-          {
-            title: 'Input Mapping',
+            title: 'Keyboard Input Mapping',
             chart: `graph LR
-    subgraph "Desktop"
+    subgraph "Keyboard Keys"
         Left[Arrow Left]
         Right[Arrow Right]
         Down[Arrow Down]
         Up[Arrow Up]
         Space[Space Bar]
+        P[P Key]
     end
 
-    subgraph "Mobile"
+    subgraph "Game Actions"
+        MoveLeft[Move Left]
+        MoveRight[Move Right]
+        SoftDrop[Soft Drop]
+        Rotate[Rotate]
+        HardDrop[Hard Drop]
+        Pause[Pause Game]
+    end
+
+    Left --> MoveLeft
+    Right --> MoveRight
+    Down --> SoftDrop
+    Up --> Rotate
+    Space --> HardDrop
+    P --> Pause
+
+    style MoveLeft fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
+    style Rotate fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
+    style HardDrop fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
+      {
+        id: 'Touch',
+        title: 'Mobile Touch Controls',
+        diagrams: [
+          {
+            title: 'Touch & Gesture Input',
+            chart: `graph LR
+    subgraph "Touch Gestures"
         SwipeL[Swipe Left]
         SwipeR[Swipe Right]
         SwipeD[Swipe Down]
@@ -451,7 +426,7 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         DoubleTap[Double Tap]
     end
 
-    subgraph "Actions"
+    subgraph "Game Actions"
         MoveLeft[Move Left]
         MoveRight[Move Right]
         SoftDrop[Soft Drop]
@@ -459,23 +434,15 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         HardDrop[Hard Drop]
     end
 
-    Left --> MoveLeft
     SwipeL --> MoveLeft
-
-    Right --> MoveRight
     SwipeR --> MoveRight
-
-    Down --> SoftDrop
     SwipeD --> SoftDrop
-
-    Up --> Rotate
     Tap --> Rotate
-
-    Space --> HardDrop
     DoubleTap --> HardDrop
 
-    style MoveLeft fill:#FDC435,color:#000,stroke:#000,stroke-width:3px
-    style Rotate fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+    style MoveLeft fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
+    style Rotate fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
+    style HardDrop fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px`,
           },
         ],
       },
@@ -512,16 +479,14 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     API --> GitHub
     NextJS --> Fonts
 
-    style NextJS fill:#0070f3,color:#fff,stroke:#000,stroke-width:3px
-    style Vercel fill:#000,color:#fff,stroke:#FDC435,stroke-width:3px
-    style GitHub fill:#333,color:#fff,stroke:#000,stroke-width:3px`,
+    style NextJS fill:#0070f3,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
+    style Vercel fill:#000,color:#fff,stroke:#FDC435,stroke-width:3px,cursor:pointer
+    style GitHub fill:#333,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer`,
     },
-    expandableSections: [
+    clickableSections: [
       {
-        id: 'frontend',
-        title: 'Frontend Architecture',
-        buttonLabel: 'Frontend',
-        description: 'Component structure and styling system',
+        id: 'NextJS',
+        title: 'Next.js Application Architecture',
         diagrams: [
           {
             title: 'Page Structure',
@@ -535,7 +500,7 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         Skills[Skills Section]
         Experience[Experience Section]
         Projects[Projects Section]
-        GitHub[GitHub Activity]
+        GitHubComp[GitHub Activity]
         Footer[Footer]
     end
 
@@ -549,7 +514,7 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     Layout --> Skills
     Layout --> Experience
     Layout --> Projects
-    Layout --> GitHub
+    Layout --> GitHubComp
     Layout --> Footer
     Layout --> ProjectDetail
 
@@ -592,13 +557,11 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         ],
       },
       {
-        id: 'deployment',
-        title: 'Build & Deployment',
-        buttonLabel: 'Deployment',
-        description: 'CI/CD pipeline and hosting infrastructure',
+        id: 'Vercel',
+        title: 'Deployment Infrastructure',
         diagrams: [
           {
-            title: 'GitHub Actions Pipeline',
+            title: 'CI/CD Pipeline',
             chart: `graph TB
     Push[Push to main] --> Actions[GitHub Actions]
 
@@ -606,29 +569,27 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     Checkout --> Setup[Setup Node.js]
     Setup --> Cache[Restore Cache]
     Cache --> Install[npm ci]
-    Install --> Build[next build]
-    Build --> Upload[Upload Artifact]
+    Install --> BuildStep[next build]
+    BuildStep --> Upload[Upload Artifact]
 
-    Upload --> Vercel[Deploy to Vercel]
+    Upload --> VercelDeploy[Deploy to Vercel]
     Upload --> GHPages[Deploy to GitHub Pages]
 
     style Actions fill:#2088ff,color:#fff,stroke:#000,stroke-width:3px
-    style Vercel fill:#000,color:#fff,stroke:#FDC435,stroke-width:3px`,
+    style VercelDeploy fill:#000,color:#fff,stroke:#FDC435,stroke-width:3px`,
           },
         ],
       },
       {
-        id: 'integrations',
-        title: 'External Integrations',
-        buttonLabel: 'Integrations',
-        description: 'GitHub API and external services',
+        id: 'GitHub',
+        title: 'GitHub API Integration',
         diagrams: [
           {
-            title: 'GitHub Integration',
+            title: 'Contribution Data Flow',
             chart: `graph LR
     subgraph "Application"
         Component[GitHub Activity Component]
-        API[API Route<br/>/api/github/contributions]
+        APIRoute[API Route<br/>/api/github/contributions]
     end
 
     subgraph "GitHub"
@@ -637,15 +598,16 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
         Account2[Archontas123]
     end
 
-    Component --> API
-    API --> GraphQL
+    Component --> APIRoute
+    APIRoute --> GraphQL
     GraphQL --> Account1
     GraphQL --> Account2
 
     Account1 --> Component
     Account2 --> Component
 
-    style GraphQL fill:#333,color:#fff,stroke:#000,stroke-width:3px`,
+    style GraphQL fill:#333,color:#fff,stroke:#000,stroke-width:3px
+    style APIRoute fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
           },
         ],
       },
