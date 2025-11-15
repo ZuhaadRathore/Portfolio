@@ -143,7 +143,7 @@ export default function ClickableMermaidDiagram({
   const currentSection = clickableSections.find((s) => s.id === expandedSection)
 
   return (
-    <div className="space-y-6">
+    <>
       {/* Main Diagram */}
       <motion.div
         className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
@@ -160,7 +160,7 @@ export default function ClickableMermaidDiagram({
         )}
         <div
           ref={containerRef}
-          className="p-6 overflow-x-auto cursor-pointer"
+          className="p-6 overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: svg }}
         />
         <div className="px-6 pb-4 text-center">
@@ -170,58 +170,62 @@ export default function ClickableMermaidDiagram({
         </div>
       </motion.div>
 
-      {/* Expanded Section */}
+      {/* Modal Popup */}
       <AnimatePresence>
         {currentSection && (
           <motion.div
-            initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
-            animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
-            exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
-            transition={{ duration: 0.4 }}
-            className="space-y-6"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setExpandedSection(null)}
           >
-            {/* Section Header */}
             <motion.div
-              className="bg-primary text-black px-6 py-4 border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark flex items-center justify-between"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              className="relative w-full max-w-6xl max-h-[90vh] bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 50 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <h4 className="font-display text-2xl md:text-3xl uppercase tracking-wider">
-                {currentSection.title}
-              </h4>
-              <button
-                onClick={() => setExpandedSection(null)}
-                className="p-2 hover:bg-black/10 transition-colors border-2 border-black"
-                aria-label="Close section"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </motion.div>
-
-            {/* Section Diagrams */}
-            <div className="space-y-6">
-              {currentSection.diagrams.map((diagram, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-                  className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
+              {/* Modal Header */}
+              <div className="bg-primary text-black px-6 py-4 border-b-3 border-border-light dark:border-border-dark flex items-center justify-between">
+                <h4 className="font-display text-xl md:text-2xl uppercase tracking-wider">
+                  {currentSection.title}
+                </h4>
+                <button
+                  onClick={() => setExpandedSection(null)}
+                  className="p-2 hover:bg-black/10 transition-colors border-2 border-black"
+                  aria-label="Close modal"
                 >
-                  <div className="bg-primary text-black px-6 py-3 border-b-3 border-border-light dark:border-border-dark">
-                    <h5 className="font-display text-lg uppercase tracking-wider">
-                      {diagram.title}
-                    </h5>
-                  </div>
-                  <DiagramRenderer chart={diagram.chart} />
-                </motion.div>
-              ))}
-            </div>
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 space-y-6">
+                {currentSection.diagrams.map((diagram, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
+                  >
+                    <div className="bg-primary text-black px-6 py-3 border-b-3 border-border-light dark:border-border-dark">
+                      <h5 className="font-display text-lg uppercase tracking-wider">
+                        {diagram.title}
+                      </h5>
+                    </div>
+                    <DiagramRenderer chart={diagram.chart} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   )
 }
 

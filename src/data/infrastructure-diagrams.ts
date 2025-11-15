@@ -56,9 +56,9 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
     style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
     style CLI fill:#FDC435,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
-    style PostgreSQL fill:#336791,color:#fff,stroke:#000,stroke-width:3px
-    style Redis fill:#dc382d,color:#fff,stroke:#000,stroke-width:3px
-    style Docker fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px`,
+    style PostgreSQL fill:#336791,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
+    style Redis fill:#dc382d,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
+    style Docker fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer`,
     },
     clickableSections: [
       {
@@ -266,6 +266,115 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
           },
         ],
       },
+      {
+        id: 'PostgreSQL',
+        title: 'PostgreSQL Database',
+        diagrams: [
+          {
+            title: 'Database Schema & Connections',
+            chart: `graph TB
+    subgraph "Application Layer"
+        Backend[Rust Backend]
+        SQLx[SQLx ORM<br/>Type-Safe Queries]
+    end
+
+    subgraph "Database"
+        PostgreSQL[(PostgreSQL<br/>Relational Database)]
+        Tables[Tables<br/>Users, Sessions, Data]
+        Indexes[Indexes<br/>Performance Optimization]
+        Constraints[Constraints<br/>Data Integrity]
+    end
+
+    subgraph "Migration System"
+        Migrations[SQL Migrations<br/>Version Control]
+        Schema[Schema Evolution<br/>Automated Updates]
+    end
+
+    Backend --> SQLx
+    SQLx --> PostgreSQL
+    PostgreSQL --> Tables
+    PostgreSQL --> Indexes
+    PostgreSQL --> Constraints
+    Migrations --> Schema
+    Schema --> PostgreSQL
+
+    style PostgreSQL fill:#336791,color:#fff,stroke:#000,stroke-width:3px
+    style SQLx fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
+      {
+        id: 'Redis',
+        title: 'Redis Cache Layer',
+        diagrams: [
+          {
+            title: 'Caching Architecture',
+            chart: `graph LR
+    subgraph "Application"
+        Backend[Rust Backend]
+        CacheLogic[Cache Logic<br/>Get/Set/Delete]
+    end
+
+    subgraph "Redis Server"
+        Redis[(Redis<br/>In-Memory Cache)]
+        Sessions[Session Data<br/>JWT Tokens]
+        TempData[Temporary Data<br/>Rate Limits]
+        Cache[Cached Queries<br/>Performance]
+    end
+
+    Backend --> CacheLogic
+    CacheLogic --> Redis
+    Redis --> Sessions
+    Redis --> TempData
+    Redis --> Cache
+
+    style Redis fill:#dc382d,color:#fff,stroke:#000,stroke-width:3px
+    style CacheLogic fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
+      {
+        id: 'Docker',
+        title: 'Docker Deployment',
+        diagrams: [
+          {
+            title: 'Container Architecture',
+            chart: `graph TB
+    subgraph "Docker Compose"
+        Compose[docker-compose.yml<br/>Service Orchestration]
+    end
+
+    subgraph "Containers"
+        AppContainer[App Container<br/>Tauri Application]
+        DBContainer[PostgreSQL Container<br/>Database Server]
+        RedisContainer[Redis Container<br/>Cache Server]
+    end
+
+    subgraph "Volumes"
+        DBVolume[DB Volume<br/>Persistent Data]
+        RedisVolume[Redis Volume<br/>Cache Persistence]
+    end
+
+    subgraph "Network"
+        AppNetwork[Internal Network<br/>Container Communication]
+    end
+
+    Compose --> AppContainer
+    Compose --> DBContainer
+    Compose --> RedisContainer
+
+    DBContainer --> DBVolume
+    RedisContainer --> RedisVolume
+
+    AppContainer --> AppNetwork
+    DBContainer --> AppNetwork
+    RedisContainer --> AppNetwork
+
+    style Compose fill:#2496ed,color:#fff,stroke:#000,stroke-width:3px
+    style AppContainer fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
     ],
   },
 
@@ -301,14 +410,114 @@ export const projectInfrastructure: ProjectInfrastructure[] = [
     Keyboard --> GameEngine
     Touch --> GameEngine
 
-    style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
-    style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style Frontend fill:#61dafb,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
+    style Backend fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
     style GameEngine fill:#FDC435,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
-    style Mobile fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
+    style Mobile fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px,cursor:pointer
     style Keyboard fill:#0078d4,color:#fff,stroke:#000,stroke-width:3px,cursor:pointer
     style Touch fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px,cursor:pointer`,
     },
     clickableSections: [
+      {
+        id: 'Frontend',
+        title: 'React Game UI',
+        diagrams: [
+          {
+            title: 'UI Components',
+            chart: `graph TB
+    subgraph "Game UI"
+        GameCanvas[Game Canvas<br/>Main Play Area]
+        Score[Score Display<br/>Points & Level]
+        NextPiece[Next Piece Preview<br/>Upcoming Tetromino]
+        Controls[Control Panel<br/>Pause/Restart]
+    end
+
+    subgraph "React Components"
+        App[App Component]
+        GameBoard[GameBoard Component]
+        HUD[HUD Component]
+        Menu[Menu Component]
+    end
+
+    App --> GameBoard
+    App --> HUD
+    App --> Menu
+
+    GameBoard --> GameCanvas
+    HUD --> Score
+    HUD --> NextPiece
+    Menu --> Controls
+
+    style App fill:#61dafb,color:#000,stroke:#000,stroke-width:3px
+    style GameCanvas fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
+      {
+        id: 'Backend',
+        title: 'Tauri Backend',
+        diagrams: [
+          {
+            title: 'System Integration',
+            chart: `graph LR
+    subgraph "Rust Backend"
+        Main[Main Process]
+        Platform[Platform APIs<br/>Window/File System]
+        Commands[Tauri Commands<br/>Game Controls]
+    end
+
+    subgraph "Frontend"
+        React[React UI]
+        GameLogic[Game Logic<br/>JavaScript]
+    end
+
+    React <--> Commands
+    Commands --> Main
+    Main --> Platform
+
+    style Main fill:#ce422b,color:#fff,stroke:#000,stroke-width:3px
+    style Commands fill:#FDC435,color:#000,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
+      {
+        id: 'Mobile',
+        title: 'Mobile Platform Support',
+        diagrams: [
+          {
+            title: 'Mobile Build Configuration',
+            chart: `graph TB
+    subgraph "Android"
+        AndroidSDK[Android SDK<br/>NDK + Build Tools]
+        APK[APK Build<br/>Android Package]
+        AAB[AAB Build<br/>App Bundle]
+    end
+
+    subgraph "iOS"
+        XcodeSDK[Xcode SDK<br/>iOS Toolchain]
+        IPA[IPA Build<br/>iOS Package]
+    end
+
+    subgraph "Mobile Features"
+        TouchInput[Touch Input<br/>Gesture Support]
+        Orientation[Screen Orientation<br/>Portrait/Landscape]
+        Performance[Performance<br/>60 FPS Native]
+    end
+
+    AndroidSDK --> APK
+    AndroidSDK --> AAB
+    XcodeSDK --> IPA
+
+    APK --> TouchInput
+    IPA --> TouchInput
+    TouchInput --> Orientation
+    Orientation --> Performance
+
+    style APK fill:#3ddc84,color:#000,stroke:#000,stroke-width:3px
+    style IPA fill:#147efb,color:#fff,stroke:#000,stroke-width:3px`,
+          },
+        ],
+      },
       {
         id: 'GameEngine',
         title: 'Game Engine Architecture',
