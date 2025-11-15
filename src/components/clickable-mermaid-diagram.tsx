@@ -31,20 +31,7 @@ export default function ClickableMermaidDiagram({
   const [svg, setSvg] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
-  const componentIdRef = useRef(`diagram-${Math.random().toString(36).substr(2, 9)}`)
-
-  useEffect(() => {
-    // Register click handlers globally
-    const componentId = componentIdRef.current
-    ;(window as any)[`${componentId}_handleNodeClick`] = (sectionId: string) => {
-      setExpandedSection(expandedSection === sectionId ? null : sectionId)
-    }
-
-    return () => {
-      // Cleanup
-      delete (window as any)[`${componentId}_handleNodeClick`]
-    }
-  }, [expandedSection])
+  const diagramIdRef = useRef<string>('')
 
   useEffect(() => {
     const renderDiagram = async () => {
@@ -88,19 +75,10 @@ export default function ClickableMermaidDiagram({
 
         // Generate unique ID
         const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`
-        const componentId = componentIdRef.current
+        diagramIdRef.current = id
 
-        // Add click handlers to the chart
-        let chartWithClicks = mainChart
-        clickableSections.forEach((section) => {
-          // Add click handler for each section ID
-          if (!chartWithClicks.includes(`click ${section.id}`)) {
-            chartWithClicks += `\n    click ${section.id} call ${componentId}_handleNodeClick('${section.id}') "Click to explore ${section.title}"`
-          }
-        })
-
-        // Render
-        const { svg: renderedSvg } = await mermaid.render(id, chartWithClicks)
+        // Render diagram
+        const { svg: renderedSvg } = await mermaid.render(id, mainChart)
         setSvg(renderedSvg)
         setError(null)
       } catch (err) {
@@ -110,7 +88,49 @@ export default function ClickableMermaidDiagram({
     }
 
     renderDiagram()
-  }, [mainChart, clickableSections])
+  }, [mainChart])
+
+  // Add click handlers after SVG is rendered
+  useEffect(() => {
+    if (!svg || !containerRef.current) return
+
+    const handleNodeClick = (sectionId: string) => {
+      setExpandedSection((current) => (current === sectionId ? null : sectionId))
+    }
+
+    const listeners: Array<{ element: Element; handler: EventListener }> = []
+
+    clickableSections.forEach((section) => {
+      // Try multiple selectors to find the node
+      const selectors = [
+        `#${diagramIdRef.current} .node[id$="${section.id}"]`,
+        `#${diagramIdRef.current} [id*="flowchart-${section.id}"]`,
+        `#${diagramIdRef.current} g[id*="${section.id}"]`,
+      ]
+
+      for (const selector of selectors) {
+        const nodeElement = containerRef.current?.querySelector(selector)
+        if (nodeElement) {
+          const handler = (e: Event) => {
+            e.stopPropagation()
+            handleNodeClick(section.id)
+          }
+
+          nodeElement.addEventListener('click', handler)
+          ;(nodeElement as HTMLElement).style.cursor = 'pointer'
+          listeners.push({ element: nodeElement, handler })
+          break // Found the element, no need to try other selectors
+        }
+      }
+    })
+
+    // Cleanup function
+    return () => {
+      listeners.forEach(({ element, handler }) => {
+        element.removeEventListener('click', handler)
+      })
+    }
+  }, [svg, clickableSections])
 
   if (error) {
     return (
