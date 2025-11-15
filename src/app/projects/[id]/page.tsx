@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, ExternalLink, Github, Calendar, User, Building } from 'lucide-react'
 import { motion } from 'framer-motion'
-import InfrastructureDiagramViewer from '@/components/infrastructure-diagram-viewer'
+import ExpandableInfrastructureDiagram from '@/components/expandable-infrastructure-diagram'
 import { getProjectInfrastructure } from '@/data/infrastructure-diagrams'
 
 interface Project {
@@ -85,7 +85,7 @@ export default function ProjectDetailsPage() {
   const projectId = parseInt(params.id as string)
 
   const project = projects.find(p => p.id === projectId)
-  const infrastructureDiagrams = getProjectInfrastructure(projectId)
+  const infrastructure = getProjectInfrastructure(projectId)
 
   if (!project) {
     return (
@@ -248,15 +248,12 @@ export default function ProjectDetailsPage() {
               )}
 
               {/* Infrastructure Diagrams */}
-              {infrastructureDiagrams.length > 0 && (
+              {infrastructure && (
                 <div>
                   <h3 className="font-display text-2xl md:text-3xl uppercase tracking-widest text-primary mb-6">
                     Infrastructure Architecture
                   </h3>
-                  <p className="text-sm text-text-light/60 dark:text-text-dark/60 mb-4 font-body">
-                    Click the diagram to view all {infrastructureDiagrams.length} infrastructure diagrams
-                  </p>
-                  <InfrastructureDiagramViewer diagrams={infrastructureDiagrams} />
+                  <ExpandableInfrastructureDiagram infrastructure={infrastructure} />
                 </div>
               )}
             </motion.div>
