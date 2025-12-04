@@ -46,18 +46,18 @@ const projects: Project[] = [
   {
     id: 4,
     title: 'Anton (TUI-LIB)',
-    description: 'A terminal-first UI kit for building fast, keyboard-driven dashboards with layout primitives, widgets, and theming.',
+    description: 'Immediate-mode terminal UI kit with deterministic event loop, flex-like layout, widget registry, and CSS-like theming for keyboard-native dashboards.',
     image: '/images/anton-tui-lib.svg',
-    technologies: ['Terminal UI', 'Layout Engine', 'Widget System', 'Theming'],
+    technologies: ['Rust', 'Terminal UI', 'Layout Engine', 'Widget Registry', 'Themes'],
     githubUrl: 'https://github.com/ZuhaadRathore/TUI-LIB',
   },
   {
     id: 5,
     title: 'RetentionAI',
-    description: 'A Tauri desktop coach that wraps a Python/FASTAPI sidecar and an embedded ML model to ship spaced-repetition training as one installer.',
+    description: 'A Tauri desktop coach that bundles a FastAPI sidecar, PyInstaller-built model runtime, and React UI into a single installer for offline spaced repetition.',
     image: '/images/retentionai.svg',
-    technologies: ['Tauri', 'React', 'TypeScript', 'FastAPI', 'Python', 'Zustand'],
-    liveUrl: 'https://zuhaadrathore.github.io/RetentionAI',
+    technologies: ['Tauri', 'React', 'TypeScript', 'FastAPI', 'Python', 'PyInstaller', 'Zustand'],
+    liveUrl: 'https://github.com/ZuhaadRathore/Retention',
     githubUrl: 'https://github.com/ZuhaadRathore/Retention',
   }
 ]
@@ -95,7 +95,7 @@ function ProjectCard({ project }: ProjectCardProps) {
       }}
     >
       <motion.div
-        className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-300 rounded-lg blur opacity-0 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"
+        className="absolute -inset-0.5 bg-gradient-to-r from-primary to-yellow-300 rounded-lg blur opacity-0 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 pointer-events-none"
         animate={{
           rotate: [0, 5, -5, 0],
         }}
@@ -113,7 +113,10 @@ function ProjectCard({ project }: ProjectCardProps) {
           transition: { duration: 0.3, ease: "easeOut" }
         }}
       >
-        <div className="w-full aspect-[2/1] bg-center bg-no-repeat bg-cover border-3 border-border-light dark:border-border-dark mb-2 overflow-hidden relative group/image">
+        <Link
+          href={`/projects/${project.id}`}
+          className="block w-full aspect-[2/1] bg-center bg-no-repeat bg-cover border-3 border-border-light dark:border-border-dark mb-2 overflow-hidden relative group/image cursor-pointer"
+        >
           <Image
             src={project.image}
             alt={project.title}
@@ -123,8 +126,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             priority
             loading="eager"
           />
-          <Link
-            href={`/projects/${project.id}`}
+          <div
             aria-label={`Open ${project.title} details`}
             className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10"
           >
@@ -138,8 +140,8 @@ function ProjectCard({ project }: ProjectCardProps) {
             >
               <ArrowUpRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </motion.span>
-          </Link>
-        </div>
+          </div>
+        </Link>
 
         <Link href={`/projects/${project.id}`}>
           <motion.div

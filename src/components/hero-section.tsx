@@ -71,7 +71,7 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="min-h-screen flex flex-col justify-center items-center relative py-20"
+      className="flex flex-col justify-center items-center relative py-12 md:py-16 pb-24"
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-start w-full"
     >
@@ -83,7 +83,7 @@ export default function HeroSection() {
       >
       <div className="md:col-span-2">
         <motion.h1
-          className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] uppercase tracking-tighter mb-6 text-text-light dark:text-text-dark leading-[0.9]"
+          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark leading-[0.9]"
           variants={itemVariants}
         >
           <motion.span
@@ -105,7 +105,7 @@ export default function HeroSection() {
           </motion.span>
         </motion.h1>
         <motion.p
-          className="text-lg sm:text-xl md:text-2xl text-text-light/80 dark:text-text-dark/80 max-w-3xl mb-8"
+          className="text-lg sm:text-xl md:text-2xl text-text-light/80 dark:text-text-dark/80 max-w-3xl mb-6"
           variants={itemVariants}
         >
           I build exceptional and accessible digital experiences for the web.

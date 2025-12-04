@@ -66,10 +66,10 @@ const projects: Project[] = [
   {
     id: 4,
     title: 'Anton (TUI-LIB)',
-    description: 'Terminal-first UI kit for building keyboard-driven dashboards with a lean widget and layout system.',
-    detailedDescription: 'Anton is a lightweight terminal UI library (TUI-LIB) designed for fast, keyboard-native dashboards. It ships layout primitives (stacks, grids, splits), reusable widgets (tables, inputs, status bars), and a theming layer so CLI apps stay legible in both light and dark terminals. The library is built to stay dependency-light, with a clear event loop, predictable rendering, and ergonomic APIs for assembling dashboards quickly.',
+    description: 'Immediate-mode terminal UI kit for keyboard-driven dashboards with a deterministic event loop, flex-like layout, and CSS-style theming.',
+    detailedDescription: 'Anton (TUI-LIB) is a modern immediate-mode TUI library. It centers on a deterministic event loop, flexbox-style layout (stacks, grids, splits), a widget registry (tables, inputs, status bars, keybind help), and CSS-like theming with semantic tokens and state variants (focused/hovered/disabled) expressed through a `.ath` DSL. Rendering stays double-buffered and flicker-free, input is keyboard-first, and the API keeps layouts explicit so refreshes stay predictable even under heavy state changes.',
     image: '/images/anton-tui-lib.svg',
-    technologies: ['Terminal UI', 'Widget System', 'Layout Engine', 'Theming'],
+    technologies: ['Rust', 'Terminal UI', 'Widget System', 'Layout Engine', 'Theming'],
     date: '2024',
     role: 'Library Author',
     client: 'Open Source Community',
@@ -80,14 +80,14 @@ const projects: Project[] = [
     id: 5,
     title: 'RetentionAI',
     description: 'A Tauri desktop coach bundling a FastAPI sidecar and embedded ML model into a single installer.',
-    detailedDescription: 'RetentionAI wraps a React front-end in a Tauri shell and ships a FastAPI-powered Python sidecar that serves the spaced-repetition engine. The build pipeline bakes the sidecar (PyInstaller) directly into the Tauri bundle so users get an all-in-one installer with the model downloaded and ready to score cards offline. Scripts handle sidecar builds, model downloads, and final packaging while the UI talks to the sidecar over HTTP for health checks, deck management, and scoring.',
+    detailedDescription: 'RetentionAI wraps a React/Zustand front-end in a Tauri shell and talks to a FastAPI Python sidecar over HTTP (`VITE_API_BASE_URL` defaults to `http://127.0.0.1:27888`). The sidecar exposes /health, /score, /decks, etc., and ships an embedded model under `models/sentence-transformers`. Build scripts download the model, run PyInstaller, stage the binary under `src-tauri/binaries/<platform>`, and then package everything with `pnpm run release` so the user gets one installer (`retention.exe`) with the sidecar bundled.',
     image: '/images/retentionai.svg',
-    technologies: ['Tauri', 'React', 'TypeScript', 'FastAPI', 'Python', 'Zustand'],
+    technologies: ['Tauri', 'React', 'TypeScript', 'FastAPI', 'Python', 'PyInstaller', 'Zustand'],
     date: '2024',
     role: 'Full-Stack Developer',
     client: 'Personal Project',
     overview: 'Cross-platform study coach that ships a bundled ML sidecar and offline-friendly desktop UI.',
-    liveUrl: 'https://zuhaadrathore.github.io/RetentionAI',
+    liveUrl: 'https://github.com/ZuhaadRathore/Retention',
     githubUrl: 'https://github.com/ZuhaadRathore/Retention'
   }
 ]

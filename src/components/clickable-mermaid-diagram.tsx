@@ -151,6 +151,7 @@ export default function ClickableMermaidDiagram({
   }
 
   const currentSection = clickableSections.find((s) => s.id === expandedSection)
+  const hasClickable = clickableSections.length > 0
 
   return (
     <>
@@ -173,68 +174,72 @@ export default function ClickableMermaidDiagram({
           className="p-6 overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: svg }}
         />
-        <div className="px-6 pb-4 text-center">
-          <p className="text-xs text-text-light/60 dark:text-text-dark/60 font-body">
-            💡 Click on the colored boxes in the diagram to explore detailed architecture
-          </p>
-        </div>
+        {hasClickable && (
+          <div className="px-6 pb-4 text-center">
+            <p className="text-xs text-text-light/60 dark:text-text-dark/60 font-body">
+              💡 Click on the colored boxes in the diagram to explore detailed architecture
+            </p>
+          </div>
+        )}
       </motion.div>
 
       {/* Modal Popup */}
-      <AnimatePresence>
-        {currentSection && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setExpandedSection(null)}
-          >
+      {hasClickable && (
+        <AnimatePresence>
+          {currentSection && (
             <motion.div
-              className="relative w-full max-w-6xl max-h-[90vh] bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
-              initial={{ scale: 0.9, y: 50 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 50 }}
-              transition={{ duration: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setExpandedSection(null)}
             >
-              {/* Modal Header */}
-              <div className="bg-primary text-black px-6 py-4 border-b-3 border-border-light dark:border-border-dark flex items-center justify-between">
-                <h4 className="font-display text-xl md:text-2xl uppercase tracking-wider">
-                  {currentSection.title}
-                </h4>
-                <button
-                  onClick={() => setExpandedSection(null)}
-                  className="p-2 hover:bg-black/10 transition-colors border-2 border-black"
-                  aria-label="Close modal"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-
-              {/* Modal Content */}
-              <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 space-y-6">
-                {currentSection.diagrams.map((diagram, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
+              <motion.div
+                className="relative w-full max-w-6xl max-h-[90vh] bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
+                initial={{ scale: 0.9, y: 50 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 50 }}
+                transition={{ duration: 0.3 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className="bg-primary text-black px-6 py-4 border-b-3 border-border-light dark:border-border-dark flex items-center justify-between">
+                  <h4 className="font-display text-xl md:text-2xl uppercase tracking-wider">
+                    {currentSection.title}
+                  </h4>
+                  <button
+                    onClick={() => setExpandedSection(null)}
+                    className="p-2 hover:bg-black/10 transition-colors border-2 border-black"
+                    aria-label="Close modal"
                   >
-                    <div className="bg-primary text-black px-6 py-3 border-b-3 border-border-light dark:border-border-dark">
-                      <h5 className="font-display text-lg uppercase tracking-wider">
-                        {diagram.title}
-                      </h5>
-                    </div>
-                    <DiagramRenderer chart={diagram.chart} />
-                  </motion.div>
-                ))}
-              </div>
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
+
+                {/* Modal Content */}
+                <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 space-y-6">
+                  {currentSection.diagrams.map((diagram, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark overflow-hidden"
+                    >
+                      <div className="bg-primary text-black px-6 py-3 border-b-3 border-border-light dark:border-border-dark">
+                        <h5 className="font-display text-lg uppercase tracking-wider">
+                          {diagram.title}
+                        </h5>
+                      </div>
+                      <DiagramRenderer chart={diagram.chart} />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      )}
     </>
   )
 }
