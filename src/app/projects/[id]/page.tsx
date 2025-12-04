@@ -65,17 +65,30 @@ const projects: Project[] = [
   },
   {
     id: 4,
-    title: 'Collaborative Workspace',
-    description: 'A collaborative workspace app with real-time features.',
-    detailedDescription: 'A comprehensive collaborative workspace application that enables teams to work together seamlessly. Features include real-time document editing, video conferencing, task management, and file sharing capabilities.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDkuQKlxgbvdvYr9Ag9hzbz0CftKXqNsxzzzJzGjDPpvGUY9cYtYWQoTBxrgmDyfThzkCOmljVkwLF82mboylBallQKDqmbDPTx61quNkUrY6Xapk8WOcUG7_U1Czwi-twKwIc2dTUSCsvkwJw3B_VrJ1g4xkci0zqPyNAu0D38jhFiClN_ECFo_Mvmicl0awpNugUb-U2hHugNKYlD9bBXtoOid2ELT0DfFSdPYdH5Rnsc1GPe2fyF5SYRalr4Kw22iQLhzVnbSciV',
-    technologies: ['Vue.js', 'Socket.io', 'PostgreSQL', 'WebRTC'],
+    title: 'Anton (TUI-LIB)',
+    description: 'Terminal-first UI kit for building keyboard-driven dashboards with a lean widget and layout system.',
+    detailedDescription: 'Anton is a lightweight terminal UI library (TUI-LIB) designed for fast, keyboard-native dashboards. It ships layout primitives (stacks, grids, splits), reusable widgets (tables, inputs, status bars), and a theming layer so CLI apps stay legible in both light and dark terminals. The library is built to stay dependency-light, with a clear event loop, predictable rendering, and ergonomic APIs for assembling dashboards quickly.',
+    image: '/images/anton-tui-lib.svg',
+    technologies: ['Terminal UI', 'Widget System', 'Layout Engine', 'Theming'],
+    date: '2024',
+    role: 'Library Author',
+    client: 'Open Source Community',
+    overview: 'Custom terminal UI library focused on fast rendering, keyboard UX, and composable widgets.',
+    githubUrl: 'https://github.com/ZuhaadRathore/TUI-LIB'
+  },
+  {
+    id: 5,
+    title: 'RetentionAI',
+    description: 'A Tauri desktop coach bundling a FastAPI sidecar and embedded ML model into a single installer.',
+    detailedDescription: 'RetentionAI wraps a React front-end in a Tauri shell and ships a FastAPI-powered Python sidecar that serves the spaced-repetition engine. The build pipeline bakes the sidecar (PyInstaller) directly into the Tauri bundle so users get an all-in-one installer with the model downloaded and ready to score cards offline. Scripts handle sidecar builds, model downloads, and final packaging while the UI talks to the sidecar over HTTP for health checks, deck management, and scoring.',
+    image: '/images/retentionai.svg',
+    technologies: ['Tauri', 'React', 'TypeScript', 'FastAPI', 'Python', 'Zustand'],
     date: '2024',
     role: 'Full-Stack Developer',
-    client: 'Remote Team Solutions',
-    overview: 'Real-time collaboration platform for distributed teams.',
-    liveUrl: 'https://example.com',
-    githubUrl: 'https://github.com/example/project'
+    client: 'Personal Project',
+    overview: 'Cross-platform study coach that ships a bundled ML sidecar and offline-friendly desktop UI.',
+    liveUrl: 'https://zuhaadrathore.github.io/RetentionAI',
+    githubUrl: 'https://github.com/ZuhaadRathore/Retention'
   }
 ]
 

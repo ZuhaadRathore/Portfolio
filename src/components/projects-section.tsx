@@ -42,6 +42,23 @@ const projects: Project[] = [
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     liveUrl: 'https://zuhaad.com',
     githubUrl: 'https://github.com/ZuhaadRathore/Portfolio',
+  },
+  {
+    id: 4,
+    title: 'Anton (TUI-LIB)',
+    description: 'A terminal-first UI kit for building fast, keyboard-driven dashboards with layout primitives, widgets, and theming.',
+    image: '/images/anton-tui-lib.svg',
+    technologies: ['Terminal UI', 'Layout Engine', 'Widget System', 'Theming'],
+    githubUrl: 'https://github.com/ZuhaadRathore/TUI-LIB',
+  },
+  {
+    id: 5,
+    title: 'RetentionAI',
+    description: 'A Tauri desktop coach that wraps a Python/FASTAPI sidecar and an embedded ML model to ship spaced-repetition training as one installer.',
+    image: '/images/retentionai.svg',
+    technologies: ['Tauri', 'React', 'TypeScript', 'FastAPI', 'Python', 'Zustand'],
+    liveUrl: 'https://zuhaadrathore.github.io/RetentionAI',
+    githubUrl: 'https://github.com/ZuhaadRathore/Retention',
   }
 ]
 
