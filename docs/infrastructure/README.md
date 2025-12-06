@@ -1,5 +1,8 @@
 # Infrastructure Documentation
 
+> **Note**: System architecture diagrams are currently being redesigned from scratch.
+> Placeholder diagrams are in place while new architectural visualizations are being developed.
+
 This directory contains comprehensive infrastructure diagrams and documentation for the Portfolio Website application.
 
 ## Available Documentation
@@ -40,15 +43,16 @@ Complete infrastructure documentation for the Portfolio Website, including:
 
 ## Visual Diagrams
 
-All diagrams are rendered using Mermaid syntax and can be viewed directly in GitHub or any Mermaid-compatible markdown viewer.
+> **Status**: Architecture diagrams are being redesigned. Current diagrams use Mermaid syntax and can be viewed in GitHub.
+> New diagrams will be custom SVG visualizations tailored to each project's architecture.
 
-### Diagram Types
+### Planned Diagram Types
 
-- **System Architecture**: Overall application structure
-- **Frontend Architecture**: Component tree and data flow
-- **Build Pipeline**: CI/CD workflow from commit to deployment
-- **External Integrations**: Third-party services and APIs
-- **Development Environment**: Local development setup
+- **System Architecture**: Overall application structure (to be redesigned)
+- **Frontend Architecture**: Component tree and data flow (to be redesigned)
+- **Build Pipeline**: CI/CD workflow from commit to deployment (to be redesigned)
+- **External Integrations**: Third-party services and APIs (to be redesigned)
+- **Development Environment**: Local development setup (to be redesigned)
 
 ## Quick Links
 
