@@ -18,110 +18,124 @@ export interface ProjectInfrastructure {
 const ezTauriSvg = `<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="background-color:#0d1117;font-family:'SF Mono','Segoe UI Mono','Roboto Mono',monospace;">
   <defs>
     <linearGradient id="ez-bg" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#161b22"/>
-      <stop offset="100%" stop-color="#0d1117"/>
+      <stop offset="0%" stop-color="#111722"/>
+      <stop offset="100%" stop-color="#0b1018"/>
     </linearGradient>
-    <pattern id="ez-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#21262d" stroke-width="1"/>
+    <pattern id="ez-grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#1c2330" stroke-width="1"/>
     </pattern>
-    <marker id="ez-arrow" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,8 L10,4 z" fill="#FDC435"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="tri-yellow" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L12,5 z" fill="#facc15"/>
     </marker>
+    <marker id="tri-blue" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L12,5 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="tri-green" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L12,5 z" fill="#22c55e"/>
+    </marker>
+    <marker id="tri-purple" markerWidth="14" markerHeight="10" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L12,5 z" fill="#c084fc"/>
+    </marker>
+    <rect id="card" x="0" y="0" width="190" height="66" rx="14" ry="14"/>
   </defs>
-  <rect width="100%" height="100%" fill="url(#ez-bg)" />
-  <rect width="100%" height="100%" fill="url(#ez-grid)" opacity="0.25" />
 
-  <text x="40" y="50" fill="#ffffff" font-size="20" font-weight="700" letter-spacing="2">EZ-TAURI DELIVERY</text>
-  <text x="40" y="75" fill="#8b949e" font-size="12">Scaffold - Build - Ship loop</text>
+  <rect width="100%" height="100%" fill="url(#ez-bg)"/>
+  <rect width="100%" height="100%" fill="url(#ez-grid)" opacity="0.25"/>
 
-  <rect x="40" y="120" width="220" height="360" rx="10" fill="#161b22" stroke="#30363d" stroke-dasharray="6,4"/>
-  <text x="60" y="145" fill="#8b949e" font-size="10" letter-spacing="1">CLI + TOOLING</text>
+  <text x="42" y="52" fill="#fff" font-size="21" font-weight="700" letter-spacing="2">EZ-TAURI DELIVERY</text>
+  <text x="42" y="76" fill="#9ca3af" font-size="12">Scaffold - Build - Ship loop</text>
 
-  <rect x="300" y="120" width="240" height="160" rx="10" fill="#161b22" stroke="#30363d" stroke-dasharray="6,4"/>
-  <text x="320" y="145" fill="#8b949e" font-size="10" letter-spacing="1">DESKTOP SHELL</text>
+  <!-- Zones -->
+  <path d="M34 120 h230 v366 h-230 z" fill="#121826" stroke="#30363d" stroke-dasharray="6,6" rx="14" ry="14"/>
+  <path d="M306 118 h255 v210 h-255 z" fill="#111722" stroke="#30363d" stroke-dasharray="6,6" rx="14" ry="14"/>
+  <path d="M306 318 h255 v170 h-255 z" fill="#0f1622" stroke="#30363d" stroke-dasharray="6,6" rx="14" ry="14"/>
+  <path d="M590 186 h270 v240 h-270 z" fill="#111722" stroke="#30363d" stroke-dasharray="6,6" rx="14" ry="14"/>
 
-  <rect x="300" y="320" width="240" height="160" rx="10" fill="#161b22" stroke="#30363d" stroke-dasharray="6,4"/>
-  <text x="320" y="345" fill="#8b949e" font-size="10" letter-spacing="1">BACKEND SERVICES</text>
+  <text x="54" y="150" fill="#8b949e" font-size="10" letter-spacing="1">CLI + TOOLING</text>
+  <text x="326" y="148" fill="#8b949e" font-size="10" letter-spacing="1">DESKTOP SHELL</text>
+  <text x="326" y="348" fill="#8b949e" font-size="10" letter-spacing="1">BACKEND SERVICES</text>
+  <text x="610" y="212" fill="#8b949e" font-size="10" letter-spacing="1">OPS + RELEASE</text>
 
-  <rect x="580" y="200" width="260" height="220" rx="10" fill="#161b22" stroke="#30363d" stroke-dasharray="6,4"/>
-  <text x="600" y="225" fill="#8b949e" font-size="10" letter-spacing="1">OPS + RELEASE</text>
-
-  <g transform="translate(70, 180)">
-    <rect width="170" height="60" rx="6" fill="#21262d" stroke="#FDC435" stroke-width="2"/>
-    <text x="85" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">Developer</text>
-    <text x="85" y="45" fill="#8b949e" font-size="11" text-anchor="middle">codes + runs CLI</text>
+  <!-- Cards -->
+  <g transform="translate(60 180)">
+    <use href="#card" fill="#11151f" stroke="#facc15" stroke-width="2.5" filter="url(#glow)"/>
+    <text x="95" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Developer</text>
+    <text x="95" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">codes + runs CLI</text>
   </g>
-  <g transform="translate(70, 260)">
-    <rect width="170" height="60" rx="6" fill="#21262d" stroke="#58a6ff" stroke-width="1.5"/>
-    <text x="85" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">ez-tauri CLI</text>
-    <text x="85" y="45" fill="#8b949e" font-size="11" text-anchor="middle">scaffold + doctor</text>
+  <g transform="translate(60 256)">
+    <use href="#card" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+    <text x="95" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">ez-tauri CLI</text>
+    <text x="95" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">scaffold + doctor</text>
   </g>
-  <g transform="translate(70, 340)">
-    <rect width="170" height="60" rx="6" fill="#21262d" stroke="#7ee787" stroke-width="1.5"/>
-    <text x="85" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">Local Assets</text>
-    <text x="85" y="45" fill="#8b949e" font-size="11" text-anchor="middle">logs + env + sqlx</text>
+  <g transform="translate(60 332)">
+    <use href="#card" fill="#0f1f16" stroke="#22c55e" stroke-width="2"/>
+    <text x="95" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Local Assets</text>
+    <text x="95" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">logs + env + sqlx</text>
   </g>
-  <g transform="translate(70, 420)">
-    <rect width="170" height="60" rx="6" fill="#21262d" stroke="#c9d1d9" stroke-width="1.5"/>
-    <text x="85" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">Tests + Lints</text>
-    <text x="85" y="45" fill="#8b949e" font-size="11" text-anchor="middle">fmt, clippy, vitest</text>
-  </g>
-
-  <g transform="translate(330, 170)">
-    <rect width="180" height="60" rx="6" fill="#0d1117" stroke="#FDC435" stroke-width="2"/>
-    <text x="90" y="25" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Tauri Shell</text>
-    <text x="90" y="45" fill="#FDC435" font-size="11" text-anchor="middle">window, updater, native</text>
-  </g>
-  <g transform="translate(330, 240)">
-    <rect width="180" height="60" rx="6" fill="#0d1117" stroke="#58a6ff" stroke-width="1.5"/>
-    <text x="90" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">React UI</text>
-    <text x="90" y="45" fill="#8b949e" font-size="11" text-anchor="middle">Vite + TS + Zustand</text>
+  <g transform="translate(60 408)">
+    <use href="#card" fill="#161326" stroke="#c084fc" stroke-width="2"/>
+    <text x="95" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Tests + Lints</text>
+    <text x="95" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">fmt, clippy, vitest</text>
   </g>
 
-  <g transform="translate(330, 370)">
-    <rect width="180" height="50" rx="6" fill="#0d1117" stroke="#7ee787" stroke-width="1.5"/>
-    <text x="90" y="22" fill="#c9d1d9" font-size="12" font-weight="700" text-anchor="middle">Auth + Sessions</text>
-    <text x="90" y="40" fill="#7ee787" font-size="10" text-anchor="middle">argon2 + rate limit</text>
+  <g transform="translate(338 180)">
+    <use href="#card" fill="#0b111a" stroke="#facc15" stroke-width="2.5" filter="url(#glow)"/>
+    <text x="95" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Tauri Shell</text>
+    <text x="95" y="48" fill="#facc15" font-size="11" text-anchor="middle">window, updater, native</text>
   </g>
-  <g transform="translate(330, 430)">
-    <rect width="180" height="50" rx="6" fill="#0d1117" stroke="#d2a8ff" stroke-width="1.5"/>
-    <text x="90" y="22" fill="#c9d1d9" font-size="12" font-weight="700" text-anchor="middle">Rust Core</text>
-    <text x="90" y="40" fill="#d2a8ff" font-size="10" text-anchor="middle">commands + async</text>
-  </g>
-
-  <g transform="translate(610, 240)">
-    <rect width="200" height="60" rx="6" fill="#21262d" stroke="#FDC435" stroke-width="2"/>
-    <text x="100" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">Release Pipeline</text>
-    <text x="100" y="45" fill="#8b949e" font-size="11" text-anchor="middle">CI, signing, notarize</text>
-  </g>
-  <g transform="translate(610, 310)">
-    <rect width="200" height="60" rx="6" fill="#21262d" stroke="#58a6ff" stroke-width="1.5"/>
-    <text x="100" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">Installers</text>
-    <text x="100" y="45" fill="#8b949e" font-size="11" text-anchor="middle">msi, dmg, appimage</text>
-  </g>
-  <g transform="translate(610, 380)">
-    <rect width="200" height="60" rx="6" fill="#21262d" stroke="#7ee787" stroke-width="1.5"/>
-    <text x="100" y="25" fill="#c9d1d9" font-size="13" font-weight="700" text-anchor="middle">Auto Update</text>
-    <text x="100" y="45" fill="#7ee787" font-size="11" text-anchor="middle">channels + rollback</text>
+  <g transform="translate(338 256)">
+    <use href="#card" fill="#0e1420" stroke="#3b82f6" stroke-width="2"/>
+    <text x="95" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">React UI</text>
+    <text x="95" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">Vite + TS + Zustand</text>
   </g>
 
-  <g transform="translate(520, 150)">
-    <rect width="70" height="30" rx="4" fill="#21262d" stroke="#30363d"/>
-    <text x="35" y="20" fill="#8b949e" font-size="10" text-anchor="middle">Assets</text>
+  <g transform="translate(338 360)">
+    <use href="#card" width="190" height="58" fill="#0f1f16" stroke="#22c55e" stroke-width="2"/>
+    <text x="95" y="26" fill="#e5e7eb" font-size="12" font-weight="700" text-anchor="middle">Auth + Sessions</text>
+    <text x="95" y="44" fill="#22c55e" font-size="10" text-anchor="middle">argon2 + rate limit</text>
+  </g>
+  <g transform="translate(338 422)">
+    <use href="#card" width="190" height="58" fill="#151024" stroke="#c084fc" stroke-width="2"/>
+    <text x="95" y="26" fill="#e5e7eb" font-size="12" font-weight="700" text-anchor="middle">Rust Core</text>
+    <text x="95" y="44" fill="#c084fc" font-size="10" text-anchor="middle">commands + async</text>
   </g>
 
-  <path d="M 240 210 L 300 210" stroke="#FDC435" stroke-width="2" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 240 290 L 330 290 L 330 200" stroke="#58a6ff" stroke-width="2" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 240 370 L 330 370 L 330 260" stroke="#7ee787" stroke-width="1.8" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 240 450 L 330 450 L 330 240" stroke="#d2a8ff" stroke-width="1.8" fill="none" marker-end="url(#ez-arrow)"/>
+  <g transform="translate(628 232)">
+    <use href="#card" fill="#0e1420" stroke="#facc15" stroke-width="2.5" filter="url(#glow)" width="210" height="66"/>
+    <text x="105" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Release Pipeline</text>
+    <text x="105" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">CI, signing, notarize</text>
+  </g>
+  <g transform="translate(628 308)">
+    <use href="#card" fill="#0e1420" stroke="#3b82f6" stroke-width="2" width="210" height="66"/>
+    <text x="105" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Installers</text>
+    <text x="105" y="48" fill="#9ca3af" font-size="11" text-anchor="middle">msi, dmg, appimage</text>
+  </g>
+  <g transform="translate(628 384)">
+    <use href="#card" fill="#0f1f16" stroke="#22c55e" stroke-width="2" width="210" height="66"/>
+    <text x="105" y="28" fill="#e5e7eb" font-size="13" font-weight="700" text-anchor="middle">Auto Update</text>
+    <text x="105" y="48" fill="#22c55e" font-size="11" text-anchor="middle">channels + rollback</text>
+  </g>
 
-  <path d="M 420 300 L 420 370" stroke="#8b949e" stroke-width="2" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 420 420 L 420 430" stroke="#8b949e" stroke-width="2" fill="none" marker-end="url(#ez-arrow)"/>
+  <rect x="516" y="152" width="78" height="30" rx="8" ry="8" fill="#1f2937" stroke="#30363d"/>
+  <text x="555" y="172" fill="#9ca3af" font-size="10" text-anchor="middle">Assets</text>
 
-  <path d="M 510 200 L 610 200 L 610 250" stroke="#FDC435" stroke-width="2" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 510 430 L 610 430" stroke="#d2a8ff" stroke-width="2" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 710 200 L 710 180 L 560 180" stroke="#FDC435" stroke-width="1.6" stroke-dasharray="6,6" fill="none" marker-end="url(#ez-arrow)"/>
-  <path d="M 710 440 L 710 470 L 450 470 L 450 480" stroke="#7ee787" stroke-width="1.6" stroke-dasharray="6,6" fill="none" marker-end="url(#ez-arrow)"/>
+  <!-- Flows -->
+  <path d="M 250 210 L 336 210" stroke="#facc15" stroke-width="2.4" fill="none" marker-end="url(#tri-yellow)"/>
+  <path d="M 250 294 L 336 294" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#tri-blue)"/>
+  <path d="M 250 378 L 336 378" stroke="#22c55e" stroke-width="2" fill="none" marker-end="url(#tri-green)"/>
+  <path d="M 250 458 L 336 458" stroke="#c084fc" stroke-width="2" fill="none" marker-end="url(#tri-purple)"/>
+
+  <path d="M 433 310 L 433 360" stroke="#9ca3af" stroke-width="2" fill="none" marker-end="url(#tri-yellow)"/>
+  <path d="M 433 410 L 433 422" stroke="#9ca3af" stroke-width="2" fill="none" marker-end="url(#tri-purple)"/>
+
+  <path d="M 520 200 L 628 200 L 628 250" stroke="#facc15" stroke-width="2" fill="none" marker-end="url(#tri-yellow)"/>
+  <path d="M 520 454 L 628 454" stroke="#c084fc" stroke-width="2" fill="none" marker-end="url(#tri-purple)"/>
+  <path d="M 742 200 L 742 184 L 566 184" stroke="#facc15" stroke-width="1.8" stroke-dasharray="6,6" fill="none" marker-end="url(#tri-yellow)"/>
+  <path d="M 742 450 L 742 476 L 448 476 L 448 484" stroke="#22c55e" stroke-width="1.8" stroke-dasharray="6,6" fill="none" marker-end="url(#tri-green)"/>
 </svg>`
 
 const tetrisSvg = `<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="background-color:#0d1117;font-family:'SF Mono','Segoe UI Mono','Roboto Mono',monospace;">
