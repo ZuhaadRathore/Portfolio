@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react'
-import MermaidDiagram from './mermaid-diagram'
+import InlineSvgDiagram from './inline-svg-diagram'
 import { InfrastructureDiagram } from '@/data/infrastructure-diagrams'
 
 interface InfrastructureDiagramViewerProps {
@@ -71,7 +71,7 @@ export default function InfrastructureDiagramViewer({ diagrams }: Infrastructure
         </div>
 
         {/* First diagram preview */}
-        <MermaidDiagram chart={diagrams[0].chart} title={diagrams[0].title} />
+        <InlineSvgDiagram svg={diagrams[0].svg} title={diagrams[0].title} />
       </motion.div>
 
       {/* Modal */}
@@ -124,8 +124,8 @@ export default function InfrastructureDiagramViewer({ diagrams }: Infrastructure
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <MermaidDiagram
-                      chart={diagrams[currentIndex].chart}
+                    <InlineSvgDiagram
+                      svg={diagrams[currentIndex].svg}
                       title={diagrams[currentIndex].title}
                     />
                   </motion.div>

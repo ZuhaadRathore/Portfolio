@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, ExternalLink, Github, Calendar, User, Building } from 'lucide-react'
 import { motion } from 'framer-motion'
-import ClickableMermaidDiagram from '@/components/clickable-mermaid-diagram'
+import ClickableSvgDiagram from '@/components/clickable-svg-diagram'
 import { getProjectInfrastructure } from '@/data/infrastructure-diagrams'
 
 interface Project {
@@ -266,9 +266,8 @@ export default function ProjectDetailsPage() {
                   <h3 className="font-display text-2xl md:text-3xl uppercase tracking-widest text-primary mb-6">
                     Infrastructure Architecture
                   </h3>
-                  <ClickableMermaidDiagram
-                    mainChart={infrastructure.mainDiagram.chart}
-                    title={infrastructure.mainDiagram.title}
+                  <ClickableSvgDiagram
+                    mainDiagram={infrastructure.mainDiagram}
                     clickableSections={infrastructure.clickableSections}
                   />
                 </div>
