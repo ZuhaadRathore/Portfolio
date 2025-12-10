@@ -9,7 +9,6 @@ import Link from 'next/link'
 const navItems = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
-  { name: 'GitHub', href: '#github' },
   { name: 'Experience', href: '#experience' },
   { name: 'Skills', href: '#skills' },
   { name: 'Projects', href: '#projects' }
@@ -76,7 +75,7 @@ export default function Header() {
       const currentScroll = getScrollPosition()
       setIsScrolled(currentScroll > 50)
 
-      const sections = ['home', 'about', 'github', 'experience', 'skills', 'projects']
+      const sections = ['home', 'about', 'experience', 'skills', 'projects']
       const headerOffset = 160
       const scrollPosition = currentScroll + headerOffset
 

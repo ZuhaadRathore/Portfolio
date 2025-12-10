@@ -34,6 +34,16 @@ export async function GET(request: NextRequest) {
               }
             }
           }
+          totalContributions
+        }
+        repositories(first: 100) {
+          totalCount
+        }
+        followers {
+          totalCount
+        }
+        following {
+          totalCount
         }
       }
     }
@@ -71,7 +81,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks
+    const user = data.data.user
+    const weeks = user.contributionsCollection.contributionCalendar.weeks
     const contributionDays = weeks.flatMap((week: any) =>
       week.contributionDays.map((day: any) => ({
         date: day.date,
@@ -83,7 +94,15 @@ export async function GET(request: NextRequest) {
       }))
     )
 
-    return NextResponse.json({ contributionDays })
+    return NextResponse.json({
+      contributionDays,
+      stats: {
+        totalContributions: user.contributionsCollection.totalContributions,
+        repositoriesCount: user.repositories.totalCount,
+        followers: user.followers.totalCount,
+        following: user.following.totalCount
+      }
+    })
   } catch (error) {
     console.error('Failed to fetch contribution data:', error)
     return NextResponse.json(

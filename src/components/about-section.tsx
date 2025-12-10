@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import GitHubActivity from './github-activity'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -102,6 +103,10 @@ export default function AboutSection() {
               </div>
             </motion.div>
           </div>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <GitHubActivity />
         </motion.div>
       </motion.div>
     </section>

@@ -10,9 +10,21 @@ interface ContributionDay {
   level: number
 }
 
+interface GitHubStats {
+  totalContributions: number
+  repositoriesCount: number
+  followers: number
+  following: number
+}
+
 const GITHUB_USERNAMES = ['ZuhaadRathore', 'Archontas123']
 
-const fetchContributionData = async (username: string): Promise<ContributionDay[]> => {
+interface FetchResult {
+  contributions: ContributionDay[]
+  stats: GitHubStats | null
+}
+
+const fetchContributionData = async (username: string): Promise<FetchResult> => {
   try {
     const response = await fetch(`/api/github/contributions?username=${encodeURIComponent(username)}`)
 
@@ -23,10 +35,13 @@ const fetchContributionData = async (username: string): Promise<ContributionDay[
     }
 
     const data = await response.json()
-    return data.contributionDays || []
+    return {
+      contributions: data.contributionDays || [],
+      stats: data.stats || null
+    }
   } catch (error) {
     console.error('Failed to fetch contribution data:', error)
-    return []
+    return { contributions: [], stats: null }
   }
 }
 
@@ -66,8 +81,36 @@ const mergeContributions = (contributions1: ContributionDay[], contributions2: C
   )
 }
 
+const padContributionsToStartOfYear = (contributions: ContributionDay[]): ContributionDay[] => {
+  if (contributions.length === 0) return []
+
+  const currentYear = new Date().getFullYear()
+  const jan1 = new Date(`${currentYear}-01-01`)
+  const firstContributionDate = new Date(contributions[0].date)
+
+  const paddedContributions: ContributionDay[] = []
+
+  // Add empty days from Jan 1 to first contribution
+  let currentDate = new Date(jan1)
+  while (currentDate < firstContributionDate) {
+    const dateStr = currentDate.toISOString().split('T')[0]
+    paddedContributions.push({
+      date: dateStr,
+      count: 0,
+      level: 0
+    })
+    currentDate.setDate(currentDate.getDate() + 1)
+  }
+
+  // Add actual contributions
+  paddedContributions.push(...contributions)
+
+  return paddedContributions
+}
+
 export default function GitHubActivity() {
   const [contributions, setContributions] = useState<ContributionDay[]>([])
+  const [stats, setStats] = useState<GitHubStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -77,14 +120,18 @@ export default function GitHubActivity() {
         setLoading(true)
 
         // Fetch contribution data from both accounts in parallel
-        const [contributions1, contributions2] = await Promise.all([
+        const [result1, result2] = await Promise.all([
           fetchContributionData(GITHUB_USERNAMES[0]),
           fetchContributionData(GITHUB_USERNAMES[1])
         ])
 
         // Merge the contributions
-        const mergedContributions = mergeContributions(contributions1, contributions2)
-        setContributions(mergedContributions)
+        const mergedContributions = mergeContributions(result1.contributions, result2.contributions)
+        const paddedContributions = padContributionsToStartOfYear(mergedContributions)
+
+        setContributions(paddedContributions)
+        // Use stats from first account (primary account)
+        setStats(result1.stats)
       } catch (err) {
         setError('Failed to load GitHub data.')
         console.error('GitHub API Error:', err)
@@ -143,7 +190,9 @@ export default function GitHubActivity() {
         </motion.a>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 overflow-x-auto">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+        {/* Chart */}
+        <div className="flex-1 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 overflow-x-auto">
         {/* Month labels */}
         <div className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-2 min-w-max ml-[42px] sm:ml-[58px]">
           {(() => {
@@ -247,6 +296,34 @@ export default function GitHubActivity() {
             })()}
           </div>
         </div>
+        </div>
+
+        {/* Stats Sidebar */}
+        {stats && (
+          <div className="w-full lg:w-40 flex flex-col gap-3 sm:gap-4">
+            <StatItem label="Contributions" value={stats.totalContributions.toLocaleString()} />
+            <StatItem label="Repositories" value={stats.repositoriesCount.toString()} />
+            <StatItem label="Followers" value={stats.followers.toString()} />
+            <StatItem label="Following" value={stats.following.toString()} />
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
+function StatItem({ label, value }: { label: string; value: string }) {
+  return (
+    <motion.div
+      className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4"
+      whileHover={{ scale: 1.05, y: -2 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="text-[11px] sm:text-xs uppercase text-text-light/60 dark:text-text-dark/60 font-semibold tracking-wider mb-1 sm:mb-2">
+        {label}
+      </div>
+      <div className="text-lg sm:text-2xl font-bold text-primary">
+        {value}
       </div>
     </motion.div>
   )
