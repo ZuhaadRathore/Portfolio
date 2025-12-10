@@ -202,18 +202,20 @@ export default function GitHubActivity() {
         </motion.a>
       </div>
 
-      {/* Chart Container */}
-      <div className="relative bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 overflow-x-auto">
-        {/* Stats Grid - Positioned Top Right */}
+      {/* Stats and Chart Container */}
+      <div className="space-y-4">
+        {/* Stats Grid */}
         {stats && (
-          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-2 sm:gap-3">
-            <StatItem label="CONTRIBUTIONS" value={stats.totalContributions.toLocaleString()} compact />
-            <StatItem label="REPOSITORIES" value={stats.repositoriesCount.toString()} compact />
-            <StatItem label="FOLLOWERS" value={stats.followers.toString()} compact />
-            <StatItem label="FOLLOWING" value={stats.following.toString()} compact />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            <StatItem label="CONTRIBUTIONS" value={stats.totalContributions.toLocaleString()} />
+            <StatItem label="REPOSITORIES" value={stats.repositoriesCount.toString()} />
+            <StatItem label="FOLLOWERS" value={stats.followers.toString()} />
+            <StatItem label="FOLLOWING" value={stats.following.toString()} />
           </div>
         )}
 
+        {/* Chart Container */}
+        <div className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 overflow-x-auto">
         <div>
         {/* Month labels */}
         <div className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-2 min-w-max ml-[42px] sm:ml-[58px]">
@@ -319,30 +321,26 @@ export default function GitHubActivity() {
           </div>
         </div>
         </div>
+        </div>
       </div>
     </motion.div>
   )
 }
 
-function StatItem({ label, value, compact }: { label: string; value: string; compact?: boolean }) {
+function StatItem({ label, value }: { label: string; value: string }) {
   return (
     <motion.div
-      className={`border-2 border-gray-200 dark:border-gray-700 ${
-        compact
-          ? 'bg-gray-100 dark:bg-gray-700 px-2 sm:px-3 py-1.5 sm:py-2'
-          : 'bg-gray-50 dark:bg-gray-800 p-3 sm:p-4'
-      }`}
-      whileHover={{ scale: 1.05, y: -2 }}
+      className="bg-background-light dark:bg-background-dark border-3 border-border-light dark:border-border-dark p-3 sm:p-4 shadow-brutal-light dark:shadow-brutal-dark"
+      whileHover={{
+        scale: 1.05,
+        y: -4
+      }}
       transition={{ duration: 0.2 }}
     >
-      <div className={`uppercase text-text-light/60 dark:text-text-dark/60 font-semibold tracking-wider ${
-        compact ? 'text-[9px] sm:text-[10px] mb-0.5' : 'text-[11px] sm:text-xs mb-1 sm:mb-2'
-      }`}>
+      <div className="text-[10px] sm:text-xs uppercase text-text-light/60 dark:text-text-dark/60 font-bold tracking-wider mb-2">
         {label}
       </div>
-      <div className={`font-bold text-primary ${
-        compact ? 'text-sm sm:text-base' : 'text-lg sm:text-2xl'
-      }`}>
+      <div className="text-2xl sm:text-3xl font-display font-bold text-primary">
         {value}
       </div>
     </motion.div>
