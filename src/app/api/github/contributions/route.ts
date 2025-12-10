@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
     )
 
     // Calculate total contributions from the days
-    const totalContributions = contributionDays.reduce((sum: number, day) => sum + day.count, 0)
+    const totalContributions = contributionDays.reduce((sum: number, day: any) => sum + day.count, 0)
 
     return NextResponse.json({
       contributionDays,
