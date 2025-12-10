@@ -11,10 +11,13 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const token = process.env.GITHUB_TOKEN
+  // Use different tokens for different accounts
+  const token = username === 'Archontas123'
+    ? process.env.GITHUB_TOKEN_2
+    : process.env.GITHUB_TOKEN
 
   if (!token) {
-    console.error('GITHUB_TOKEN environment variable is not set')
+    console.error(`GitHub token not configured for ${username}`)
     return NextResponse.json(
       { error: 'GitHub token not configured' },
       { status: 500 }

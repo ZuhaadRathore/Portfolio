@@ -81,31 +81,33 @@ const mergeContributions = (contributions1: ContributionDay[], contributions2: C
   )
 }
 
-const padContributionsToStartOfYear = (contributions: ContributionDay[]): ContributionDay[] => {
+const filterAndPadContributionsToYear = (contributions: ContributionDay[]): ContributionDay[] => {
   if (contributions.length === 0) return []
 
   const currentYear = new Date().getFullYear()
   const jan1 = new Date(`${currentYear}-01-01`)
-  const firstContributionDate = new Date(contributions[0].date)
+  const dec31 = new Date(`${currentYear}-12-31`)
 
-  const paddedContributions: ContributionDay[] = []
+  const yearContributions: ContributionDay[] = []
 
-  // Add empty days from Jan 1 to first contribution
+  // Add all days from Jan 1 to Dec 31, filling with contribution data or empty days
   let currentDate = new Date(jan1)
-  while (currentDate < firstContributionDate) {
+  const contributionMap = new Map(contributions.map(day => [day.date, day]))
+
+  while (currentDate <= dec31) {
     const dateStr = currentDate.toISOString().split('T')[0]
-    paddedContributions.push({
+    const dayData = contributionMap.get(dateStr)
+
+    yearContributions.push(dayData || {
       date: dateStr,
       count: 0,
       level: 0
     })
+
     currentDate.setDate(currentDate.getDate() + 1)
   }
 
-  // Add actual contributions
-  paddedContributions.push(...contributions)
-
-  return paddedContributions
+  return yearContributions
 }
 
 export default function GitHubActivity() {
@@ -127,11 +129,21 @@ export default function GitHubActivity() {
 
         // Merge the contributions
         const mergedContributions = mergeContributions(result1.contributions, result2.contributions)
-        const paddedContributions = padContributionsToStartOfYear(mergedContributions)
+        const yearContributions = filterAndPadContributionsToYear(mergedContributions)
 
-        setContributions(paddedContributions)
-        // Use stats from first account (primary account)
-        setStats(result1.stats)
+        setContributions(yearContributions)
+
+        // Merge stats from both accounts
+        if (result1.stats && result2.stats) {
+          setStats({
+            totalContributions: result1.stats.totalContributions + result2.stats.totalContributions,
+            repositoriesCount: result1.stats.repositoriesCount + result2.stats.repositoriesCount,
+            followers: result1.stats.followers + result2.stats.followers,
+            following: result1.stats.following + result2.stats.following
+          })
+        } else {
+          setStats(result1.stats)
+        }
       } catch (err) {
         setError('Failed to load GitHub data.')
         console.error('GitHub API Error:', err)
@@ -190,9 +202,19 @@ export default function GitHubActivity() {
         </motion.a>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
-        {/* Chart */}
-        <div className="flex-1 bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 overflow-x-auto">
+      {/* Chart Container */}
+      <div className="relative bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4 overflow-x-auto">
+        {/* Stats Grid - Positioned Top Right */}
+        {stats && (
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-2 sm:gap-3">
+            <StatItem label="CONTRIBUTIONS" value={stats.totalContributions.toLocaleString()} compact />
+            <StatItem label="REPOSITORIES" value={stats.repositoriesCount.toString()} compact />
+            <StatItem label="FOLLOWERS" value={stats.followers.toString()} compact />
+            <StatItem label="FOLLOWING" value={stats.following.toString()} compact />
+          </div>
+        )}
+
+        <div>
         {/* Month labels */}
         <div className="flex gap-0.5 sm:gap-1 mb-1 sm:mb-2 min-w-max ml-[42px] sm:ml-[58px]">
           {(() => {
@@ -297,32 +319,30 @@ export default function GitHubActivity() {
           </div>
         </div>
         </div>
-
-        {/* Stats Sidebar */}
-        {stats && (
-          <div className="w-full lg:w-40 flex flex-col gap-3 sm:gap-4">
-            <StatItem label="Contributions" value={stats.totalContributions.toLocaleString()} />
-            <StatItem label="Repositories" value={stats.repositoriesCount.toString()} />
-            <StatItem label="Followers" value={stats.followers.toString()} />
-            <StatItem label="Following" value={stats.following.toString()} />
-          </div>
-        )}
       </div>
     </motion.div>
   )
 }
 
-function StatItem({ label, value }: { label: string; value: string }) {
+function StatItem({ label, value, compact }: { label: string; value: string; compact?: boolean }) {
   return (
     <motion.div
-      className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 p-3 sm:p-4"
+      className={`border-2 border-gray-200 dark:border-gray-700 ${
+        compact
+          ? 'bg-gray-100 dark:bg-gray-700 px-2 sm:px-3 py-1.5 sm:py-2'
+          : 'bg-gray-50 dark:bg-gray-800 p-3 sm:p-4'
+      }`}
       whileHover={{ scale: 1.05, y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="text-[11px] sm:text-xs uppercase text-text-light/60 dark:text-text-dark/60 font-semibold tracking-wider mb-1 sm:mb-2">
+      <div className={`uppercase text-text-light/60 dark:text-text-dark/60 font-semibold tracking-wider ${
+        compact ? 'text-[9px] sm:text-[10px] mb-0.5' : 'text-[11px] sm:text-xs mb-1 sm:mb-2'
+      }`}>
         {label}
       </div>
-      <div className="text-lg sm:text-2xl font-bold text-primary">
+      <div className={`font-bold text-primary ${
+        compact ? 'text-sm sm:text-base' : 'text-lg sm:text-2xl'
+      }`}>
         {value}
       </div>
     </motion.div>
