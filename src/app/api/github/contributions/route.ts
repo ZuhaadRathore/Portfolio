@@ -34,7 +34,6 @@ export async function GET(request: NextRequest) {
               }
             }
           }
-          totalContributions
         }
         repositories(first: 100) {
           totalCount
@@ -94,10 +93,13 @@ export async function GET(request: NextRequest) {
       }))
     )
 
+    // Calculate total contributions from the days
+    const totalContributions = contributionDays.reduce((sum, day) => sum + day.count, 0)
+
     return NextResponse.json({
       contributionDays,
       stats: {
-        totalContributions: user.contributionsCollection.totalContributions,
+        totalContributions,
         repositoriesCount: user.repositories.totalCount,
         followers: user.followers.totalCount,
         following: user.following.totalCount
