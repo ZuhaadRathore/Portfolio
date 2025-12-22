@@ -4,12 +4,13 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3005",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@studio-freight/react-lenis": "^0.0.47",
     "autoprefixer": "^10.4.21",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.446.0",

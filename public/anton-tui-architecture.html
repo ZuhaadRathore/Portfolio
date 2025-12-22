@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anton-TUI Architecture</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono:wght@400;500;700&display=swap');
+
+        :root {
+            /* Light mode (default) */
+            --bg-color: #F3F3F3;
+            --surface-color: #FFFFFF;
+            --text-color: #1A1A1A;
+            --border-color: #000000;
+            --shadow: 4px 4px 0px #000000;
+            --primary: #FDC435;
+            --primary-light: #FFE08A;
+
+            /* Component accents */
+            --accent-input: #10b981;
+            --accent-event: #FDC435;
+            --accent-layout: #3b82f6;
+            --accent-widget: #8b5cf6;
+            --accent-theme: #ec4899;
+            --accent-render: #14b8a6;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --surface-color: #1E1E1E;
+                --text-color: #FFFFFF;
+                --border-color: #FFFFFF;
+                --shadow: 4px 4px 0px #FFFFFF;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Roboto Mono', monospace;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .architecture-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-weight: 400;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.6;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* COMPONENT STYLES */
+        .layer-container {
+            position: relative;
+            background: var(--surface-color);
+            border: 3px solid var(--border-color);
+            border-radius: 0;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .layer-container:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0px var(--border-color);
+        }
+
+        .layer-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-snippet {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--bg-color);
+            padding: 12px;
+            border-radius: 0;
+            border: 3px solid var(--border-color);
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        /* BRANCHING LAYOUT */
+        .branch-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .branch-item {
+            background: var(--surface-color);
+            padding: 16px;
+            border-radius: 0;
+            border: 3px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .branch-item:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--border-color);
+        }
+
+        .branch-item::before {
+            content: '';
+            position: absolute;
+            top: -23px;
+            left: 50%;
+            width: 3px;
+            height: 20px;
+            background: var(--border-color);
+        }
+
+        /* DATA FLOW VISUALIZATION */
+        .flow-bar {
+            display: flex;
+            gap: 4px;
+            margin-top: 12px;
+            height: 8px;
+        }
+
+        .flow-segment {
+            flex: 1;
+            border-radius: 2px;
+            opacity: 0.4;
+            animation: flowPulse 2s infinite;
+        }
+
+        /* SIDE COMPONENT (Theme Engine) */
+        .side-component {
+            position: absolute;
+            right: -280px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 260px;
+            background: var(--surface-color);
+            border: 3px solid var(--accent-theme);
+            border-radius: 0;
+            padding: 16px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .has-side:hover .side-component {
+            opacity: 1;
+            right: -300px;
+            transform: translateY(-50%) translate(-4px, -4px);
+            box-shadow: 8px 8px 0px var(--border-color);
+        }
+
+        .side-connector {
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            width: 20px;
+            height: 3px;
+            background: var(--accent-theme);
+        }
+
+        /* CONNECTOR ARROWS */
+        .connector {
+            text-align: center;
+            color: var(--border-color);
+            font-size: 2rem;
+            margin: -20px 0;
+            z-index: 10;
+            position: relative;
+        }
+
+        .connector-split {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .connector-split::before,
+        .connector-split::after {
+            content: '';
+            flex: 1;
+            height: 3px;
+            background: var(--border-color);
+        }
+
+        /* CONVERGE ARROWS */
+        .converge-container {
+            position: relative;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .converge-line {
+            position: absolute;
+            width: 3px;
+            background: var(--border-color);
+            top: 0;
+        }
+
+        .converge-line.left { left: 16.66%; height: 20px; }
+        .converge-line.center { left: 50%; height: 20px; }
+        .converge-line.right { left: 83.33%; height: 20px; }
+
+        .converge-horizontal {
+            position: absolute;
+            height: 3px;
+            background: var(--border-color);
+            top: 20px;
+            left: 16.66%;
+            right: 16.66%;
+        }
+
+        .converge-arrow {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--border-color);
+            font-size: 1.5rem;
+        }
+
+        /* EXPLANATION HOVER */
+        .explanation {
+            font-size: 0.85rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-top: 10px;
+            line-height: 1.5;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+        }
+
+        .layer-container:hover .explanation,
+        .branch-item:hover .explanation {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        /* COLOR VARIANTS */
+        .section-input { border-left: 4px solid var(--accent-input); }
+        .section-event { border-left: 4px solid var(--accent-event); }
+        .section-layout { border-left: 4px solid var(--accent-layout); }
+        .section-widget { border-left: 4px solid var(--accent-widget); }
+        .section-theme { border-left: 4px solid var(--accent-theme); }
+        .section-render { border-left: 4px solid var(--accent-render); }
+
+        .flow-segment.input { background: var(--accent-input); }
+        .flow-segment.event { background: var(--accent-event); }
+        .flow-segment.layout { background: var(--accent-layout); }
+        .flow-segment.widget { background: var(--accent-widget); }
+        .flow-segment.theme { background: var(--accent-theme); }
+        .flow-segment.render { background: var(--accent-render); }
+
+        /* ANIMATIONS */
+        @keyframes flowPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px currentColor; }
+            50% { box-shadow: 0 0 20px currentColor; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .branch-container {
+                grid-template-columns: 1fr;
+            }
+
+            .side-component {
+                position: static;
+                width: 100%;
+                margin-top: 20px;
+                opacity: 1;
+                transform: none;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ICON STYLES */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 0;
+            font-size: 1rem;
+            border: 2px solid;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 0;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+            border: 2px solid;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="architecture-wrapper">
+
+    <div>
+        <h2>Anton-TUI Architecture</h2>
+        <div class="subtitle">Immediate-mode terminal UI library with deterministic event processing</div>
+    </div>
+
+    <!-- 1. INPUT LAYER -->
+    <div class="layer-container section-input">
+        <span class="layer-label" style="color: var(--accent-input)">
+            <span class="icon" style="background: var(--accent-input); color: black;">⌨</span>
+            Step 1: Keyboard Input
+        </span>
+        <div style="font-family: monospace; font-size: 1.1rem; margin-bottom: 8px;">
+            Raw terminal events (keypresses, mouse, resize)
+        </div>
+
+        <div class="flow-bar">
+            <div class="flow-segment input" style="animation-delay: 0s"></div>
+            <div class="flow-segment input" style="animation-delay: 0.2s"></div>
+            <div class="flow-segment input" style="animation-delay: 0.4s"></div>
+            <div class="flow-segment input" style="animation-delay: 0.6s"></div>
+        </div>
+
+        <div class="explanation">
+            The library captures raw terminal events from stdin - primarily keyboard input (Ctrl+C, Arrow keys, Tab, Enter) and window resize events. This is the entry point for all user interaction in the terminal UI.
+        </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- 2. EVENT LOOP (CORE) -->
+    <div class="layer-container section-event">
+        <span class="layer-label" style="color: var(--accent-event)">
+            <span class="icon" style="background: var(--accent-event); color: black;">⚡</span>
+            Step 2: Deterministic Event Loop
+            <span class="badge" style="background: var(--accent-event); color: black;">CORE</span>
+        </span>
+
+        <div style="font-family: monospace; font-size: 0.95rem; margin: 10px 0;">
+            <strong>Event Queue Processing</strong>
+        </div>
+
+        <div class="code-snippet" style="border-color: var(--accent-event);">
+            <div style="opacity: 0.6;">// Deterministic event handling</div>
+            <div>loop {</div>
+            <div>&nbsp;&nbsp;event = poll_event();</div>
+            <div>&nbsp;&nbsp;state = update_state(event);</div>
+            <div>&nbsp;&nbsp;layout = compute_layout(state);</div>
+            <div>&nbsp;&nbsp;render(layout);</div>
+            <div>}</div>
+        </div>
+
+        <div class="explanation">
+            The event loop is <strong>deterministic</strong> - the same input sequence always produces the same state transitions. Events are queued, processed sequentially, and trigger state updates before any rendering occurs. This predictability is crucial for testing and debugging complex UI interactions.
+        </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- 3. LAYOUT ENGINE (BRANCHING) -->
+    <div class="layer-container section-layout has-side">
+        <span class="layer-label" style="color: var(--accent-layout)">
+            <span class="icon" style="background: var(--accent-layout); color: black;">⚙</span>
+            Step 3: Layout Engine
+        </span>
+
+        <div style="font-size: 0.9rem; margin-bottom: 8px; opacity: 0.6;">
+            Flexbox-inspired layout system with three primitives
+        </div>
+
+        <div class="connector-split">
+            <span>BRANCHES INTO</span>
+        </div>
+
+        <div class="branch-container">
+            <div class="branch-item" style="border-color: var(--accent-layout);">
+                <div style="font-weight: 700; color: var(--accent-layout); margin-bottom: 8px;">📚 Stack</div>
+                <div style="font-size: 0.8rem;">Vertical/horizontal linear layout</div>
+                <div class="explanation" style="max-height: 100px;">
+                    Stack widgets vertically or horizontally, similar to flexbox's flex-direction. Used for toolbars, lists, and sequential content.
+                </div>
+            </div>
+
+            <div class="branch-item" style="border-color: var(--accent-layout);">
+                <div style="font-weight: 700; color: var(--accent-layout); margin-bottom: 8px;">⊞ Grid</div>
+                <div style="font-size: 0.8rem;">2D cell-based layout</div>
+                <div class="explanation" style="max-height: 100px;">
+                    Fixed grid system for dashboards, data tables, and structured multi-widget views. Each cell can contain any widget.
+                </div>
+            </div>
+
+            <div class="branch-item" style="border-color: var(--accent-layout);">
+                <div style="font-weight: 700; color: var(--accent-layout); margin-bottom: 8px;">⫼ Split</div>
+                <div style="font-size: 0.8rem;">Resizable pane divider</div>
+                <div class="explanation" style="max-height: 100px;">
+                    Dynamic split panes (like tmux). Users can resize sections with keyboard shortcuts. Perfect for editor-style layouts.
+                </div>
+            </div>
+        </div>
+
+        <!-- THEME ENGINE (SIDE BRANCH) -->
+        <div class="side-connector" style="background: var(--accent-theme);"></div>
+        <div class="side-component">
+            <span class="layer-label" style="color: var(--accent-theme);">
+                <span class="icon" style="background: var(--accent-theme); color: black;">🎨</span>
+                Theme Engine (.ath DSL)
+            </span>
+
+            <div class="code-snippet" style="border-color: var(--accent-theme); font-size: 0.75rem;">
+                <div style="color: var(--accent-theme);">// example.ath</div>
+                <div>button {</div>
+                <div>&nbsp;&nbsp;bg: #2d3748;</div>
+                <div>&nbsp;&nbsp;fg: #e2e8f0;</div>
+                <div>&nbsp;&nbsp;border: solid;</div>
+                <div>}</div>
+                <div style="margin-top: 8px;">button:focused {</div>
+                <div>&nbsp;&nbsp;bg: #3b82f6;</div>
+                <div>&nbsp;&nbsp;border: double;</div>
+                <div>}</div>
+            </div>
+
+            <div style="font-size: 0.75rem; margin-top: 8px; opacity: 0.7;">
+                CSS-like theming with semantic tokens. Supports state variants: <strong>:focused</strong>, <strong>:hovered</strong>, <strong>:disabled</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="converge-container">
+        <div class="converge-line left"></div>
+        <div class="converge-line center"></div>
+        <div class="converge-line right"></div>
+        <div class="converge-horizontal"></div>
+        <div class="converge-arrow">↓</div>
+    </div>
+
+    <!-- 4. WIDGET SYSTEM -->
+    <div class="layer-container section-widget">
+        <span class="layer-label" style="color: var(--accent-widget)">
+            <span class="icon" style="background: var(--accent-widget); color: black;">📦</span>
+            Step 4: Widget Registry
+        </span>
+
+        <div style="font-size: 0.9rem; margin-bottom: 12px; opacity: 0.6;">
+            Composable UI components with shared rendering interface
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div style="background: var(--bg-color); padding: 12px; border-radius: 0; border: 3px solid var(--accent-widget);">
+                <strong style="color: var(--accent-widget);">📊 Table</strong>
+                <div style="font-size: 0.8rem; margin-top: 4px;">Scrollable data grid with sorting</div>
+            </div>
+
+            <div style="background: var(--bg-color); padding: 12px; border-radius: 0; border: 3px solid var(--accent-widget);">
+                <strong style="color: var(--accent-widget);">📝 Input</strong>
+                <div style="font-size: 0.8rem; margin-top: 4px;">Text input with cursor & history</div>
+            </div>
+
+            <div style="background: var(--bg-color); padding: 12px; border-radius: 0; border: 3px solid var(--accent-widget);">
+                <strong style="color: var(--accent-widget);">📈 Status Bar</strong>
+                <div style="font-size: 0.8rem; margin-top: 4px;">Bottom info bar with live data</div>
+            </div>
+
+            <div style="background: var(--bg-color); padding: 12px; border-radius: 0; border: 3px solid var(--accent-widget);">
+                <strong style="color: var(--accent-widget);">⌨ Keybind Help</strong>
+                <div style="font-size: 0.8rem; margin-top: 4px;">Dynamic keybind overlay panel</div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            All widgets implement a common trait with <strong>render(&self, buffer: &mut Buffer)</strong>. The widget registry maintains instances, handles focus management, and dispatches keyboard events to the active widget.
+        </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- 5. RENDERER -->
+    <div class="layer-container section-render">
+        <span class="layer-label" style="color: var(--accent-render)">
+            <span class="icon" style="background: var(--accent-render); color: black;">🖥</span>
+            Step 5: Double-Buffered Renderer
+        </span>
+
+        <div style="font-family: monospace; font-size: 0.95rem; margin: 10px 0;">
+            <strong>Flicker-Free Terminal Output</strong>
+        </div>
+
+        <div class="code-snippet" style="border-color: var(--accent-render);">
+            <div style="opacity: 0.6;">// Render pipeline</div>
+            <div>back_buffer.clear();</div>
+            <div>widgets.render(&mut back_buffer);</div>
+            <div>diff = back_buffer.diff(front_buffer);</div>
+            <div>stdout.write(diff);</div>
+            <div>swap(front_buffer, back_buffer);</div>
+        </div>
+
+        <div style="margin-top: 16px; padding: 12px; background: var(--bg-color); border-radius: 0; border: 3px solid var(--accent-render);">
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px;">
+                <strong style="color: var(--accent-render);">Terminal Output Examples:</strong>
+            </div>
+            <div style="font-family: 'Roboto Mono', monospace; font-size: 0.8rem; line-height: 1.8;">
+                <div>┌─────────────────────┐</div>
+                <div>│ <span style="color: var(--accent-input);">[Input Field]</span>     │</div>
+                <div>├─────────────────────┤</div>
+                <div>│ Status: <span style="color: var(--accent-widget);">Ready</span>    │</div>
+                <div>└─────────────────────┘</div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            Uses double-buffering to eliminate flicker. Only changed cells are written to stdout (diff-based rendering). This keeps CPU usage low and produces smooth 60fps terminal UIs even with heavy state updates.
+        </div>
+    </div>
+
+    <!-- FINAL NOTE -->
+    <div style="text-align: center; margin-top: 20px; padding: 20px; border-top: 3px solid var(--border-color);">
+        <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 8px;">
+            💡 <strong>Key Principle:</strong> Immediate-mode architecture
+        </div>
+        <div style="font-size: 0.85rem; opacity: 0.7; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+            Unlike retained-mode UIs (DOM, native widgets), Anton-TUI rebuilds the entire UI on every frame from application state. This eliminates state synchronization bugs and makes the UI completely deterministic and easy to reason about.
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

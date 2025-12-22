@@ -1,227 +1,164 @@
 'use client'
 
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
-import { Github, Linkedin, Twitter, ChevronDown } from 'lucide-react'
+import { Github, Linkedin, Twitter, ChevronDown, ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2
-    }
-  }
-}
-
-const itemVariants = {
-  hidden: {
-    opacity: 0,
-    y: 30,
-    scale: 0.9
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1
-  }
-}
-
-const profileVariants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.8,
-    rotate: -10
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0
-  }
-}
-
-const badgeVariants = {
-  hidden: {
-    opacity: 0,
-    x: 20,
-    y: 20
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    y: 0
-  }
-}
+import Magnetic from '@/components/ui/magnetic'
+import { useRef } from 'react'
 
 export default function HeroSection() {
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.2 })
+  const containerRef = useRef(null)
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.1 })
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  })
 
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about')
-    if (aboutSection) {
-      const headerOffset = 100
-      const elementPosition = aboutSection.getBoundingClientRect().top + window.scrollY - headerOffset
-      window.scrollTo({ top: elementPosition, behavior: 'smooth' })
-    }
-  }
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+
+  const socialLinks = [
+    { icon: Github, href: "https://github.com/ZuhaadRathore", label: "GitHub" },
+    { icon: Linkedin, href: "https://linkedin.com/in/zuhaad-rathore", label: "LinkedIn" },
+    { icon: Twitter, href: "https://twitter.com/zuhaad_rathore", label: "Twitter" }
+  ]
+
+  const titleWords = ["Full-Stack", "Developer"]
 
   return (
     <section
-      ref={ref}
-      className="flex flex-col justify-center items-center relative py-12 md:py-16 pb-24"
+      ref={containerRef}
+      id="home"
+      className="flex flex-col justify-center items-center relative py-12 md:py-24 pb-32 min-h-[90vh]"
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-start w-full"
-    >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate={isVisible ? "visible" : "hidden"}
-        className="contents"
+      <div 
+        ref={ref}
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 items-center w-full max-w-7xl mx-auto px-4 sm:px-6"
       >
-      <div className="md:col-span-2">
-        <motion.h1
-          className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl uppercase tracking-tighter mb-4 text-text-light dark:text-text-dark leading-[0.9]"
-          variants={itemVariants}
-        >
-          <motion.span
-            className="inline-block"
-            initial={{ opacity: 0, x: -50 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            Full-Stack
-          </motion.span>
-          <br />
-          <motion.span
-            className="inline-block"
-            initial={{ opacity: 0, x: 50 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Developer
-          </motion.span>
-        </motion.h1>
-        <motion.p
-          className="text-lg sm:text-xl md:text-2xl text-text-light/80 dark:text-text-dark/80 max-w-3xl mb-6"
-          variants={itemVariants}
-        >
-          I build exceptional and accessible digital experiences for the web.
-        </motion.p>
-        <motion.div
-          className="flex gap-4"
-          variants={itemVariants}
-        >
-          <Link
-            href="https://github.com/ZuhaadRathore"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
-          >
-            <motion.div
-              whileHover={{ scale: 1.2, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+        <div className="md:col-span-2 z-10">
+          <h1 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl uppercase tracking-tighter mb-6 text-text-light dark:text-text-dark leading-[0.85]">
+            {titleWords.map((word, i) => (
+              <div key={i} className="overflow-hidden">
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={isVisible ? { y: 0 } : { y: "100%" }}
+                  transition={{ 
+                    duration: 1, 
+                    ease: [0.33, 1, 0.68, 1],
+                    delay: 0.1 + (i * 0.1) 
+                  }}
+                >
+                  {word}
+                </motion.div>
+              </div>
+            ))}
+          </h1>
+          
+          <div className="overflow-hidden mb-8">
+             <motion.p
+              className="text-lg sm:text-xl md:text-2xl text-text-light/80 dark:text-text-dark/80 max-w-2xl font-body"
+              initial={{ y: "100%", opacity: 0 }}
+              animate={isVisible ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <Github className="w-6 h-6" />
-            </motion.div>
-          </Link>
-          <Link
-            href="https://linkedin.com/in/zuhaad-rathore"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
+              I build exceptional and accessible digital experiences for the web.
+            </motion.p>
+          </div>
+
+          <motion.div
+            className="flex gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <motion.div
-              whileHover={{ scale: 1.2, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Linkedin className="w-6 h-6" />
-            </motion.div>
-          </Link>
-          <Link
-            href="https://twitter.com/zuhaad_rathore"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Twitter"
-            className="text-text-light dark:text-text-dark hover:text-primary transition-colors"
-          >
-            <motion.div
-              whileHover={{ scale: 1.2, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Twitter className="w-6 h-6" />
-            </motion.div>
-          </Link>
-        </motion.div>
-      </div>
-      <div className="relative w-full max-w-[250px] sm:max-w-xs mx-auto md:mx-0">
-        <motion.div
-          className="absolute top-2 left-2 w-full h-full bg-primary rounded-full"
-          initial={{ scale: 0, rotate: 45 }}
-          animate={isVisible ? { scale: 1, rotate: 0 } : { scale: 0, rotate: 45 }}
-          transition={{ duration: 0.8, delay: 0.7, ease: "backOut" }}
-        />
-        <motion.div
-          className="relative z-10 w-full aspect-square rounded-full border-3 border-border-light dark:border-border-dark overflow-hidden"
-          variants={profileVariants}
+            {socialLinks.map((social, i) => (
+              <Magnetic key={social.label}>
+                <Link
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="block text-text-light dark:text-text-dark hover:text-primary transition-colors"
+                >
+                  <div className="p-3 border-2 border-transparent hover:border-text-light dark:hover:border-text-dark rounded-full transition-all duration-300">
+                    <social.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+                  </div>
+                </Link>
+              </Magnetic>
+            ))}
+          </motion.div>
+        </div>
+
+        <motion.div 
+          style={{ y, opacity }}
+          className="relative w-full max-w-[300px] sm:max-w-md mx-auto md:mx-0 md:justify-self-end"
         >
           <motion.div
-            className="relative w-full h-full"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
+            className="absolute top-4 left-4 w-full h-full bg-primary rounded-full"
+            initial={{ scale: 0 }}
+            animate={isVisible ? { scale: 1 } : { scale: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+          />
+          <motion.div
+            className="relative z-10 w-full aspect-square rounded-full border-4 border-border-light dark:border-border-dark overflow-hidden bg-surface-light dark:bg-surface-dark"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={isVisible ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
             <Image
               src="/images/pfp.jpg"
               alt="Profile Picture"
               fill
-              className="object-cover"
+              className="object-cover scale-110 hover:scale-100 transition-transform duration-700 ease-out"
               priority
             />
           </motion.div>
+          
+          <motion.div
+            className="absolute bottom-0 -right-4 z-20"
+            initial={{ scale: 0, rotate: -20 }}
+            animate={isVisible ? { scale: 1, rotate: -5 } : { scale: 0, rotate: -20 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              delay: 1 
+            }}
+          >
+            <Magnetic>
+              <div className="group bg-surface-light dark:bg-surface-dark px-6 py-3 border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark cursor-default hover:bg-primary transition-colors duration-300">
+                <p className="font-body text-sm font-bold uppercase text-primary group-hover:text-white tracking-widest flex items-center gap-2">
+                  Available for Hire
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </p>
+              </div>
+            </Magnetic>
+          </motion.div>
         </motion.div>
-        <motion.div
-          className="absolute bottom-0 right-0 bg-background-light dark:bg-background-dark p-2 border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark z-20"
-          variants={badgeVariants}
-          whileHover={{
-            scale: 1.1,
-            rotate: -2
-          }}
-          transition={{ duration: 0.2 }}
-        >
-          <p className="font-body text-sm font-bold uppercase text-primary">
-            AVAILABLE FOR HIRE
-          </p>
-        </motion.div>
-      </div>
-      </motion.div>
       </div>
 
-      {/* Scroll Down Indicator */}
       <motion.button
-        onClick={scrollToAbout}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-text-light dark:text-text-dark hover:text-primary transition-colors cursor-pointer"
-        initial={{ opacity: 0, y: -20 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
-        aria-label="Scroll to About section"
+        onClick={() => {
+            const nextSection = document.getElementById('about') || document.body.nextElementSibling
+            if (nextSection) {
+               nextSection.scrollIntoView({ behavior: 'smooth' })
+            } else {
+               window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+            }
+        }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-text-light dark:text-text-dark z-20 cursor-pointer"
+        initial={{ opacity: 0 }}
+        animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 1, delay: 1.5 }}
       >
-        <span className="text-xs uppercase tracking-wider font-bold">Scroll Down</span>
-        <motion.div
-          animate={{
-            y: [0, 8, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
+        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Scroll</span>
+        {/* Simple CSS animation instead of Framer Motion for better robustness */}
+        <div className="animate-bounce">
           <ChevronDown className="w-6 h-6" />
-        </motion.div>
+        </div>
       </motion.button>
     </section>
   )

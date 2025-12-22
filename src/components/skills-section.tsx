@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import Magnetic from '@/components/ui/magnetic'
 
 interface Skill {
   name: string
@@ -88,15 +89,14 @@ const cardVariants = {
   hidden: {
     opacity: 0,
     y: 50,
-    scale: 0.9
   },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
       duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94] as const
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+      staggerChildren: 0.1
     }
   }
 }
@@ -111,7 +111,6 @@ const skillItemVariants = {
     x: 0,
     transition: {
       duration: 0.5,
-      ease: [0.0, 0.0, 0.2, 1.0] as const
     }
   }
 }
@@ -122,56 +121,36 @@ function SkillCard({ title, skills, index }: SkillCardProps) {
   return (
     <motion.div
       ref={ref as any}
-      className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-4 sm:p-6 shadow-brutal-light dark:shadow-brutal-dark"
+      className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-6 sm:p-8 shadow-brutal-light dark:shadow-brutal-dark hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#000000] dark:hover:shadow-[8px_8px_0px_#FFFFFF] transition-all duration-300"
       variants={cardVariants}
       initial="hidden"
       animate={isVisible ? "visible" : "hidden"}
       transition={{ delay: index * 0.2 }}
-      whileHover={{
-        y: -8,
-        scale: 1.02,
-        transition: { duration: 0.3 }
-      }}
     >
       <motion.h3
-        className="font-display text-2xl sm:text-3xl uppercase text-primary mb-4 sm:mb-6 text-center"
-        initial={{ opacity: 0, y: -20 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-        transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
+        className="font-display text-2xl sm:text-3xl uppercase text-primary mb-6 sm:mb-8 text-center"
       >
         {title}
       </motion.h3>
-      <div className="space-y-3 sm:space-y-4">
-        {skills.map((skill, skillIndex) => (
+      <div className="space-y-4">
+        {skills.map((skill) => (
           <motion.div
             key={skill.name}
-            className="flex items-center gap-3 sm:gap-4 skill-item"
+            className="flex items-center gap-4 group"
             variants={skillItemVariants}
-            initial="hidden"
-            animate={isVisible ? "visible" : "hidden"}
-            transition={{ delay: index * 0.2 + skillIndex * 0.1 + 0.5 }}
-            whileHover={{
-              x: 8,
-              scale: 1.05,
-              transition: { duration: 0.2 }
-            }}
           >
-            <motion.div
-              className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0"
-              whileHover={{
-                scale: 1.1
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              <Image
-                src={skill.icon}
-                alt={skill.name}
-                fill
-                sizes="40px"
-                className="skill-icon object-contain"
-              />
-            </motion.div>
-            <span className="font-body font-bold text-base sm:text-lg text-text-light dark:text-text-dark">
+            <Magnetic>
+                <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 bg-background-light dark:bg-background-dark border-2 border-border-light dark:border-border-dark flex items-center justify-center group-hover:bg-primary transition-colors duration-300">
+                    <Image
+                        src={skill.icon}
+                        alt={skill.name}
+                        width={24}
+                        height={24}
+                        className="object-contain w-6 h-6 sm:w-7 sm:h-7"
+                    />
+                </div>
+            </Magnetic>
+            <span className="font-body font-bold text-lg sm:text-xl text-text-light dark:text-text-dark group-hover:text-primary transition-colors duration-300">
               {skill.name}
             </span>
           </motion.div>
@@ -187,24 +166,21 @@ export default function SkillsSection() {
   return (
     <motion.section
       ref={ref}
-      className="py-8 md:py-16"
-      initial={{ opacity: 0 }}
-      animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.8 }}
+      className="py-16 md:py-32"
     >
       <motion.h2
-        className="font-display text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-center mb-8 md:mb-12 text-text-light dark:text-text-dark"
-        initial={{ opacity: 0, y: -30 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -30 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        className="font-display text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter text-center mb-16 md:mb-24 text-text-light dark:text-text-dark"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.8 }}
       >
         Skills
       </motion.h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-        <SkillCard title="Programming Languages" skills={programmingLanguages} index={0} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
+        <SkillCard title="Languages" skills={programmingLanguages} index={0} />
         <SkillCard title="Frameworks" skills={frameworks} index={1} />
         <SkillCard title="Tools" skills={tools} index={2} />
       </div>
     </motion.section>
   )
-}
+}       

@@ -1,9 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
 import { Briefcase, Calendar, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import Magnetic from '@/components/ui/magnetic'
 
 interface Experience {
   id: number
@@ -57,164 +58,110 @@ const experiences: Experience[] = [
   }
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3
-    }
-  }
-}
-
-const itemVariants = {
-  hidden: {
-    opacity: 0,
-    x: -50
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94] as const
-    }
-  }
-}
-
 export default function ExperienceSection() {
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.2 })
+  const containerRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end center"]
+  })
 
   return (
-    <motion.section
-      ref={ref}
-      className="py-8 md:py-16"
-      initial={{ opacity: 0 }}
-      animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.8 }}
+    <section
+      ref={containerRef}
+      className="py-16 md:py-32 relative"
     >
-      <motion.h2
-        className="font-display text-4xl sm:text-5xl md:text-7xl uppercase tracking-tighter text-center mb-8 md:mb-12 text-text-light dark:text-text-dark"
-        initial={{ opacity: 0, y: -30 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: -30 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
-        Experience
-      </motion.h2>
+      <div className="max-w-4xl mx-auto px-4">
+        <motion.h2
+            className="font-display text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter text-center mb-16 md:mb-24 text-text-light dark:text-text-dark"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+        >
+            Experience
+        </motion.h2>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate={isVisible ? "visible" : "hidden"}
-        className="max-w-4xl mx-auto space-y-6 md:space-y-8"
-      >
-        {experiences.map((experience, index) => (
-          <motion.div
-            key={experience.id}
-            variants={itemVariants}
-            className="relative"
-            whileHover={{
-              x: 8,
-              transition: { duration: 0.3 }
-            }}
-          >
-            {/* Timeline connector - hide on last item */}
-            {index < experiences.length - 1 && (
-              <div className="hidden md:block absolute left-6 top-20 w-0.5 h-full bg-border-light dark:bg-border-dark opacity-30" />
-            )}
-
-            <div className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-5 sm:p-6 md:p-8 shadow-brutal-light dark:shadow-brutal-dark relative overflow-hidden group">
-              {/* Hover gradient effect */}
-              <motion.div
-                className="absolute -inset-1 bg-gradient-to-r from-primary to-yellow-300 rounded-lg blur opacity-0 group-hover:opacity-20 transition duration-1000"
-                animate={{
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-
-              <div className="relative z-10">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <motion.div
-                        className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-primary border-3 border-border-light dark:border-border-dark flex items-center justify-center"
-                        whileHover={{ rotate: 5, scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Briefcase className="h-5 w-5 sm:h-6 sm:w-6 text-black" />
-                      </motion.div>
-                      <div>
-                        <h3 className="font-display text-xl sm:text-2xl md:text-3xl uppercase text-primary leading-tight">
-                          {experience.role}
-                        </h3>
-                        {experience.websiteUrl ? (
-                          <Link
-                            href={experience.websiteUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-body font-bold text-base sm:text-lg text-text-light dark:text-text-dark hover:text-primary transition-colors inline-flex items-center gap-1 group"
-                          >
-                            {experience.company}
-                            <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </Link>
-                        ) : (
-                          <p className="font-body font-bold text-base sm:text-lg text-text-light dark:text-text-dark">
-                            {experience.company}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 bg-background-light dark:bg-background-dark border-2 border-border-light dark:border-border-dark px-3 py-2 self-start">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    <span className="font-mono text-sm font-bold text-text-light dark:text-text-dark whitespace-nowrap">
-                      {experience.period}
-                    </span>
-                    {experience.current && (
-                      <motion.span
-                        className="ml-2 px-2 py-0.5 bg-primary text-black text-xs font-bold uppercase"
-                        animate={{
-                          scale: [1, 1.05, 1],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        Current
-                      </motion.span>
-                    )}
-                  </div>
-                </div>
-
-                <p className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80 leading-relaxed">
-                  {experience.description}
-                </p>
-              </div>
+        <div className="relative space-y-12 md:space-y-16">
+            {/* Animated Timeline Line */}
+            <div className="absolute left-6 md:left-8 top-4 w-1 bg-border-light/20 dark:bg-border-dark/20 hidden md:block" style={{ height: 'calc(100% - 1rem)' }}>
+                <motion.div
+                    className="w-full bg-primary origin-top"
+                    style={{ scaleY: scrollYProgress, height: "100%" }}
+                />
             </div>
-          </motion.div>
-        ))}
-      </motion.div>
 
-      {/* Timeline summary */}
-      <motion.div
-        className="mt-12 text-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-      >
-        <p className="font-mono text-sm text-text-light/60 dark:text-text-dark/60">
-          {experiences.length} positions • {new Date().getFullYear() - 2021}+ years of experience
-        </p>
-      </motion.div>
-    </motion.section>
+            {experiences.map((experience, index) => (
+            <motion.div
+                key={experience.id}
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="relative pl-0 md:pl-24"
+            >
+                {/* Timeline Dot */}
+                <div className="absolute left-6 md:left-8 top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-surface-light dark:bg-surface-dark border-4 border-primary z-10 hidden md:block" />
+
+                <div className="group relative bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-6 sm:p-8 shadow-brutal-light dark:shadow-brutal-dark hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#000000] dark:hover:shadow-[8px_8px_0px_#FFFFFF] transition-all duration-300">
+                    
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                        <div>
+                            <h3 className="font-display text-2xl sm:text-3xl uppercase text-text-light dark:text-text-dark mb-2">
+                                {experience.role}
+                            </h3>
+                            <div className="flex items-center gap-2 text-primary font-bold text-lg">
+                                <Briefcase className="w-5 h-5" />
+                                {experience.websiteUrl ? (
+                                    <Link 
+                                        href={experience.websiteUrl}
+                                        target="_blank"
+                                        className="hover:underline decoration-2 underline-offset-4 flex items-center gap-1"
+                                    >
+                                        {experience.company}
+                                        <ExternalLink className="w-4 h-4" />
+                                    </Link>
+                                ) : (
+                                    <span>{experience.company}</span>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-3">
+                            <span className="flex items-center gap-2 px-3 py-1 font-mono text-sm font-bold border-2 border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark">
+                                <Calendar className="w-4 h-4" />
+                                {experience.period}
+                            </span>
+                            {experience.current && (
+                                <span className="px-3 py-1 font-mono text-sm font-bold bg-primary text-black border-2 border-primary">
+                                    CURRENT
+                                </span>
+                            )}
+                        </div>
+                    </div>
+
+                    <p className="text-lg text-text-light/80 dark:text-text-dark/80 leading-relaxed font-body">
+                        {experience.description}
+                    </p>
+                </div>
+            </motion.div>
+            ))}
+        </div>
+
+        <motion.div
+            className="mt-16 text-center"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+        >
+             <Link href="/public/README_RESUME.md" target="_blank" className="inline-block">
+                <Magnetic>
+                    <div className="px-8 py-4 bg-text-light dark:bg-text-dark text-background-light dark:text-background-dark font-display text-xl uppercase tracking-wider hover:bg-primary hover:text-black transition-colors">
+                        View Full Resume
+                    </div>
+                </Magnetic>
+            </Link>
+        </motion.div>
+      </div>
+    </section>
   )
 }
