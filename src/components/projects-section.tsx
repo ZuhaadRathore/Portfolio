@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState, MouseEvent } from 'react'
 
 interface Project {
   id: number
@@ -62,13 +62,38 @@ const projects: Project[] = [
 ]
 
 function ProjectCard({ project }: { project: Project }) {
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartPos = useRef({ x: 0, y: 0 })
+
+  const handleMouseDown = (e: MouseEvent) => {
+    dragStartPos.current = { x: e.clientX, y: e.clientY }
+    setIsDragging(false)
+  }
+
+  const handleMouseMove = (e: MouseEvent) => {
+    const deltaX = Math.abs(e.clientX - dragStartPos.current.x)
+    const deltaY = Math.abs(e.clientY - dragStartPos.current.y)
+    if (deltaX > 5 || deltaY > 5) {
+      setIsDragging(true)
+    }
+  }
+
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (isDragging) {
+      e.preventDefault()
+    }
+  }
+
   return (
-    <div 
+    <div
         className="group relative flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] h-full snap-center"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
     >
       <div className="h-full bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-4 sm:p-6 flex flex-col shadow-brutal-light dark:shadow-brutal-dark transition-all duration-300 hover:-translate-y-2 hover:shadow-[8px_8px_0px_#000000] dark:hover:shadow-[8px_8px_0px_#FFFFFF]">
         <Link
           href={`/projects/${project.id}`}
+          onClick={handleClick}
           className="block w-full aspect-[16/9] bg-gray-100 dark:bg-gray-800 border-2 border-border-light dark:border-border-dark mb-6 overflow-hidden relative group/image cursor-pointer"
         >
           <Image
@@ -86,7 +111,7 @@ function ProjectCard({ project }: { project: Project }) {
         </Link>
 
         <div className="flex-1 flex flex-col">
-            <Link href={`/projects/${project.id}`} className="block">
+            <Link href={`/projects/${project.id}`} onClick={handleClick} className="block">
                 <h3 className="font-display text-2xl sm:text-3xl uppercase text-text-light dark:text-text-dark mb-3 group-hover:text-primary transition-colors line-clamp-1">
                 {project.title}
                 </h3>
