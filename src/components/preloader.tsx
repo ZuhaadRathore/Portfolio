@@ -16,12 +16,10 @@ export default function Preloader() {
 
   const curve = {
     initial: {
-      d: initialPath,
-      transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] }
+      d: initialPath
     },
     exit: {
-      d: targetPath,
-      transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.3 }
+      d: targetPath
     }
   }
 
@@ -56,7 +54,12 @@ export default function Preloader() {
       </motion.p>
       
       <svg className="absolute top-0 w-full h-[calc(100%+300px)] pointer-events-none fill-text-light dark:fill-text-dark">
-        <motion.path variants={curve} initial="initial" exit="exit"></motion.path>
+        <motion.path
+          variants={curve}
+          initial="initial"
+          exit="exit"
+          transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.3 }}
+        ></motion.path>
       </svg>
     </motion.div>
   )

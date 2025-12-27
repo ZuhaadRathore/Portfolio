@@ -327,7 +327,7 @@ export default function GitHubActivity() {
                             'bg-primary border border-primary'
                             ]
 
-                            if (!day) return <div className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
+                            if (!day) return <div key={`${weekIndex}-${dayIndex}`} className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
 
                             return (
                             <motion.div
