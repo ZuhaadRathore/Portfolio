@@ -243,7 +243,7 @@ export default function AntonArchitectureDiagram() {
             {/* Layout (Right) */}
             <div className="relative w-fit mx-auto">
                     {/* Bidirectional connection with Core */}
-                    <div className="absolute top-1/2 right-full w-24 md:w-48 h-px hidden md:block -z-10">
+                    <div className="absolute top-1/2 right-full w-20 md:w-40 h-px hidden md:block -z-10">
                     <ConnectionLine width="100%" />
                     {/* Left arrow (Core to Layout) */}
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 text-text-light dark:text-text-dark rotate-180 z-20">
