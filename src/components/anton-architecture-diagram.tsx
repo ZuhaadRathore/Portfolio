@@ -218,7 +218,7 @@ export default function AntonArchitectureDiagram() {
                     onClick={() => setSelectedNode('state')}
                 />
                 {/* Arrow to Core */}
-                <div className="absolute top-1/2 left-full w-24 md:w-48 h-px hidden md:block -z-10 translate-y-2">
+                <div className="absolute top-1/2 left-full w-24 md:w-48 h-px hidden md:block -z-10 translate-y-4">
                     <ConnectionLine width="100%" />
                     <Arrow />
                 </div>
@@ -243,14 +243,14 @@ export default function AntonArchitectureDiagram() {
             {/* Layout (Right) */}
             <div className="relative w-fit mx-auto">
                     {/* Bidirectional connection with Core */}
-                    <div className="absolute top-1/2 right-full w-20 md:w-40 h-px hidden md:block -z-10">
+                    <div className="absolute top-1/2 right-full w-20 md:w-40 h-px hidden md:block -z-10 mr-4">
                     <ConnectionLine width="100%" />
                     {/* Left arrow (Core to Layout) */}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 text-text-light dark:text-text-dark rotate-180 z-20">
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 text-text-light dark:text-text-dark rotate-180 z-20">
                         <ArrowRight className="w-5 h-5" />
                     </div>
                     {/* Right arrow (Layout to Core) */}
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 text-text-light dark:text-text-dark z-20">
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 text-text-light dark:text-text-dark z-20">
                         <ArrowRight className="w-5 h-5" />
                     </div>
                     </div>
