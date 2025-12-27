@@ -5,7 +5,8 @@
       "Bash(powershell -Command \"Remove-Item -LiteralPath ''\\?\\C:\\Users\\Tavuc\\Documents\\Workspace\\Web\\Portfolio\\nul'' -Force\")",
       "Bash(cmd //c \"del nul\")",
       "Bash(echo \"rm failed with code $?\")",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(Remove-Item \"public\\anton-tui-architecture.html\")"
     ],
     "deny": [],
     "ask": []

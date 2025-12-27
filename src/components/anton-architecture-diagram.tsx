@@ -199,7 +199,7 @@ export default function AntonArchitectureDiagram() {
                     onClick={() => setSelectedNode('input')}
                 />
                 {/* Down to Core */}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 h-32 w-px -z-10">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 h-24 w-px -z-10">
                     <ConnectionLine vertical height="100%" />
                     <ConnectionLabel text="Events" vertical />
                     <Arrow vertical />
