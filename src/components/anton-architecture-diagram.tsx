@@ -281,7 +281,7 @@ export default function AntonArchitectureDiagram() {
                 </div>
 
                 {/* Widgets (Center) */}
-                <div className="relative w-fit mx-auto md:-mr-8">
+                <div className="relative w-fit mx-auto">
                 <DiagramNode
                     id="widgets"
                     selected={selectedNode === 'widgets'}
