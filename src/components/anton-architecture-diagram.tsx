@@ -218,7 +218,7 @@ export default function AntonArchitectureDiagram() {
                     onClick={() => setSelectedNode('state')}
                 />
                 {/* Arrow to Core */}
-                <div className="absolute top-[60%] left-full w-20 md:w-40 h-px hidden md:block -z-10">
+                <div className="absolute top-1/2 left-full w-20 md:w-40 h-px hidden md:block -z-10">
                     <ConnectionLine width="100%" />
                     <Arrow />
                 </div>
