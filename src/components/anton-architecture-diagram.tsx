@@ -169,7 +169,7 @@ export default function AntonArchitectureDiagram() {
 
   return (
     <div className="w-full py-8 text-text-light dark:text-text-dark selection:bg-primary/30 relative">
-      
+
       {/* Header */}
       <div className="mb-12 border-b-2 border-border-light/10 dark:border-border-dark/10 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -281,7 +281,7 @@ export default function AntonArchitectureDiagram() {
                 </div>
 
                 {/* Widgets (Center) */}
-                <div className="relative w-fit mx-auto md:-translate-x-8">
+                <div className="relative w-fit mx-auto md:-translate-x-16 md:-translate-y-4">
                 <DiagramNode
                     id="widgets"
                     selected={selectedNode === 'widgets'}
