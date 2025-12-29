@@ -428,29 +428,14 @@ function InspectorPanel({ node, onClose }: { node: NodeDef, onClose: () => void 
                 </div>
             </div>
 
-            <div className="space-y-6">
-                <div>
-                    <h4 className="flex items-center gap-2 font-bold uppercase text-[10px] tracking-widest mb-2 opacity-60">
-                        <Activity className="w-3 h-3" />
-                        Responsibility
-                    </h4>
-                    <p className="text-sm leading-relaxed text-text-light/90 dark:text-text-dark/90 font-body">
-                        {node.fullDesc}
-                    </p>
-                </div>
-
-                <div className="bg-background-light dark:bg-background-dark border-2 border-border-light/10 dark:border-border-dark/10 p-4 rounded-lg relative group overflow-hidden">
-                    <div className={`absolute top-0 right-0 px-2 py-1 ${node.bgColor} text-[9px] font-mono uppercase rounded-bl text-text-light dark:text-text-dark font-bold`}>
-                        Rust
-                    </div>
-                    <h4 className="flex items-center gap-2 font-bold uppercase text-[10px] tracking-widest mb-2 opacity-60">
-                        <Code2 className="w-3 h-3" />
-                        Logic Snippet
-                    </h4>
-                    <pre className={`font-mono text-[10px] md:text-xs overflow-x-auto ${node.color}`}>
-                        {node.codeSnippet}
-                    </pre>
-                </div>
+            <div>
+                <h4 className="flex items-center gap-2 font-bold uppercase text-[10px] tracking-widest mb-2 opacity-60">
+                    <Activity className="w-3 h-3" />
+                    Responsibility
+                </h4>
+                <p className="text-sm leading-relaxed text-text-light/90 dark:text-text-dark/90 font-body">
+                    {node.fullDesc}
+                </p>
             </div>
         </div>
     )
