@@ -64,11 +64,12 @@ export default function AboutSection() {
               </h3>
               <div className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80">
                 <p>
-                  With over 4 years of experience, I&apos;m a passionate full-stack developer who thrives on
-                  turning complex problems into elegant solutions. My expertise spans React, Next.js, TypeScript,
-                  Rust, and Node.js—but what truly drives me is building products that make a real impact.
-                  Whether it&apos;s serving 1000+ students or empowering gaming creators, I focus on crafting
-                  digital experiences that are both technically excellent and genuinely useful.
+                  I&apos;m a <span className="text-primary font-semibold">systems-focused engineer</span> who builds at the intersection of
+                  <span className="text-primary font-semibold"> low-level performance and modern web</span>. With deep expertise in
+                  <span className="text-primary font-semibold"> Rust for high-performance systems</span>, I bring that same rigor to crafting
+                  blazing-fast web applications. My work spans from <span className="text-primary font-semibold">machine learning pipelines</span> to
+                  production web platforms serving <span className="text-primary font-semibold">1000+ users daily</span>—all built with a focus on
+                  performance, scalability, and elegant architecture.
                 </p>
               </div>
             </motion.div>
@@ -89,16 +90,18 @@ export default function AboutSection() {
               </h3>
               <div className="text-sm sm:text-base text-text-light/80 dark:text-text-dark/80 space-y-3 md:space-y-4">
                 <p>
-                  From pixel-perfect UIs to high-performance backends, I build complete systems.
-                  My frontend work prioritizes accessibility and responsiveness, while my backend
-                  expertise includes designing robust APIs, optimizing databases, and architecting
-                  scalable infrastructure with PostgreSQL, Redis, and modern cloud platforms.
+                  On the web, I architect full-stack applications with <span className="text-primary font-semibold">React, Next.js, and TypeScript</span>,
+                  building <span className="text-primary font-semibold">real-time systems</span> and crafting interfaces that feel effortless.
+                  My <span className="text-primary font-semibold">Rust expertise</span> powers everything from performance-critical backends to
+                  <span className="text-primary font-semibold"> WebAssembly modules</span> that bring native speed to the browser.
+                  I leverage <span className="text-primary font-semibold">PostgreSQL, Redis</span>, and modern infrastructure to build systems that scale.
                 </p>
                 <p>
-                  I believe in owning projects end-to-end. This means not just writing code, but
-                  understanding business requirements, making architectural decisions, and shipping
-                  products that solve real problems. Currently leading technical teams and building
-                  platforms that serve thousands of users daily.
+                  In the <span className="text-primary font-semibold">ML space</span>, I build and deploy practical models—from
+                  <span className="text-primary font-semibold"> NLP pipelines to computer vision</span> systems. I focus on the entire ML lifecycle:
+                  data engineering, model training, optimization, and production deployment. Whether it&apos;s integrating
+                  <span className="text-primary font-semibold"> LLMs into applications</span> or building custom ML solutions from scratch,
+                  I bridge the gap between research and real-world impact.
                 </p>
               </div>
             </motion.div>
