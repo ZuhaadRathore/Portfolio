@@ -26,7 +26,7 @@ export default function HeroSection() {
     { icon: Twitter, href: "https://twitter.com/zuhaad_rathore", label: "Twitter" }
   ]
 
-  const titleWords = ["Full-Stack", "Developer"]
+  const titleWords = ["Engineer &", "Designer"]
 
   return (
     <section
@@ -64,7 +64,7 @@ export default function HeroSection() {
               animate={isVisible ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              I build exceptional and accessible digital experiences for the web.
+              Building beautiful, functional web applications from concept to deployment.
             </motion.p>
           </div>
 
