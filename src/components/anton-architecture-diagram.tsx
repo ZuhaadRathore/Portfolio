@@ -235,7 +235,7 @@ export default function AntonArchitectureDiagram() {
                 {/* Down to Widget Tree */}
                 <div className="absolute top-full left-1/2 -translate-x-1/2 h-32 w-px -z-10 origin-top md:-rotate-[30deg]">
                     <ConnectionLine vertical height="100%" />
-                    <div className="md:rotate-[30deg]">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:rotate-[30deg]">
                         <ConnectionLabel text="State" vertical />
                     </div>
                     <Arrow vertical />
