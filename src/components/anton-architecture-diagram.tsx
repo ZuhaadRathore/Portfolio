@@ -275,9 +275,11 @@ export default function AntonArchitectureDiagram() {
                     onClick={() => setSelectedNode('theme')} 
                 />
                     {/* Arrow to Widgets */}
-                    <div className="absolute top-1/2 left-full translate-x-2 w-24 md:w-44 h-px hidden md:block -z-10">
+                    <div className="absolute top-1/2 left-full translate-x-2 w-24 md:w-44 h-px hidden md:block -z-10 origin-left md:-rotate-[8deg]">
                     <ConnectionLine width="100%" />
-                    <ConnectionLabel text="Styles" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:rotate-[8deg]">
+                        <ConnectionLabel text="Styles" />
+                    </div>
                     <Arrow />
                     </div>
                 </div>
@@ -290,9 +292,11 @@ export default function AntonArchitectureDiagram() {
                     onClick={() => setSelectedNode('widgets')}
                 />
                     {/* Down to Render */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-2 h-28 w-px -z-10">
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 translate-y-2 h-28 w-px -z-10 origin-top md:rotate-[15deg]">
                     <ConnectionLine vertical height="100%" />
-                    <ConnectionLabel text="Draw Calls" vertical />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:-rotate-[15deg]">
+                        <ConnectionLabel text="Draw Calls" vertical />
+                    </div>
                     <Arrow vertical />
                     </div>
                 </div>
