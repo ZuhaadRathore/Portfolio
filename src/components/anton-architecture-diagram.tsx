@@ -185,7 +185,7 @@ export default function AntonArchitectureDiagram() {
         </div>
       </div>
 
-      <div className="relative min-h-[800px] bg-background-light dark:bg-background-dark p-8 md:p-16 border-2 border-border-light/10 dark:border-border-dark/10 rounded-xl shadow-inner overflow-hidden">
+      <div className="hidden md:block relative min-h-[800px] bg-background-light dark:bg-background-dark p-8 md:p-16 border-2 border-border-light/10 dark:border-border-dark/10 rounded-xl shadow-inner overflow-hidden">
             
         {/* Background Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none rounded-xl" />

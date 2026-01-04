@@ -138,8 +138,7 @@ export default function Header() {
     const element = document.getElementById(targetId)
     if (element) {
       const headerOffset = 100
-      const currentScroll = getScrollPosition()
-      const elementPosition = element.getBoundingClientRect().top + currentScroll - headerOffset
+      const elementPosition = element.offsetTop - headerOffset
       setScrollPosition(elementPosition)
     }
   }
