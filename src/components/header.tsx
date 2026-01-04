@@ -262,10 +262,10 @@ export default function Header() {
               </AnimatePresence>
             </motion.button>
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Menu Toggle - Hidden */}
             <motion.button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden flex h-10 w-10 items-center justify-center bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark text-text-light dark:text-text-dark shadow-brutal-light dark:shadow-brutal-dark"
+              className="hidden"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Toggle mobile menu"
@@ -297,9 +297,9 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Hidden */}
         <AnimatePresence>
-          {isMobileMenuOpen && (
+          {false && isMobileMenuOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
