@@ -104,35 +104,24 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
           />
 
-          {/* Person Outline SVG - behind the photo */}
+          {/* Photo outline effect - behind the actual photo */}
           <motion.div
-            className="absolute inset-0 z-[3] flex items-center justify-center text-text-light dark:text-text-dark"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isVisible ? { opacity: 0.3, scale: 1.1 } : { opacity: 0, scale: 0.8 }}
+            className="absolute inset-0 z-[3] rounded-full overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isVisible ? { opacity: 1, scale: 1.05 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
+            style={{
+              filter: 'brightness(0) invert(1) blur(2px) contrast(200%)',
+            }}
           >
-            <svg
-              viewBox="0 0 400 400"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
-            >
-              {/* Head outline */}
-              <ellipse cx="200" cy="140" rx="85" ry="100" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              {/* Neck */}
-              <path d="M 160 210 Q 160 230, 160 240 L 240 240 Q 240 230, 240 210" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              {/* Shoulders and upper body */}
-              <path d="M 160 240 Q 140 250, 120 270 L 100 340 Q 100 360, 120 370 L 180 370 L 180 300 Q 180 260, 200 260 Q 220 260, 220 300 L 220 370 L 280 370 Q 300 360, 300 340 L 280 270 Q 260 250, 240 240" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-              {/* Hair/head details */}
-              <path d="M 115 140 Q 110 110, 130 90 Q 160 70, 200 70 Q 240 70, 270 90 Q 290 110, 285 140" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-              {/* Facial features */}
-              <circle cx="175" cy="135" r="3" fill="currentColor"/>
-              <circle cx="225" cy="135" r="3" fill="currentColor"/>
-              <path d="M 190 165 Q 200 168, 210 165" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              {/* Clothing detail */}
-              <line x1="200" y1="260" x2="200" y2="370" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              {/* Collar */}
-              <path d="M 160 240 L 180 260 L 200 250 L 220 260 L 240 240" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <Image
+              src="/images/pfp-removebg-preview.png"
+              alt=""
+              fill
+              sizes="(max-width: 768px) 300px, 448px"
+              className="object-contain scale-110"
+              aria-hidden="true"
+            />
           </motion.div>
 
           {/* Rotating dashed circle outline */}
