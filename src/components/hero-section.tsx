@@ -106,9 +106,9 @@ export default function HeroSection() {
 
           {/* Person Outline SVG - behind the photo */}
           <motion.div
-            className="absolute inset-0 z-[3] flex items-center justify-center text-primary"
+            className="absolute inset-0 z-[3] flex items-center justify-center text-text-light dark:text-text-dark"
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={isVisible ? { opacity: 0.15, scale: 1.1 } : { opacity: 0, scale: 0.8 }}
+            animate={isVisible ? { opacity: 0.3, scale: 1.1 } : { opacity: 0, scale: 0.8 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
           >
             <svg
