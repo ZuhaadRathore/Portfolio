@@ -104,14 +104,14 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
           />
 
-          {/* Photo outline effect - behind the actual photo */}
+          {/* Detailed photo outline - shows eyes, mouth, all features */}
           <motion.div
             className="absolute inset-0 z-[3] rounded-full overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={isVisible ? { opacity: 1, scale: 1.05 } : { opacity: 0, scale: 0.95 }}
+            animate={isVisible ? { opacity: 0.4, scale: 1.08 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
             style={{
-              filter: 'brightness(0) invert(1) blur(2px) contrast(200%)',
+              filter: 'grayscale(1) contrast(300%) brightness(200%) invert(1) blur(1px)',
             }}
           >
             <Image
@@ -122,47 +122,6 @@ export default function HeroSection() {
               className="object-contain scale-110"
               aria-hidden="true"
             />
-          </motion.div>
-
-          {/* Rotating dashed circle outline */}
-          <motion.div
-            className="absolute -inset-3 z-[5]"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-            transition={{ duration: 1, delay: 0.7 }}
-          >
-            <svg
-              viewBox="0 0 200 200"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
-            >
-              <motion.circle
-                cx="100"
-                cy="100"
-                r="95"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeDasharray="3 6"
-                className="text-primary opacity-40"
-                initial={{ pathLength: 0, rotate: 0 }}
-                animate={isVisible ? {
-                  pathLength: 1,
-                  rotate: 360
-                } : {
-                  pathLength: 0,
-                  rotate: 0
-                }}
-                transition={{
-                  pathLength: { duration: 2, delay: 0.8, ease: "easeInOut" },
-                  rotate: {
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }
-                }}
-              />
-            </svg>
           </motion.div>
 
           {/* Profile picture */}
