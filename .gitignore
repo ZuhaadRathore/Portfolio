@@ -67,3 +67,4 @@ temp/
 # Build artifacts
 *.tgz
 *.tar.gzNUL
+remove-nul.ps1

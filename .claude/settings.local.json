@@ -16,7 +16,10 @@
       "Bash(powershell -Command:*)",
       "Bash(node scripts/remove-bg-ai.js:*)",
       "Bash(git rm:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(git clean:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File remove-nul.ps1)"
     ],
     "deny": [],
     "ask": []
