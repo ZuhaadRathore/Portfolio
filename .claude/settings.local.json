@@ -6,7 +6,17 @@
       "Bash(cmd //c \"del nul\")",
       "Bash(echo \"rm failed with code $?\")",
       "Bash(git add:*)",
-      "Bash(Remove-Item \"public\\anton-tui-architecture.html\")"
+      "Bash(Remove-Item \"public\\anton-tui-architecture.html\")",
+      "Bash(findstr:*)",
+      "Bash(npm install:*)",
+      "Bash(node scripts/convert-images.js:*)",
+      "Bash(npm rebuild:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(dir:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(node scripts/remove-bg-ai.js:*)",
+      "Bash(git rm:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []
