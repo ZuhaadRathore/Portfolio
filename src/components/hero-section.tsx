@@ -96,17 +96,9 @@ export default function HeroSection() {
           style={{ y, opacity }}
           className="relative w-full max-w-[300px] sm:max-w-md mx-auto md:mx-0 md:justify-self-end"
         >
-          {/* Background blob */}
-          <motion.div
-            className="absolute top-4 left-4 w-full h-full bg-primary rounded-full"
-            initial={{ scale: 0 }}
-            animate={isVisible ? { scale: 1 } : { scale: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-          />
-
           {/* Detailed photo outline - shows eyes, mouth, all features */}
           <motion.div
-            className="absolute inset-0 z-[3] rounded-full overflow-hidden"
+            className="absolute inset-0 z-[3] overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isVisible ? { opacity: 0.4, scale: 1.08 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
@@ -126,7 +118,7 @@ export default function HeroSection() {
 
           {/* Profile picture */}
           <motion.div
-            className="relative z-10 w-full aspect-square rounded-full border-4 border-border-light dark:border-border-dark overflow-hidden bg-transparent"
+            className="relative z-10 w-full aspect-square overflow-hidden bg-transparent"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={isVisible ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
