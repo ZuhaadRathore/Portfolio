@@ -96,24 +96,39 @@ export default function HeroSection() {
           style={{ y, opacity }}
           className="relative w-full max-w-[300px] sm:max-w-md mx-auto md:mx-0 md:justify-self-end"
         >
-          {/* Detailed photo outline - shows eyes, mouth, all features */}
+          {/* Artistic sketch outline */}
           <motion.div
             className="relative z-10 w-full aspect-square overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={isVisible ? { opacity: 0.5, scale: 1 } : { opacity: 0, scale: 0.95 }}
+            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-            style={{
-              filter: 'grayscale(1) contrast(300%) brightness(200%) invert(1) blur(1px)',
-            }}
           >
-            <Image
-              src="/images/pfp-removebg-preview.png"
-              alt="Zuhaad Rathore - Software Engineer & Designer"
-              fill
-              sizes="(max-width: 768px) 300px, 448px"
-              className="object-contain"
-              priority
-            />
+            {/* Sketch effect using multiple filter layers */}
+            <div className="absolute inset-0" style={{
+              filter: 'grayscale(1) contrast(500%) brightness(10000%) invert(1)',
+              mixBlendMode: 'difference',
+            }}>
+              <Image
+                src="/images/pfp-removebg-preview.png"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 300px, 448px"
+                className="object-contain blur-[2px]"
+                aria-hidden="true"
+              />
+            </div>
+            <div className="absolute inset-0" style={{
+              filter: 'grayscale(1) contrast(200%) brightness(1000%) invert(1)',
+            }}>
+              <Image
+                src="/images/pfp-removebg-preview.png"
+                alt="Zuhaad Rathore - Software Engineer & Designer"
+                fill
+                sizes="(max-width: 768px) 300px, 448px"
+                className="object-contain"
+                priority
+              />
+            </div>
           </motion.div>
           
           <motion.div
