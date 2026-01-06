@@ -98,9 +98,9 @@ export default function HeroSection() {
         >
           {/* Detailed photo outline - shows eyes, mouth, all features */}
           <motion.div
-            className="absolute inset-0 z-[3] overflow-hidden"
+            className="relative z-10 w-full aspect-square overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={isVisible ? { opacity: 0.4, scale: 1.08 } : { opacity: 0, scale: 0.95 }}
+            animate={isVisible ? { opacity: 0.5, scale: 1 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
             style={{
               filter: 'grayscale(1) contrast(300%) brightness(200%) invert(1) blur(1px)',
@@ -108,28 +108,10 @@ export default function HeroSection() {
           >
             <Image
               src="/images/pfp-removebg-preview.png"
-              alt=""
-              fill
-              sizes="(max-width: 768px) 300px, 448px"
-              className="object-contain scale-110"
-              aria-hidden="true"
-            />
-          </motion.div>
-
-          {/* Profile picture */}
-          <motion.div
-            className="relative z-10 w-full aspect-square overflow-hidden bg-transparent"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={isVisible ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Image
-              src="/images/pfp-removebg-preview.png"
               alt="Zuhaad Rathore - Software Engineer & Designer"
               fill
               sizes="(max-width: 768px) 300px, 448px"
-              quality={95}
-              className="object-contain scale-110 hover:scale-100 transition-transform duration-700 ease-out"
+              className="object-contain"
               priority
             />
           </motion.div>
