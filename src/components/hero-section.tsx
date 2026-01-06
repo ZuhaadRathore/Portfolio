@@ -96,16 +96,27 @@ export default function HeroSection() {
           style={{ y, opacity }}
           className="relative w-full max-w-[300px] sm:max-w-md mx-auto md:mx-0 md:justify-self-end"
         >
-          {/* Artistic sketch outline */}
+          {/* Pencil sketch outline effect */}
           <motion.div
             className="relative z-10 w-full aspect-square overflow-hidden"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
           >
-            {/* Sketch effect using multiple filter layers */}
+            {/* Base blurred layer for edge detection */}
+            <div className="absolute inset-0 opacity-0">
+              <Image
+                src="/images/pfp-removebg-preview.png"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 300px, 448px"
+                className="object-contain blur-[4px]"
+                aria-hidden="true"
+              />
+            </div>
+
+            {/* Sharp layer - difference creates edges */}
             <div className="absolute inset-0" style={{
-              filter: 'grayscale(1) contrast(500%) brightness(10000%) invert(1)',
               mixBlendMode: 'difference',
             }}>
               <Image
@@ -113,12 +124,15 @@ export default function HeroSection() {
                 alt=""
                 fill
                 sizes="(max-width: 768px) 300px, 448px"
-                className="object-contain blur-[2px]"
+                className="object-contain blur-[3px]"
                 aria-hidden="true"
               />
             </div>
+
+            {/* Final outline layer */}
             <div className="absolute inset-0" style={{
-              filter: 'grayscale(1) contrast(200%) brightness(1000%) invert(1)',
+              filter: 'grayscale(1) contrast(800%) brightness(500%) invert(1)',
+              mixBlendMode: 'normal',
             }}>
               <Image
                 src="/images/pfp-removebg-preview.png"
