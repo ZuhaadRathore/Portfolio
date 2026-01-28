@@ -6,10 +6,11 @@ import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { Github, Linkedin, Twitter, ChevronDown, ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 import Magnetic from '@/components/ui/magnetic'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export default function HeroSection() {
   const containerRef = useRef(null)
+  const [isHovered, setIsHovered] = useState(false)
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 })
   
   const { scrollYProgress } = useScroll({
@@ -46,7 +47,7 @@ export default function HeroSection() {
                   initial={{ y: "100%" }}
                   animate={isVisible ? { y: 0 } : { y: "100%" }}
                   transition={{ 
-                    duration: 1, 
+                    duration: 0.8, 
                     ease: [0.33, 1, 0.68, 1],
                     delay: 0.1 + (i * 0.1) 
                   }}
@@ -62,7 +63,7 @@ export default function HeroSection() {
               className="text-lg sm:text-xl md:text-2xl text-text-light/80 dark:text-text-dark/80 max-w-2xl font-body"
               initial={{ y: "100%", opacity: 0 }}
               animate={isVisible ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             >
               Building beautiful, functional web applications from concept to deployment.
             </motion.p>
@@ -72,7 +73,7 @@ export default function HeroSection() {
             className="flex gap-6"
             initial={{ opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
             {socialLinks.map((social, i) => (
               <Magnetic key={social.label}>
@@ -94,72 +95,113 @@ export default function HeroSection() {
 
         <motion.div
           style={{ y, opacity }}
-          className="relative w-full max-w-[300px] sm:max-w-md mx-auto md:mx-0 md:justify-self-end"
+          className="relative w-full max-w-[350px] sm:max-w-xl mx-auto md:mx-0 md:justify-self-end"
         >
-          {/* White outline only - no fill */}
+          {/* Artistic hand-drawn white outline */}
           <motion.div
-            className="relative z-10 w-full aspect-square overflow-visible"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-            transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-          >
-            {/* Create outline using edge detection */}
-            <div className="absolute inset-0 opacity-0">
-              <Image
-                src="/images/pfp-removebg-preview.png"
-                alt=""
-                fill
-                sizes="(max-width: 768px) 300px, 448px"
-                className="object-contain blur-[3px]"
-                aria-hidden="true"
-              />
-            </div>
-            <div className="absolute inset-0" style={{
-              mixBlendMode: 'difference',
-              filter: 'blur(2px)',
-            }}>
-              <Image
-                src="/images/pfp-removebg-preview.png"
-                alt=""
-                fill
-                sizes="(max-width: 768px) 300px, 448px"
-                className="object-contain"
-                aria-hidden="true"
-              />
-            </div>
-            <div className="absolute inset-0" style={{
-              filter: 'invert(1) contrast(1000%) brightness(200%)',
-            }}>
-              <Image
-                src="/images/pfp-removebg-preview.png"
-                alt="Zuhaad Rathore - Software Engineer & Designer"
-                fill
-                sizes="(max-width: 768px) 300px, 448px"
-                className="object-contain"
-                priority
-              />
-            </div>
-          </motion.div>
-          
-          <motion.div
-            className="absolute bottom-0 -right-4 z-20"
-            initial={{ scale: 0, rotate: -20 }}
-            animate={isVisible ? { scale: 1, rotate: -5 } : { scale: 0, rotate: -20 }}
-            transition={{ 
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-              delay: 1 
+            className="relative z-10 w-full aspect-square overflow-visible cursor-pointer"
+            initial={{ opacity: 0, scale: 0.95, rotate: -5 }}
+            animate={isVisible ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.95, rotate: -5 }}
+            transition={{
+              duration: 1.0,
+              delay: 0.4,
+              ease: [0.34, 1.56, 0.64, 1],
+              rotate: { duration: 1.2, ease: "easeOut" }
             }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
-            <Magnetic>
-              <div className="group bg-surface-light dark:bg-surface-dark px-6 py-3 border-3 border-border-light dark:border-border-dark shadow-brutal-light dark:shadow-brutal-dark cursor-default hover:bg-primary transition-colors duration-300">
-                <p className="font-body text-sm font-bold uppercase text-primary group-hover:text-white tracking-widest flex items-center gap-2">
-                  Available for Hire
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </p>
+            {/* Wrapper for both layers to rotate/wobble together */}
+            <motion.div
+              className="absolute inset-0"
+              animate={{
+                rotate: isHovered ? 0 : [0, 1, -1, 0],
+                scale: isHovered ? 1.05 : 1
+              }}
+              transition={{
+                rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+                scale: { duration: 0.3 }
+              }}
+            >
+              {/* Layer 1: Color Image (Behind) - Fades in on hover */}
+              <motion.div 
+                className="absolute inset-0 z-0"
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
+                <Image
+                  src="/images/pfp-removebg-preview.png"
+                  alt="Zuhaad Rathore - Software Engineer & Designer"
+                  fill
+                  sizes="(max-width: 768px) 300px, 448px"
+                  className="object-contain"
+                  priority
+                />
+              </motion.div>
+
+              {/* Layer 2: Outline Sketch (Front) - Always visible, acts as the "lines" to be filled */}
+              <div className="absolute inset-0 z-10 pointer-events-none">
+                <Image
+                  src="/images/pfp-removebg-preview.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 300px, 448px"
+                  className="object-contain"
+                  style={{
+                    filter: 'url(#artistic-sketch-filter)',
+                    opacity: 0.9,
+                  }}
+                  priority
+                />
               </div>
-            </Magnetic>
+            </motion.div>
+
+            {/* Enhanced SVG filter for artistic hand-drawn effect */}
+            <svg width="0" height="0" className="absolute">
+              <defs>
+                <filter id="artistic-sketch-filter" x="-50%" y="-50%" width="200%" height="200%">
+                  {/* Generate base outline from alpha */}
+                  <feMorphology operator="dilate" radius="2" in="SourceAlpha" result="dilated" />
+                  <feMorphology operator="erode" radius="1" in="SourceAlpha" result="eroded" />
+                  <feComposite in="dilated" in2="eroded" operator="out" result="outline" />
+
+                  {/* Stroke 1: Large wobble (The heavy hand) */}
+                  <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" result="noise1" seed="1" />
+                  <feDisplacementMap in="outline" in2="noise1" scale="6" result="stroke1" />
+
+                  {/* Stroke 2: Fine detail (The detail sketch) */}
+                  <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise2" seed="2" />
+                  <feDisplacementMap in="outline" in2="noise2" scale="4" result="stroke2" />
+
+                  {/* Stroke 3: Scribble (The artistic chaos) */}
+                  <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="3" result="noise3" seed="3" />
+                  <feDisplacementMap in="outline" in2="noise3" scale="2" result="stroke3" />
+
+                  {/* Merge strokes to create "sketchy" look */}
+                  <feMerge result="sketch">
+                    <feMergeNode in="stroke1" />
+                    <feMergeNode in="stroke2" />
+                    <feMergeNode in="stroke3" />
+                  </feMerge>
+
+                  {/* Slight blur for pencil texture */}
+                  <feGaussianBlur stdDeviation="0.5" in="sketch" result="softSketch" />
+
+                  {/* Colorize White */}
+                  <feFlood floodColor="white" result="white" />
+                  <feComposite in="white" in2="softSketch" operator="in" result="whiteSketch" />
+
+                  {/* Add Glow */}
+                  <feGaussianBlur in="whiteSketch" stdDeviation="2" result="glow" />
+                  
+                  {/* Final Composition */}
+                  <feMerge>
+                    <feMergeNode in="glow" />
+                    <feMergeNode in="whiteSketch" />
+                  </feMerge>
+                </filter>
+              </defs>
+            </svg>
           </motion.div>
         </motion.div>
       </div>
