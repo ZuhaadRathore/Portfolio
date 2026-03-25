@@ -51,7 +51,7 @@ A layered polish pass that deepens the portfolio's existing newspaper/print aest
 
 ### Fold Corner on Cards & Tiles
 - Pure CSS folded corner, top-right, ~14px
-- Implementation: two pseudo-elements forming overlapping triangles — one `var(--paper)`-colored and one `transparent` — creating a physical lift illusion
+- Implementation: single `::after` pseudo-element using `linear-gradient(225deg, var(--paper) 50%, rgba(0,0,0,0.08) 50%)` — simulates the fold shadow with one element. `::before` is already taken by the hand-drawn border on both `.card` and `.tile`, so the two-triangle approach is not viable.
 - Applied to: `.card` in projects section, `.tile` in skills section
 - No JS required
 
