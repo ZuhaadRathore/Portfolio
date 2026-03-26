@@ -34,6 +34,7 @@
   bottom: 0;
   height: 2px;
   background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
   filter: url(#pencil-roughen-soft);
   transform: scaleX(0);
   transform-origin: left;
