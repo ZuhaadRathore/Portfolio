@@ -146,6 +146,19 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
 }
 
+/* Folded corner — top right, pure CSS */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(225deg, var(--paper) 50%, rgba(0, 0, 0, 0.08) 50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 .cardLink {
   display: block;
   text-decoration: none;

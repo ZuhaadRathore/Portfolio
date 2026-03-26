@@ -147,6 +147,19 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
+/* Folded corner — top right */
+.tile::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(225deg, var(--paper) 50%, rgba(0, 0, 0, 0.08) 50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 /* ── Tile sizes ── */
 .tileLg {
   grid-column: span 2;
