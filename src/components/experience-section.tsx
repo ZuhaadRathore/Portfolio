@@ -1,166 +1,337 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
-import { Briefcase, Calendar, ExternalLink } from 'lucide-react'
-import Link from 'next/link'
-import Magnetic from '@/components/ui/magnetic'
+import { useEffect, useRef, useState } from 'react'
+import s from './experience-section.module.css'
 
-interface Experience {
-  id: number
-  role: string
-  company: string
-  period: string
-  startYear: number
-  description: string
-  current?: boolean
-  websiteUrl?: string
-}
-
-const experiences: Experience[] = [
+const experiences = [
   {
-    id: 1,
-    role: 'CTO',
-    company: 'Aequitas STEM',
-    period: '2025 - Present',
-    startYear: 2025,
-    description: 'Leading technical strategy and development initiatives for STEM education platform serving 1000+ students across 5+ schools.',
-    current: true
+    year: '2024',
+    yearLabel: '2024–PRESENT',
+    title: 'Chief Technology Officer (CTO)',
+    company: 'MYTHOFY',
+    description:
+      'Owns technical strategy and execution across product, platform, and delivery. Leads engineering decisions, architecture, and shipping cadence.',
+    active: true,
+    stack: ['Next.js', 'TypeScript', 'Node.js', 'PostgreSQL', 'AWS'],
+    highlights: [
+      'Defined and shipped the core product architecture from scratch',
+      'Established CI/CD pipelines and engineering processes',
+      'Led technical hiring and team growth',
+    ],
   },
   {
-    id: 2,
-    role: 'CTO',
-    company: 'Kids in Motion',
-    period: '2024 - Present',
-    startYear: 2024,
-    description: 'Built and architected full-stack sports program management system using Spring Boot, React, and Firebase. Platform has successfully hosted numerous sports drives, engaging nearly 100 kids while managing technical operations and infrastructure.',
-    current: true,
-    websiteUrl: 'https://kidsinmotionpa.org'
+    year: '2020',
+    yearLabel: '2020–SUMMER 2024',
+    title: 'Freelance Software Engineer',
+    company: 'INDEPENDENT',
+    description:
+      'Built and shipped web products end-to-end: UI engineering, backend integrations, deployment, and performance tuning. Worked across varied scopes from quick iterations to longer-term systems.',
+    active: false,
+    stack: ['React', 'Vue', 'Node.js', 'Firebase', 'Tailwind CSS'],
+    highlights: [
+      'Delivered 15+ client projects across e-commerce, SaaS, and media',
+      'Built real-time dashboards and data visualization tools',
+      'Optimized site performance achieving sub-second load times',
+    ],
   },
-  {
-    id: 3,
-    role: 'CTO',
-    company: 'Mythofy Inc',
-    period: '2024 - Present',
-    startYear: 2024,
-    description: 'Leading a team of 5 developers to revolutionize the gaming space for creators and gamers. Built MythoPay, a multi-platform currency exchange service enabling creators to host stores and seamlessly connect with their favorite games.',
-    current: true,
-    websiteUrl: 'https://mythofy.net'
-  },
-  {
-    id: 4,
-    role: 'Freelance Software Developer',
-    company: 'Self-Employed',
-    period: '2021 - 2024',
-    startYear: 2021,
-    description: 'Built custom web applications, desktop solutions, and provided technical consulting for diverse clients.',
-    current: false
-  }
 ]
 
-export default function ExperienceSection() {
-  const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end center"]
-  })
+// ── Scramble hook ──
+const SCRAMBLE_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ–·:/'
+
+function useTextScramble(text: string, trigger: boolean) {
+  const [display, setDisplay] = useState('')
+  const frameRef = useRef(0)
+  const hasRun = useRef(false)
+
+  useEffect(() => {
+    if (!trigger || hasRun.current) return
+    hasRun.current = true
+
+    const length = text.length
+    const totalDuration = 600 // ms
+    const startTime = performance.now()
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / totalDuration, 1)
+
+      const result = text
+        .split('')
+        .map((char, i) => {
+          if (char === ' ' || char === '–') return char
+          const charThreshold = 0.2 + (i / length) * 0.7
+          if (progress >= charThreshold) return char
+          return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+        })
+        .join('')
+
+      setDisplay(result)
+
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(tick)
+      }
+    }
+
+    frameRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frameRef.current)
+  }, [trigger, text])
+
+  return trigger ? display : ''
+}
+
+// ── Hover hook that works during scroll ──
+function useScrollHover(
+  entryRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
+) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const pointerPos = useRef<{ x: number; y: number } | null>(null)
+
+  useEffect(() => {
+    const onPointerMove = (e: PointerEvent) => {
+      pointerPos.current = { x: e.clientX, y: e.clientY }
+      checkHover()
+    }
+
+    const onPointerLeave = () => {
+      pointerPos.current = null
+      setHoveredIndex(null)
+    }
+
+    const checkHover = () => {
+      const pos = pointerPos.current
+      if (!pos) {
+        setHoveredIndex(null)
+        return
+      }
+
+      let found: number | null = null
+      for (let i = 0; i < entryRefs.current.length; i++) {
+        const el = entryRefs.current[i]
+        if (!el) continue
+        const rect = el.getBoundingClientRect()
+        if (
+          pos.x >= rect.left &&
+          pos.x <= rect.right &&
+          pos.y >= rect.top &&
+          pos.y <= rect.bottom
+        ) {
+          found = i
+          break
+        }
+      }
+      setHoveredIndex(found)
+    }
+
+    let scrollRaf = 0
+    const onScroll = () => {
+      cancelAnimationFrame(scrollRaf)
+      scrollRaf = requestAnimationFrame(checkHover)
+    }
+
+    window.addEventListener('pointermove', pointerPos.current ? undefined as never : onPointerMove, { passive: true })
+    document.addEventListener('pointermove', onPointerMove, { passive: true })
+    document.addEventListener('pointerleave', onPointerLeave)
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      document.removeEventListener('pointermove', onPointerMove)
+      document.removeEventListener('pointerleave', onPointerLeave)
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(scrollRaf)
+    }
+  }, [entryRefs])
+
+  return hoveredIndex
+}
+
+function ScrambleYearInstant({
+  text,
+  trigger,
+  instant,
+}: {
+  text: string
+  trigger: boolean
+  instant: boolean
+}) {
+  const display = useTextScramble(text, trigger && !instant)
+  if (instant) return <>{text}</>
+  return <>{display}</>
+}
+
+// ── Main component ──
+export default function ExperienceSection({
+  skipIntro = false,
+  isActive = false,
+}: {
+  skipIntro?: boolean
+  isActive?: boolean
+}) {
+  const [headerVisible, setHeaderVisible] = useState(skipIntro)
+  const [lineVisible, setLineVisible] = useState(skipIntro)
+  const [visibleEntries, setVisibleEntries] = useState<Set<number>>(
+    () => (
+      skipIntro
+        ? new Set(experiences.map((_, idx) => idx))
+        : new Set<number>()
+    )
+  )
+  const [revealedEntries, setRevealedEntries] = useState<Set<number>>(
+    () => (
+      skipIntro
+        ? new Set(experiences.map((_, idx) => idx))
+        : new Set<number>()
+    )
+  )
+
+  const headerRef = useRef<HTMLDivElement>(null)
+  const lineRef = useRef<HTMLDivElement>(null)
+  const entryRefs = useRef<(HTMLDivElement | null)[]>([])
+  const hoveredIndex = useScrollHover(entryRefs)
+
+  // Header observer
+  useEffect(() => {
+    if (skipIntro) return
+    if (!headerRef.current) return
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setHeaderVisible(true)
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    obs.observe(headerRef.current)
+    return () => obs.disconnect()
+  }, [skipIntro])
+
+  // Timeline line observer
+  useEffect(() => {
+    if (skipIntro) return
+    if (!lineRef.current) return
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setLineVisible(true)
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    obs.observe(lineRef.current)
+    return () => obs.disconnect()
+  }, [skipIntro])
+
+  // Entry observers — staggered reveal
+  useEffect(() => {
+    if (skipIntro) return
+    const timers: ReturnType<typeof setTimeout>[] = []
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const idx = Number(e.target.getAttribute('data-index'))
+            const delay = idx * 150
+            const t = setTimeout(() => {
+              setVisibleEntries((prev) => new Set(prev).add(idx))
+              const reveal = setTimeout(() => {
+                setRevealedEntries((prev) => new Set(prev).add(idx))
+              }, 400)
+              timers.push(reveal)
+            }, delay)
+            timers.push(t)
+            obs.unobserve(e.target)
+          }
+        })
+      },
+      { threshold: 0, rootMargin: '0px 0px 60px 0px' }
+    )
+
+    entryRefs.current.forEach((el) => {
+      if (el) obs.observe(el)
+    })
+
+    return () => {
+      obs.disconnect()
+      timers.forEach(clearTimeout)
+    }
+  }, [skipIntro])
 
   return (
-    <section
-      ref={containerRef}
-      className="py-16 md:py-32 relative"
-    >
-      <div className="max-w-4xl mx-auto px-4">
-        <motion.h2
-            className="font-display text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter text-center mb-16 md:mb-24 text-text-light dark:text-text-dark"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-        >
-            Experience
-        </motion.h2>
+    <section id="experience" className={`${s.section} ${isActive ? s.sectionInView : ''}`}>
+      <div
+        ref={headerRef}
+        className={`${s.header} ${headerVisible ? s.headerVisible : ''}`}
+      >
+        <span className={s.headerIndex} aria-hidden="true">02</span>
+        <span className={s.headerTitle}>EXPERIENCE</span>
+        <span className={s.headerSub}>2020 – PRESENT</span>
+        <span className={s.dateline} aria-hidden="true">VOL. I · ISSUE 2025</span>
+      </div>
 
-        <div className="relative space-y-12 md:space-y-16">
-            {/* Animated Timeline Line */}
-            <div className="absolute left-6 md:left-8 top-4 w-1 bg-border-light/20 dark:bg-border-dark/20 hidden md:block" style={{ height: 'calc(100% - 1rem)' }}>
-                <motion.div
-                    className="w-full bg-primary origin-top"
-                    style={{ scaleY: scrollYProgress, height: "100%" }}
-                />
-            </div>
+      <div className={s.timeline}>
+        <div
+          ref={lineRef}
+          className={`${s.timelineLine} ${lineVisible ? s.timelineLineVisible : ''}`}
+        />
 
-            {experiences.map((experience, index) => (
-            <motion.div
-                key={experience.id}
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="relative pl-0 md:pl-24"
+        {experiences.map((exp, i) => {
+          const visible = visibleEntries.has(i)
+          const hovered = visible && hoveredIndex === i
+          return (
+            <div
+              key={i}
+              ref={(el) => { entryRefs.current[i] = el }}
+              data-index={i}
+              className={[
+                s.entry,
+                visible ? s.entryVisible : '',
+                hovered ? s.entryHovered : '',
+              ].join(' ')}
             >
-                {/* Timeline Dot */}
-                <div className="absolute left-6 md:left-8 top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-surface-light dark:bg-surface-dark border-4 border-primary z-10 hidden md:block" />
+              <div className={s.entryNode}>
+                <div className={s.entryDot} />
+              </div>
+              <div className={s.entryRing} />
+              {exp.active && <div className={s.entryActivePulse} />}
 
-                <div className="group relative bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-6 sm:p-8 shadow-brutal-light dark:shadow-brutal-dark hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#000000] dark:hover:shadow-[8px_8px_0px_#FFFFFF] transition-all duration-300">
-                    
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                        <div>
-                            <h3 className="font-display text-2xl sm:text-3xl uppercase text-text-light dark:text-text-dark mb-2">
-                                {experience.role}
-                            </h3>
-                            <div className="flex items-center gap-2 text-primary font-bold text-lg">
-                                <Briefcase className="w-5 h-5" />
-                                {experience.websiteUrl ? (
-                                    <Link 
-                                        href={experience.websiteUrl}
-                                        target="_blank"
-                                        className="hover:underline decoration-2 underline-offset-4 flex items-center gap-1"
-                                    >
-                                        {experience.company}
-                                        <ExternalLink className="w-4 h-4" />
-                                    </Link>
-                                ) : (
-                                    <span>{experience.company}</span>
-                                )}
-                            </div>
-                        </div>
+              <div className={s.entryWatermark} aria-hidden="true">
+                {exp.year}
+              </div>
 
-                        <div className="flex flex-wrap items-center gap-3">
-                            <span className="flex items-center gap-2 px-3 py-1 font-mono text-sm font-bold border-2 border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark">
-                                <Calendar className="w-4 h-4" />
-                                {experience.period}
-                            </span>
-                            {experience.current && (
-                                <span className="px-3 py-1 font-mono text-sm font-bold bg-primary text-black border-2 border-primary">
-                                    CURRENT
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-                    <p className="text-lg text-text-light/80 dark:text-text-dark/80 leading-relaxed font-body">
-                        {experience.description}
-                    </p>
+              <div className={s.entryCard}>
+                <div className={s.entryYear}>
+                  <ScrambleYearInstant
+                    text={exp.yearLabel}
+                    trigger={visible}
+                    instant={skipIntro}
+                  />
                 </div>
-            </motion.div>
-            ))}
-        </div>
+                <h3 className={s.entryTitle}>{exp.title}</h3>
+                <span className={s.entryCompany}>{exp.company}</span>
+                <p className={s.entryDesc}>{exp.description}</p>
 
-        <motion.div
-            className="mt-16 text-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-        >
-             <Link href="/public/README_RESUME.md" target="_blank" className="inline-block">
-                <Magnetic>
-                    <div className="px-8 py-4 bg-text-light dark:bg-text-dark text-background-light dark:text-background-dark font-display text-xl uppercase tracking-wider hover:bg-primary hover:text-black transition-colors">
-                        View Full Resume
-                    </div>
-                </Magnetic>
-            </Link>
-        </motion.div>
+                {/* Details — revealed on scroll into view */}
+                <div className={[s.entryReveal, revealedEntries.has(i) ? s.entryRevealOpen : ''].join(' ')}>
+                  <div className={s.entryStack}>
+                    {exp.stack.map((tech) => (
+                      <span key={tech} className={s.entryTag}>{tech}</span>
+                    ))}
+                  </div>
+                  <ul className={s.entryHighlights}>
+                    {exp.highlights.map((h, j) => (
+                      <li key={j} className={s.entryHighlight}>{h}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+
+        <div className={`${s.timelineTail} ${lineVisible ? s.timelineTailVisible : ''}`} />
       </div>
     </section>
   )

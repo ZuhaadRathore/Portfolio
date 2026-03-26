@@ -1,186 +1,227 @@
 'use client'
 
-import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
-import Magnetic from '@/components/ui/magnetic'
+import { useEffect, useRef, useState } from 'react'
+import s from './skills-section.module.css'
 
-interface Skill {
+type Skill = {
   name: string
-  icon: string
+  category: string
+  iconSrc: string
+  size: 'lg' | 'md'
 }
 
-const programmingLanguages: Skill[] = [
+const skills: Skill[] = [
+  // Hero tiles (2×2)
   {
     name: 'Rust',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg'
+    category: 'LANGUAGE',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg',
+    size: 'lg',
   },
   {
-    name: 'TypeScript',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg'
+    name: 'React',
+    category: 'FRAMEWORK',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg',
+    size: 'lg',
   },
+  // Medium tiles filling beside the first hero
   {
     name: 'Python',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg'
+    category: 'LANGUAGE',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg',
+    size: 'md',
   },
   {
     name: 'Java',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg'
+    category: 'LANGUAGE',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg',
+    size: 'md',
   },
   {
     name: 'C++',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg'
-  }
-]
-
-const frameworks: Skill[] = [
-  {
-    name: 'React',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg'
+    category: 'LANGUAGE',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg',
+    size: 'md',
   },
   {
     name: 'Vite',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg'
+    category: 'TOOL',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg',
+    size: 'md',
+  },
+  // Second row heroes
+  {
+    name: 'Next.js',
+    category: 'FRAMEWORK',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg',
+    size: 'lg',
+  },
+  {
+    name: 'TypeScript',
+    category: 'LANGUAGE',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg',
+    size: 'lg',
+  },
+  // Medium tiles filling beside
+  {
+    name: 'Node.js',
+    category: 'RUNTIME',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg',
+    size: 'md',
   },
   {
     name: 'Tauri',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tauri/tauri-original.svg'
-  },
-  {
-    name: 'Node.js',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg'
-  },
-  {
-    name: 'Axum',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg'
+    category: 'FRAMEWORK',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tauri/tauri-original.svg',
+    size: 'md',
   },
   {
     name: 'Django',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg'
-  }
-]
-
-const tools: Skill[] = [
-  {
-    name: 'PostgreSQL',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg'
+    category: 'FRAMEWORK',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg',
+    size: 'md',
   },
   {
-    name: 'Git',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg'
+    name: 'Axum',
+    category: 'FRAMEWORK',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg',
+    size: 'md',
+  },
+  // Bottom row
+  {
+    name: 'PostgreSQL',
+    category: 'DATABASE',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg',
+    size: 'md',
   },
   {
     name: 'Docker',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg'
+    category: 'TOOL',
+    iconSrc: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg',
+    size: 'md',
   },
-  {
-    name: 'VS Code',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg'
-  }
 ]
 
-interface SkillCardProps {
-  title: string
-  skills: Skill[]
-  index: number
-}
+export default function SkillsSection({
+  skipIntro = false,
+  isActive = false,
+}: {
+  skipIntro?: boolean
+  isActive?: boolean
+}) {
+  const [headerVisible, setHeaderVisible] = useState(skipIntro)
+  const [visibleTiles, setVisibleTiles] = useState<Set<number>>(
+    () => (
+      skipIntro
+        ? new Set(skills.map((_, idx) => idx))
+        : new Set<number>()
+    )
+  )
+  const headerRef = useRef<HTMLDivElement>(null)
+  const tileRefs = useRef<(HTMLDivElement | null)[]>([])
 
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-      staggerChildren: 0.1
+  useEffect(() => {
+    if (skipIntro) return
+    if (!headerRef.current) return
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setHeaderVisible(true)
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    obs.observe(headerRef.current)
+    return () => obs.disconnect()
+  }, [skipIntro])
+
+  useEffect(() => {
+    if (skipIntro) return
+    const timers: ReturnType<typeof setTimeout>[] = []
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const idx = Number(e.target.getAttribute('data-index'))
+            const t = setTimeout(() => {
+              setVisibleTiles((prev) => new Set(prev).add(idx))
+            }, idx * 60 + (idx < 4 ? 0 : 100))
+            timers.push(t)
+            obs.unobserve(e.target)
+          }
+        })
+      },
+      { threshold: 0, rootMargin: '0px 0px 40px 0px' }
+    )
+
+    tileRefs.current.forEach((el) => {
+      if (el) obs.observe(el)
+    })
+
+    return () => {
+      obs.disconnect()
+      timers.forEach(clearTimeout)
     }
-  }
-}
-
-const skillItemVariants = {
-  hidden: {
-    opacity: 0,
-    x: -20
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.5,
-    }
-  }
-}
-
-function SkillCard({ title, skills, index }: SkillCardProps) {
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.3 })
+  }, [skipIntro])
 
   return (
-    <motion.div
-      ref={ref as any}
-      className="bg-surface-light dark:bg-surface-dark border-3 border-border-light dark:border-border-dark p-6 sm:p-8 shadow-brutal-light dark:shadow-brutal-dark hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#000000] dark:hover:shadow-[8px_8px_0px_#FFFFFF] transition-all duration-300"
-      variants={cardVariants}
-      initial="hidden"
-      animate={isVisible ? "visible" : "hidden"}
-      transition={{ delay: index * 0.2 }}
-    >
-      <motion.h3
-        className="font-display text-2xl sm:text-3xl uppercase text-primary mb-6 sm:mb-8 text-center"
+    <section id="skills" className={`${s.section} ${isActive ? s.sectionInView : ''}`}>
+      <div
+        ref={headerRef}
+        className={`${s.header} ${headerVisible ? s.headerVisible : ''}`}
       >
-        {title}
-      </motion.h3>
-      <div className="space-y-4">
-        {skills.map((skill) => (
-          <motion.div
+        <span className={s.headerIndex} aria-hidden="true">03</span>
+        <span className={s.headerTitle}>SKILLS</span>
+        <span className={s.dateline} aria-hidden="true">VOL. I · ISSUE 2025</span>
+      </div>
+
+      <div className={s.grid}>
+        {skills.map((skill, i) => (
+          <div
             key={skill.name}
-            className="flex items-center gap-4 group"
-            variants={skillItemVariants}
+            ref={(el) => { tileRefs.current[i] = el }}
+            data-index={i}
+            className={[
+              s.tile,
+              skill.size === 'lg' ? s.tileLg : s.tileMd,
+              visibleTiles.has(i) ? s.tileVisible : '',
+            ].join(' ')}
           >
-            <Magnetic>
-                <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 bg-background-light dark:bg-background-dark border-2 border-border-light dark:border-border-dark flex items-center justify-center group-hover:bg-primary transition-colors duration-300">
-                    <Image
-                        src={skill.icon}
-                        alt={skill.name}
-                        width={24}
-                        height={24}
-                        className="object-contain w-6 h-6 sm:w-7 sm:h-7"
-                    />
-                </div>
-            </Magnetic>
-            <span className="font-body font-bold text-lg sm:text-xl text-text-light dark:text-text-dark group-hover:text-primary transition-colors duration-300">
-              {skill.name}
-            </span>
-          </motion.div>
+            <div>
+              <div className={s.tileIcon}>
+                <img
+                  src={skill.iconSrc}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className={s.tileName}>{skill.name}</div>
+              <div className={s.tileCategory}>{skill.category}</div>
+            </div>
+
+            {skill.size === 'lg' && (
+              <div
+                className={[
+                  s.tileWatermark,
+                  skill.name === 'React' ? s.tileWatermarkReact : '',
+                ].join(' ')}
+                aria-hidden="true"
+              >
+                <img
+                  src={skill.iconSrc}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            )}
+          </div>
         ))}
       </div>
-    </motion.div>
+    </section>
   )
 }
-
-export default function SkillsSection() {
-  const { ref, isVisible } = useScrollReveal({ threshold: 0.2 })
-
-  return (
-    <motion.section
-      ref={ref}
-      className="py-16 md:py-32"
-    >
-      <motion.h2
-        className="font-display text-5xl sm:text-6xl md:text-8xl uppercase tracking-tighter text-center mb-16 md:mb-24 text-text-light dark:text-text-dark"
-        initial={{ opacity: 0, y: 50 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.8 }}
-      >
-        Skills
-      </motion.h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
-        <SkillCard title="Languages" skills={programmingLanguages} index={0} />
-        <SkillCard title="Frameworks" skills={frameworks} index={1} />
-        <SkillCard title="Tools" skills={tools} index={2} />
-      </div>
-    </motion.section>
-  )
-}       
