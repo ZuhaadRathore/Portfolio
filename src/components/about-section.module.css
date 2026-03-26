@@ -118,7 +118,9 @@
 .photoFrame {
   width: 240px;
   height: 300px;
-  background: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.03);
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+  background-size: 4px 4px;
   position: relative;
   overflow: hidden;
   display: flex;
