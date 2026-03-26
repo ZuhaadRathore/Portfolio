@@ -48,7 +48,7 @@
 .headerTitle {
   font-size: 1.25rem;
   letter-spacing: 0.22em;
-  filter: url(#pencil-roughen-soft);
+  filter: url(#pencil-roughen-soft) drop-shadow(1px 1px 0 rgba(208, 0, 0, 0.08));
 }
 
 .dateline {
