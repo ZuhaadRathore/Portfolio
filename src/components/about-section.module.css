@@ -1,0 +1,348 @@
+.section {
+  max-width: 1000px;
+  margin: 6rem auto 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 5;
+}
+
+/* ── Header ── */
+.header {
+  font-family: var(--font-mono);
+  color: var(--red);
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  position: relative;
+  min-height: clamp(4.5rem, 8vw, 7rem);
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.headerVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.35);
+  filter: url(#pencil-roughen-soft);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.headerVisible::after {
+  transform: scaleX(1);
+}
+
+.headerTitle {
+  font-size: 1.25rem;
+  letter-spacing: 0.22em;
+  filter: url(#pencil-roughen-soft);
+}
+
+.headerIndex {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 8vw, 7rem);
+  line-height: 1;
+  color: var(--red);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transform: translateX(10px);
+  transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+  text-shadow: 1px 1px 0 rgba(208, 0, 0, 0.18), -1px -1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.headerVisible .headerIndex {
+  opacity: 0.07;
+  transform: translateX(0);
+}
+
+.sectionInView .headerVisible .headerIndex {
+  opacity: 0.2;
+  transition: opacity 0.6s ease;
+}
+
+/* ── Layout ── */
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 3.5rem;
+}
+
+/* ── Photo placeholder ── */
+.photoWrap {
+  flex: 0 0 240px;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.7s ease 0.2s, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+}
+
+.visible .photoWrap {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.photoFrame {
+  width: 240px;
+  height: 300px;
+  background: rgba(0, 0, 0, 0.03);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+  cursor: default;
+}
+
+.photoFrame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  filter: url(#pencil-roughen-soft);
+  pointer-events: none;
+}
+
+/* Red accent corner */
+.photoFrame::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 32px;
+  height: 32px;
+  border-top: 3px solid var(--red);
+  border-right: 3px solid var(--red);
+  filter: url(#pencil-roughen-soft);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.photoGlare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.photoPlaceholder {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: rgba(10, 10, 10, 0.25);
+  text-transform: uppercase;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Bio ── */
+.bio {
+  flex: 1;
+  min-width: 0;
+}
+
+.bioName {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+}
+
+.visible .bioName {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bioRole {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--red);
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+  filter: url(#pencil-roughen-soft);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}
+
+.visible .bioRole {
+  opacity: 0.8;
+  transform: translateY(0);
+}
+
+.bioText {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #444;
+  max-width: 520px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+}
+
+.visible .bioText {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bioNameChar {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
+  transition-delay: calc(var(--i) * 30ms);
+}
+
+.bioName:hover .bioNameChar {
+  transform: translateY(-5px);
+  color: var(--red);
+}
+
+.bioRoleChar {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
+  transition-delay: calc(var(--i) * 22ms);
+}
+
+.bioRole:hover .bioRoleChar {
+  transform: translateY(-3px);
+  color: var(--red);
+  opacity: 1;
+}
+
+.bioAccent {
+  color: var(--red);
+  font-weight: 500;
+}
+
+/* ── Socials ── */
+.socials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.45s, transform 0.5s ease 0.45s;
+}
+
+.visible .socials {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: rgba(10, 10, 10, 0.55);
+  text-decoration: none;
+  transition: color 0.2s, transform 0.2s;
+  filter: url(#pencil-roughen-soft);
+}
+
+.socialLink:hover {
+  color: var(--red);
+  transform: translateY(-2px);
+}
+
+.socialIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.socialSep {
+  width: 1px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.12);
+  filter: url(#pencil-roughen-soft);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .section {
+    padding: 0 1.25rem;
+    margin-top: 4rem;
+  }
+
+  .content {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .photoWrap {
+    flex: 0 0 auto;
+  }
+
+  .photoFrame {
+    width: 200px;
+    height: 250px;
+  }
+
+  .bio {
+    text-align: center;
+  }
+
+  .bioText {
+    max-width: 100%;
+  }
+
+  .socials {
+    justify-content: center;
+    gap: 0.75rem;
+    row-gap: 0.5rem;
+  }
+
+  .socialSep {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .photoWrap,
+  .bioName,
+  .bioRole,
+  .bioText,
+  .socials {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .bioNameChar,
+  .bioRoleChar {
+    transition: none;
+  }
+}

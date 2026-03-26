@@ -1,0 +1,518 @@
+.section {
+  max-width: 1000px;
+  margin: 8rem auto 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 5;
+}
+
+/* ── Header ── */
+.header {
+  font-family: var(--font-mono);
+  color: var(--red);
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  min-height: clamp(4.5rem, 8vw, 7rem);
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.headerVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.35);
+  filter: url(#pencil-roughen-soft);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+}
+
+.headerVisible::after {
+  transform: scaleX(1);
+}
+
+.headerTitle {
+  font-size: 1.25rem;
+  letter-spacing: 0.22em;
+  filter: url(#pencil-roughen-soft);
+}
+
+.headerSub {
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: rgba(208, 0, 0, 0.75);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s;
+}
+
+.headerVisible .headerSub {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.headerIndex {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 8vw, 7rem);
+  line-height: 1;
+  color: var(--red);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transform: translateX(10px);
+  transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+  text-shadow: 1px 1px 0 rgba(208, 0, 0, 0.18), -1px -1px 0 rgba(0, 0, 0, 0.04);
+}
+
+.headerVisible .headerIndex {
+  opacity: 0.07;
+  transform: translateX(0);
+}
+
+.sectionInView .headerVisible .headerIndex {
+  opacity: 0.2;
+  transition: opacity 0.6s ease;
+}
+
+/* ── Timeline container ── */
+.timeline {
+  position: relative;
+  padding-left: 48px;
+}
+
+/* Vertical line that draws itself on scroll */
+.timelineLine {
+  position: absolute;
+  left: 11px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ink);
+  opacity: 0.15;
+  filter: url(#pencil-roughen-soft);
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.timelineLineVisible {
+  transform: scaleY(1);
+}
+
+/* Trailing connector to next section */
+.timelineTail {
+  position: absolute;
+  left: 11px;
+  bottom: -4rem;
+  width: 2px;
+  height: 4rem;
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.15), rgba(10, 10, 10, 0.04));
+  filter: url(#pencil-roughen-soft);
+  opacity: 0;
+  transition: opacity 0.6s ease 1.6s;
+}
+
+.timelineLineVisible ~ .timelineTail,
+.timelineTailVisible {
+  opacity: 1;
+}
+
+/* ── Entry ── */
+.entry {
+  position: relative;
+  padding: 1.75rem 0 2.5rem 0;
+}
+
+/* Timeline dot */
+.entryNode {
+  position: absolute;
+  left: -48px;
+  top: 2rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entryDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--red);
+  filter: url(#pencil-roughen-soft);
+  transform: scale(0);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+}
+
+.entryVisible .entryDot {
+  transform: scale(1);
+}
+
+.entryVisible:hover .entryDot,
+.entryHovered .entryDot {
+  background: var(--red);
+  transform: scale(1.3);
+}
+
+/* Ripple ring on dot appearance */
+.entryRing {
+  position: absolute;
+  left: -48px;
+  top: 2rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.entryRing::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--red);
+  opacity: 0;
+  transform: scale(1);
+}
+
+.entryVisible .entryRing::after {
+  animation: dotRipple 0.8s cubic-bezier(0, 0, 0.2, 1) 0.3s forwards;
+}
+
+@keyframes dotRipple {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+/* Active pulse for current role (first entry) */
+.entryActivePulse {
+  position: absolute;
+  left: -48px;
+  top: 2rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.entryActivePulse::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--red);
+  opacity: 0;
+}
+
+.entryVisible .entryActivePulse::after {
+  animation: activePulse 2.5s ease-in-out 1s infinite;
+}
+
+@keyframes activePulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(2.2);
+  }
+}
+
+/* Large watermark year — slides in from right */
+.entryWatermark {
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 12vw, 10rem);
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  transform: translateY(-50%) translateX(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.entryVisible .entryWatermark {
+  opacity: 0.06;
+  transform: translateY(-50%) translateX(0);
+  color: var(--red);
+}
+
+.entryVisible:hover .entryWatermark,
+.entryHovered .entryWatermark {
+  opacity: 0.15;
+}
+
+/* ── Content card with staggered children ── */
+.entryCard {
+  position: relative;
+  padding: 0.25rem 0;
+}
+
+.entryYear {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  color: var(--red);
+  opacity: 0.8;
+  margin-bottom: 0.65rem;
+  filter: url(#pencil-roughen-soft);
+  visibility: hidden;
+}
+
+.entryVisible .entryYear {
+  visibility: visible;
+}
+
+.entryTitle {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+}
+
+.entryVisible .entryTitle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.entryCompany {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--red);
+  letter-spacing: 0.12em;
+  display: block;
+  margin-bottom: 0.85rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}
+
+.entryVisible .entryCompany {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.entryDesc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #444;
+  max-width: 560px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s, color 0.3s ease;
+}
+
+.entryVisible .entryDesc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.entryVisible:hover .entryDesc,
+.entryHovered .entryDesc {
+  color: #222;
+}
+
+/* Subtle underline that reveals on hover */
+.entryCompany::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 1px;
+  background: var(--red);
+  margin-top: 0.3rem;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: url(#pencil-roughen-soft);
+}
+
+.entryVisible:hover .entryCompany::after,
+.entryHovered .entryCompany::after {
+  width: 60px;
+}
+
+/* ── Reveal panel — expands on scroll into view ── */
+.entryReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.35s ease;
+  overflow: hidden;
+}
+
+.entryRevealOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.entryReveal > * {
+  overflow: hidden;
+}
+
+.entryStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 1rem;
+  min-height: 0;
+}
+
+.entryTag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--red);
+  background: rgba(208, 0, 0, 0.06);
+  padding: 0.25rem 0.55rem;
+  position: relative;
+  white-space: nowrap;
+}
+
+.entryTag::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(208, 0, 0, 0.15);
+  filter: url(#pencil-roughen-soft);
+  pointer-events: none;
+}
+
+.entryHighlights {
+  list-style: none;
+  padding: 0.85rem 0 0.25rem 0;
+  margin: 0;
+  min-height: 0;
+}
+
+.entryHighlight {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #444;
+  padding: 0.3rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.entryHighlight::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  opacity: 0.5;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .section {
+    padding: 0 1.25rem;
+  }
+
+  .timeline {
+    padding-left: 36px;
+  }
+
+  .timelineLine {
+    left: 7px;
+  }
+
+  .timelineTail {
+    left: 7px;
+  }
+
+  .entryNode,
+  .entryRing,
+  .entryActivePulse {
+    left: -36px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .entryDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .entryRing::after {
+    width: 8px;
+    height: 8px;
+  }
+
+  .entryActivePulse::after {
+    width: 8px;
+    height: 8px;
+  }
+
+  .entryWatermark {
+    display: none;
+  }
+
+  .entryTitle {
+    font-size: 1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .timelineLine,
+  .entryDot,
+  .entryWatermark,
+  .entryYear,
+  .entryTitle,
+  .entryCompany,
+  .entryDesc {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .entryVisible .entryRing::after,
+  .entryVisible .entryActivePulse::after {
+    animation: none;
+  }
+
+  .timelineLine {
+    transform: scaleY(1);
+  }
+}
