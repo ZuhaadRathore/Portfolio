@@ -127,7 +127,7 @@
   transform: scale(1) translateY(0);
 }
 
-/* Hand-drawn border */
+/* Hand-drawn border — ink-draw on scroll-in */
 .tile::before {
   content: '';
   position: absolute;
@@ -135,7 +135,12 @@
   border: 2px solid rgba(0, 0, 0, 0.1);
   filter: url(#pencil-roughen-soft);
   pointer-events: none;
-  transition: border-color 0.3s;
+  clip-path: inset(0 100% 0 0);
+  transition: border-color 0.3s, clip-path 0.6s ease-out 0.15s;
+}
+
+.tileVisible::before {
+  clip-path: inset(0 0% 0 0);
 }
 
 .tile:hover::before {
@@ -284,6 +289,11 @@
 
   .tile:hover {
     transform: none;
+  }
+
+  .tile::before {
+    clip-path: none;
+    transition: border-color 0.3s;
   }
 
   .dateline {

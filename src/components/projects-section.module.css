@@ -126,7 +126,7 @@
   transform: translateY(0);
 }
 
-/* Hand-drawn border */
+/* Hand-drawn border — ink-draw on scroll-in */
 .card::before {
   content: '';
   position: absolute;
@@ -134,7 +134,12 @@
   border: 2px solid rgba(0, 0, 0, 0.1);
   filter: url(#pencil-roughen-soft);
   pointer-events: none;
-  transition: border-color 0.3s;
+  clip-path: inset(0 100% 0 0);
+  transition: border-color 0.3s, clip-path 0.6s ease-out 0.15s;
+}
+
+.cardVisible::before {
+  clip-path: inset(0 0% 0 0);
 }
 
 .card:hover::before {
@@ -342,6 +347,11 @@
 
   .card:hover {
     transform: none;
+  }
+
+  .card::before {
+    clip-path: none;
+    transition: border-color 0.3s;
   }
 
   .dateline {
