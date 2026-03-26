@@ -346,6 +346,11 @@
 .entryVisible .entryCompany {
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s, color 0.25s ease-in;
+}
+
+.entryCompany:hover {
+  color: var(--red);
 }
 
 .entryDesc {

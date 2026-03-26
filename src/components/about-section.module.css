@@ -287,7 +287,7 @@
   letter-spacing: 0.08em;
   color: rgba(10, 10, 10, 0.55);
   text-decoration: none;
-  transition: color 0.2s, transform 0.2s;
+  transition: color 0.25s ease-in, transform 0.2s;
   filter: url(#pencil-roughen-soft);
 }
 
