@@ -94,7 +94,6 @@ export default function SmokeCanvas({
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.globalCompositeOperation = 'multiply'
 
       for (const p of particles) {
         // Mouse push — repel particles within 200px of cursor
@@ -159,6 +158,7 @@ export default function SmokeCanvas({
         height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
+        mixBlendMode: 'multiply',
       }}
       aria-hidden="true"
     />

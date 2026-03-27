@@ -34,7 +34,7 @@ export default function HeroSection({
   return (
     <header
       ref={heroRef}
-      className="hero-paper-shell scroll-snap-align-start"
+      className="hero-paper-shell"
       style={{ scrollSnapAlign: 'start' }}
     >
       <SmokeCanvas heroRef={heroRef} />

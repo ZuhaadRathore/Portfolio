@@ -7,9 +7,7 @@
   --paper-light: #fdfbf7;
   --paper-mid: #f5ead8;
   --paper-dark: #eee5d8;
-  --paper-ink-soft: #5b4f42;
   --paper-line: rgba(20, 14, 10, 0.18);
-  --paper-accent: #944739;
   --paper: var(--paper-mid);
   --ink: #0A0A0A;
   --red: #D00000;
