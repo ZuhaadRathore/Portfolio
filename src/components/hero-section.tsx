@@ -44,12 +44,11 @@ export default function HeroSection({
           pointerEvents: 'none',
         }}
       >
-        <SmokeBackground smokeColor="#D00000" />
+        <SmokeBackground smokeColor="#D00000" reveal={isLoaded} />
       </div>
 
       <div className="hero-paper-fibers" aria-hidden="true" />
       <div className="hero-paper-vignette" aria-hidden="true" />
-      <div className="hero-paper-frame" aria-hidden="true" />
 
       <div className="hero-paper-content">
         <h1 className={`hero-name ${isLoaded ? 'is-ready' : ''}`}>
