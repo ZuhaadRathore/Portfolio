@@ -11,6 +11,9 @@ uniform float time;
 uniform vec2 resolution;
 uniform vec3 u_color;
 uniform vec2 u_mouse;
+uniform float u_reveal;
+uniform vec2 u_text_center;
+uniform float u_text_radius;
 
 #define FC gl_FragCoord.xy
 #define R resolution
@@ -25,39 +28,52 @@ void main(){
   uv.x+=.25;
   uv*=vec2(2,1);
 
-  // Mouse repulsion in UV space
+  // Mouse repulsion — expanded radius and stronger push
   vec2 mouseUV=(u_mouse-0.5)*vec2(R.x/R.y,1.0);
   mouseUV.x+=0.25;
   mouseUV*=vec2(2.0,1.0);
   vec2 toMouse=uv-mouseUV;
   float mouseDist=length(toMouse);
-  float mouseEffect=smoothstep(0.55,0.0,mouseDist);
-  uv+=normalize(toMouse+vec2(0.001,0.001))*mouseEffect*0.28;
+  float mouseEffect=smoothstep(0.75,0.0,mouseDist);
+  uv+=normalize(toMouse+vec2(0.001,0.001))*mouseEffect*0.55;
+
+  // Text repulsion — static void around name
+  vec2 textUV=(u_text_center-0.5)*vec2(R.x/R.y,1.0);
+  textUV.x+=0.25;
+  textUV*=vec2(2.0,1.0);
+  vec2 toText=uv-textUV;
+  float textDist=length(toText);
+  float textEffect=smoothstep(u_text_radius,0.0,textDist);
+  uv+=normalize(toText+vec2(0.001,0.001))*textEffect*0.4;
 
   float n=fbm(uv*.28-vec2(T*.01,0));
   n=noise(uv*3.+n*2.);
 
-  // Average FBM across slight RGB offsets for the smoke density
+  // RGB offset for smoke density
   float r=fbm(uv+vec2(0,T*.015)+n);
   float g=fbm(uv*1.003+vec2(0,T*.015)+n+.003);
   float b=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
   float density=(r+g+b)/3.0;
 
-  // Map FBM density to smoke opacity — smoothstep selects only denser regions
-  float alpha=smoothstep(0.72,1.35,density);
+  // Lower threshold — more smoke regions pass through
+  float alpha=smoothstep(0.52,1.1,density);
 
-  // Corner mask — smoke concentrates at all 4 corners, transparent at center
+  // Corner mask driven by u_reveal: starts wide (0.4), tightens to 2.4
   vec2 sc=FC/R;
   float d=min(min(length(sc),length(sc-vec2(1,0))),
               min(length(sc-vec2(0,1)),length(sc-vec2(1,1))));
-  float cornerMask=pow(clamp(1.0-d*2.1,0.0,1.0),1.3);
-
+  float cornerRadius=mix(0.4,2.4,u_reveal);
+  float cornerPower=mix(0.8,2.8,u_reveal);
+  float cornerMask=pow(clamp(1.0-d*cornerRadius,0.0,1.0),cornerPower);
   alpha*=cornerMask;
 
-  // Reduce smoke directly under the cursor
-  alpha*=(1.0-mouseEffect*0.85);
+  // Mouse alpha kill — near-total clear under cursor
+  alpha*=(1.0-mouseEffect*0.97);
 
-  O=vec4(u_color, clamp(alpha*0.82,0.0,1.0));
+  // Text zone alpha suppression
+  alpha*=(1.0-textEffect*0.8);
+
+  O=vec4(u_color,clamp(alpha*1.5,0.0,1.0));
 }`
 
 const VERTEX_SOURCE =
