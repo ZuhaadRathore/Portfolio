@@ -281,7 +281,7 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
 
     const startTime = performance.now()
     const duration = 1200
-    let rafId: number
+    let rafId: number = 0
 
     const animate = (now: number) => {
       const t = Math.min((now - startTime) / duration, 1)
