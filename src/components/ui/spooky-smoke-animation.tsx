@@ -214,10 +214,12 @@ class Renderer {
 
 interface SmokeBackgroundProps {
   smokeColor?: string
+  reveal?: boolean
 }
 
 export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
   smokeColor = '#D00000',
+  reveal = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rendererRef = useRef<Renderer | null>(null)
@@ -234,6 +236,7 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
       return
     }
     rendererRef.current = renderer
+    renderer.updateTextZone(0.5, 0.5, 0.32)
 
     const handleResize = () => renderer.updateScale()
     handleResize()
@@ -270,6 +273,27 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
     const rgb = hexToRgb(smokeColor)
     if (rgb) renderer.updateColor(rgb)
   }, [smokeColor])
+
+  useEffect(() => {
+    if (!reveal) return
+    const renderer = rendererRef.current
+    if (!renderer) return
+
+    const startTime = performance.now()
+    const duration = 1200
+    let rafId: number
+
+    const animate = (now: number) => {
+      const t = Math.min((now - startTime) / duration, 1)
+      const eased = 1 - Math.pow(1 - t, 3) // ease-out cubic
+      renderer.updateReveal(eased)
+      if (t < 1) {
+        rafId = requestAnimationFrame(animate)
+      }
+    }
+    rafId = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(rafId)
+  }, [reveal])
 
   return (
     <canvas
