@@ -35,13 +35,12 @@ export default function HeroSection({
       className="hero-paper-shell"
       style={{ scrollSnapAlign: 'start' }}
     >
-      {/* WebGL smoke — mix-blend-mode:multiply lets parchment show through */}
+      {/* WebGL smoke — transparent canvas, parchment always shows through */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 0,
-          mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
       >

@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef } from 'react'
 
-// Fragment shader — white background, dark smoke wisps, mouse distortion
-// White bg + mix-blend-mode:multiply on the canvas element lets parchment show through
+// Smoke is rendered as a colored, semi-transparent layer over a fully transparent canvas.
+// The parchment background always shows through — only the smoke density adds opacity.
 const fragmentShaderSource = `#version 300 es
 precision highp float;
 out vec4 O;
@@ -22,39 +22,42 @@ float fbm(vec2 p){float t=.0,a=1.;for(int i=0;i<5;i++){t+=a*noise(p);p*=mat2(1,-
 
 void main(){
   vec2 uv=(FC-.5*R)/R.y;
-  vec3 col=vec3(1);
   uv.x+=.25;
   uv*=vec2(2,1);
 
-  // Mouse repulsion — push smoke away from cursor in UV space
+  // Mouse repulsion in UV space
   vec2 mouseUV=(u_mouse-0.5)*vec2(R.x/R.y,1.0);
   mouseUV.x+=0.25;
   mouseUV*=vec2(2.0,1.0);
   vec2 toMouse=uv-mouseUV;
   float mouseDist=length(toMouse);
   float mouseEffect=smoothstep(0.55,0.0,mouseDist);
-  uv+=normalize(toMouse+vec2(0.001,0.001))*mouseEffect*0.22;
+  uv+=normalize(toMouse+vec2(0.001,0.001))*mouseEffect*0.28;
 
   float n=fbm(uv*.28-vec2(T*.01,0));
   n=noise(uv*3.+n*2.);
 
-  col.r-=fbm(uv+vec2(0,T*.015)+n);
-  col.g-=fbm(uv*1.003+vec2(0,T*.015)+n+.003);
-  col.b-=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
+  // Average FBM across slight RGB offsets for the smoke density
+  float r=fbm(uv+vec2(0,T*.015)+n);
+  float g=fbm(uv*1.003+vec2(0,T*.015)+n+.003);
+  float b=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
+  float density=(r+g+b)/3.0;
 
-  // Tint smoke wisps with u_color
-  col=mix(col,u_color,dot(col,vec3(.21,.71,.07)));
-  col=clamp(col,0.0,1.0);
+  // Map FBM density to smoke opacity — smoothstep selects only denser regions
+  float alpha=smoothstep(0.72,1.35,density);
 
-  // Corner mask — smoke is strongest at the 4 corners, fades to white (transparent
-  // under multiply blend) toward the center of the screen.
-  vec2 sc=FC/R; // 0-1 screen coords
-  float d=min(min(length(sc),length(sc-vec2(1,0))),min(length(sc-vec2(0,1)),length(sc-vec2(1,1))));
-  float cornerMask=clamp(1.0-d*2.2,0.0,1.0);
-  cornerMask=pow(cornerMask,1.2);
-  col=mix(vec3(1.0),col,cornerMask);
+  // Corner mask — smoke concentrates at all 4 corners, transparent at center
+  vec2 sc=FC/R;
+  float d=min(min(length(sc),length(sc-vec2(1,0))),
+              min(length(sc-vec2(0,1)),length(sc-vec2(1,1))));
+  float cornerMask=pow(clamp(1.0-d*2.1,0.0,1.0),1.3);
 
-  O=vec4(col,1);
+  alpha*=cornerMask;
+
+  // Reduce smoke directly under the cursor
+  alpha*=(1.0-mouseEffect*0.85);
+
+  O=vec4(u_color, clamp(alpha*0.82,0.0,1.0));
 }`
 
 const VERTEX_SOURCE =
@@ -79,14 +82,17 @@ class Renderer {
   private vs: WebGLShader | null = null
   private fs: WebGLShader | null = null
   private buffer: WebGLBuffer | null = null
-  private color: [number, number, number] = [0.627, 0.608, 0.588] // warm grey default
-  private mouse: [number, number] = [0.5, 0.5] // center default
+  private color: [number, number, number] = [0.816, 0, 0]
+  private mouse: [number, number] = [-1, -1] // off-screen default
 
   constructor(canvas: HTMLCanvasElement, fragmentSource: string) {
     this.canvas = canvas
-    const ctx = canvas.getContext('webgl2')
+    // alpha:true so the canvas is transparent where smoke alpha=0
+    const ctx = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: false })
     if (!ctx) throw new Error('WebGL2 not supported')
     this.gl = ctx
+    this.gl.enable(this.gl.BLEND)
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA)
     this.setup(fragmentSource)
     this.init()
   }
@@ -96,8 +102,7 @@ class Renderer {
   }
 
   updateMouse(x: number, y: number) {
-    // x, y are normalized 0-1 coords (y from top); flip y for WebGL
-    this.mouse = [x, 1.0 - y]
+    this.mouse = [x, 1.0 - y] // flip y for WebGL
   }
 
   updateScale() {
@@ -152,15 +157,16 @@ class Renderer {
     gl.enableVertexAttribArray(pos)
     gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0)
     ;(program as any).resolution = gl.getUniformLocation(program, 'resolution')
-    ;(program as any).time = gl.getUniformLocation(program, 'time')
-    ;(program as any).u_color = gl.getUniformLocation(program, 'u_color')
-    ;(program as any).u_mouse = gl.getUniformLocation(program, 'u_mouse')
+    ;(program as any).time      = gl.getUniformLocation(program, 'time')
+    ;(program as any).u_color   = gl.getUniformLocation(program, 'u_color')
+    ;(program as any).u_mouse   = gl.getUniformLocation(program, 'u_mouse')
   }
 
   render(now = 0) {
     const { gl, program, buffer, canvas } = this
     if (!program || !gl.isProgram(program)) return
-    gl.clearColor(1, 1, 1, 1)
+    // Clear to fully transparent — parchment shows through everywhere smoke alpha=0
+    gl.clearColor(0, 0, 0, 0)
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.useProgram(program)
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
@@ -173,27 +179,25 @@ class Renderer {
 }
 
 interface SmokeBackgroundProps {
-  smokeColor?: string // hex, e.g. "#a09b96"
+  smokeColor?: string
 }
 
 export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
-  smokeColor = '#a09b96',
+  smokeColor = '#D00000',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rendererRef = useRef<Renderer | null>(null)
 
-  // Init renderer and RAF loop
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let renderer: Renderer
     try {
       renderer = new Renderer(canvas, fragmentShaderSource)
     } catch {
-      return // WebGL2 not available, silently skip
+      return
     }
     rendererRef.current = renderer
 
@@ -208,7 +212,6 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
         (e.clientY - rect.top) / rect.height,
       )
     }
-    // Listen on window so mouse outside the element still influences it
     window.addEventListener('mousemove', handleMouseMove)
 
     let rafId: number
@@ -227,7 +230,6 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
     }
   }, [])
 
-  // Update color when prop changes
   useEffect(() => {
     const renderer = rendererRef.current
     if (!renderer) return

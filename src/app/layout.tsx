@@ -33,7 +33,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/dist/rough.js" async></script>
       </head>
       <body className={`${inter.variable} ${spaceMono.variable} ${imFell.variable} relative`}>
         {/* SVG filter definitions — pencil edge roughening */}
