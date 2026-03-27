@@ -87,7 +87,6 @@ export default function ProjectsSection({
         <span className={s.headerIndex} aria-hidden="true">05</span>
         <span className={s.headerTitle}>SELECTED WORKS</span>
         <span className={s.headerSub}>2023–2025</span>
-        <span className={s.dateline} aria-hidden="true">VOL. I · ISSUE 2025</span>
       </div>
 
       {projects.map((project, i) => (

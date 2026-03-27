@@ -173,7 +173,6 @@ export default function SkillsSection({
       >
         <span className={s.headerIndex} aria-hidden="true">03</span>
         <span className={s.headerTitle}>SKILLS</span>
-        <span className={s.dateline} aria-hidden="true">VOL. I · ISSUE 2025</span>
       </div>
 
       <div className={s.grid}>

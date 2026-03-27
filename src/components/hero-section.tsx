@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import SmokeCanvas from './smoke-canvas'
+import { SmokeBackground } from './ui/spooky-smoke-animation'
 
 export default function HeroSection({
   onLoaded,
@@ -12,7 +12,6 @@ export default function HeroSection({
 }) {
   const hasCompletedLoadRef = useRef(skipIntro)
   const [isLoaded, setIsLoaded] = useState(skipIntro)
-  const heroRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const completeLoad = () => {
@@ -33,11 +32,22 @@ export default function HeroSection({
 
   return (
     <header
-      ref={heroRef}
       className="hero-paper-shell"
       style={{ scrollSnapAlign: 'start' }}
     >
-      <SmokeCanvas heroRef={heroRef} />
+      {/* WebGL smoke — mix-blend-mode:multiply lets parchment show through */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        }}
+      >
+        <SmokeBackground smokeColor="#a09b96" />
+      </div>
+
       <div className="hero-paper-fibers" aria-hidden="true" />
       <div className="hero-paper-vignette" aria-hidden="true" />
       <div className="hero-paper-frame" aria-hidden="true" />

@@ -6,6 +6,8 @@ yarn-error.log*
 
 # Build outputs
 .next/
+.next-build/
+.next_old_*/
 out/
 build/
 dist/
@@ -42,6 +44,8 @@ Thumbs.db
 # Logs
 logs
 *.log
+dev.err
+*.bak
 
 # Runtime data
 pids

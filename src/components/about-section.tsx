@@ -117,7 +117,6 @@ export default function AboutSection({
       >
         <span className={s.headerIndex} aria-hidden="true">01</span>
         <span className={s.headerTitle}>ABOUT</span>
-        <span className={s.dateline} aria-hidden="true">VOL. I · ISSUE 2025</span>
       </div>
 
       <div

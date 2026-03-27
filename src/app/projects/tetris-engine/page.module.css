@@ -75,6 +75,28 @@
   color: var(--paper);
 }
 
+.heroImageWrap {
+  position: relative;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.heroImageWrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  filter: url(#pencil-roughen-soft);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.heroImage {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 .projectDesc h3 {
   font-family: var(--font-mono);
   color: var(--red);
@@ -91,7 +113,7 @@
 }
 
 .techDiagramSection {
-  background-color: #fff;
+  background-color: var(--paper);
   padding: 6rem 3rem;
   min-height: 100vh;
   display: flex;
@@ -162,7 +184,7 @@
 }
 
 .dataDot {
-  fill: #fff;
+  fill: var(--paper);
   stroke: var(--ink);
   stroke-width: 2;
   cursor: pointer;
@@ -192,7 +214,7 @@
 
 .node {
   position: absolute;
-  background: #fff;
+  background: var(--paper);
   border: 1px solid var(--ink);
   width: 200px;
   padding: 1.5rem;
@@ -235,7 +257,7 @@
   bottom: 3rem;
   right: 3rem;
   width: 320px;
-  background: #fff;
+  background: var(--paper);
   border: 1px solid var(--ink);
   padding: 1.5rem;
   z-index: 999;

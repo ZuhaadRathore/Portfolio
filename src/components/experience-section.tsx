@@ -268,7 +268,6 @@ export default function ExperienceSection({
         <span className={s.headerIndex} aria-hidden="true">02</span>
         <span className={s.headerTitle}>EXPERIENCE</span>
         <span className={s.headerSub}>2020 – PRESENT</span>
-        <span className={s.dateline} aria-hidden="true">VOL. I · ISSUE 2025</span>
       </div>
 
       <div className={s.timeline}>

@@ -11,25 +11,6 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { dev }) => {
-    if (dev) {
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          default: {
-            enforce: true,
-            priority: 1,
-          },
-          vendors: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: 2,
-            enforce: true,
-          },
-        },
-      }
-    }
-    return config
-  },
 }
 
 module.exports = nextConfig
