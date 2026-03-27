@@ -92,14 +92,6 @@ a {
     linear-gradient(180deg, #f8f1e2 0%, #f2e4ce 55%, #e8d9c2 100%);
 }
 
-.hero-paper-shell::before {
-  content: '';
-  position: absolute;
-  inset: 12% 5%;
-  border: 1px solid var(--paper-line);
-  pointer-events: none;
-  z-index: 0;
-}
 
 .hero-paper-fibers,
 .hero-paper-vignette,

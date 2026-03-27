@@ -45,7 +45,7 @@ export default function HeroSection({
           pointerEvents: 'none',
         }}
       >
-        <SmokeBackground smokeColor="#a09b96" />
+        <SmokeBackground smokeColor="#D00000" />
       </div>
 
       <div className="hero-paper-fibers" aria-hidden="true" />

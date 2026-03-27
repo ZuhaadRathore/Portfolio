@@ -42,11 +42,18 @@ void main(){
   col.g-=fbm(uv*1.003+vec2(0,T*.015)+n+.003);
   col.b-=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
 
-  // Tint smoke wisps with u_color; brighter regions take more of the tint
+  // Tint smoke wisps with u_color
   col=mix(col,u_color,dot(col,vec3(.21,.71,.07)));
-
-  // Clamp — background stays near white (1.0) so multiply blend is transparent
   col=clamp(col,0.0,1.0);
+
+  // Corner mask — smoke is strongest at the 4 corners, fades to white (transparent
+  // under multiply blend) toward the center of the screen.
+  vec2 sc=FC/R; // 0-1 screen coords
+  float d=min(min(length(sc),length(sc-vec2(1,0))),min(length(sc-vec2(0,1)),length(sc-vec2(1,1))));
+  float cornerMask=clamp(1.0-d*2.2,0.0,1.0);
+  cornerMask=pow(cornerMask,1.2);
+  col=mix(vec3(1.0),col,cornerMask);
+
   O=vec4(col,1);
 }`
 
