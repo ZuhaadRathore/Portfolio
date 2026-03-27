@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import SmokeCanvas from './smoke-canvas'
 
 export default function HeroSection({
   onLoaded,
@@ -36,6 +37,7 @@ export default function HeroSection({
       className="hero-paper-shell scroll-snap-align-start"
       style={{ scrollSnapAlign: 'start' }}
     >
+      <SmokeCanvas heroRef={heroRef} />
       <div className="hero-paper-fibers" aria-hidden="true" />
       <div className="hero-paper-vignette" aria-hidden="true" />
       <div className="hero-paper-frame" aria-hidden="true" />
