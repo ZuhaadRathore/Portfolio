@@ -55,8 +55,24 @@ void main(){
   float b=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
   float density=(r+g+b)/3.0;
 
-  // Lower threshold — more smoke regions pass through
-  float alpha=smoothstep(0.52,1.1,density);
+  // Charcoal: posterize density into 3 bands, scratch at edges, grain throughout
+  float bandCount=3.0;
+  float bandT=density*bandCount;
+  float band=floor(bandT)/bandCount;
+  float alpha=smoothstep(0.52,1.1,band);
+
+  // Anisotropic scratch — stretched diagonally to simulate charcoal stroke direction
+  vec2 scratchUV=vec2(uv.x*1.6-uv.y*0.5,uv.y*0.4+uv.x*0.2)*38.0;
+  float scratch=noise(scratchUV+vec2(T*0.008,0.0));
+
+  // Band-edge roughness: fract(bandT) approaches 0 at band boundaries
+  float edgeFrac=fract(bandT);
+  float atEdge=1.0-smoothstep(0.0,0.18,edgeFrac)*smoothstep(1.0,0.82,edgeFrac);
+  alpha*=mix(1.0,scratch,0.3+atEdge*0.5);
+
+  // Body grain — gentle medium-freq roughness throughout
+  float grain=noise(uv*18.0+vec2(0.0,T*0.01));
+  alpha*=mix(0.88,1.0,grain);
 
   // Corner mask driven by u_reveal: starts wide (0.4), tightens to 2.8
   vec2 sc=FC/R;
