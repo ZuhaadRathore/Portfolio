@@ -84,6 +84,9 @@ class Renderer {
   private buffer: WebGLBuffer | null = null
   private color: [number, number, number] = [0.816, 0, 0]
   private mouse: [number, number] = [-1, -1] // off-screen default
+  private reveal: number = 0
+  private textCenter: [number, number] = [0.5, 0.5]
+  private textRadius: number = 0.32
 
   constructor(canvas: HTMLCanvasElement, fragmentSource: string) {
     this.canvas = canvas
@@ -103,6 +106,15 @@ class Renderer {
 
   updateMouse(x: number, y: number) {
     this.mouse = [x, 1.0 - y] // flip y for WebGL
+  }
+
+  updateReveal(v: number) {
+    this.reveal = v
+  }
+
+  updateTextZone(cx: number, cy: number, r: number) {
+    this.textCenter = [cx, cy]
+    this.textRadius = r
   }
 
   updateScale() {
@@ -160,6 +172,9 @@ class Renderer {
     ;(program as any).time      = gl.getUniformLocation(program, 'time')
     ;(program as any).u_color   = gl.getUniformLocation(program, 'u_color')
     ;(program as any).u_mouse   = gl.getUniformLocation(program, 'u_mouse')
+    ;(program as any).u_reveal      = gl.getUniformLocation(program, 'u_reveal')
+    ;(program as any).u_text_center = gl.getUniformLocation(program, 'u_text_center')
+    ;(program as any).u_text_radius = gl.getUniformLocation(program, 'u_text_radius')
   }
 
   render(now = 0) {
@@ -174,6 +189,9 @@ class Renderer {
     gl.uniform1f((program as any).time, now * 1e-3)
     gl.uniform3fv((program as any).u_color, this.color)
     gl.uniform2fv((program as any).u_mouse, this.mouse)
+    gl.uniform1f((program as any).u_reveal,      this.reveal)
+    gl.uniform2fv((program as any).u_text_center, this.textCenter)
+    gl.uniform1f((program as any).u_text_radius,  this.textRadius)
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
   }
 }
