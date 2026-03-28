@@ -68,7 +68,7 @@ void main(){
   // Band-edge roughness: fract(bandT) approaches 0 at band boundaries
   float edgeFrac=fract(bandT);
   float atEdge=1.0-smoothstep(0.0,0.18,edgeFrac)*smoothstep(1.0,0.82,edgeFrac);
-  alpha*=mix(1.0,scratch,0.3+atEdge*0.5);
+  alpha*=mix(1.0,scratch,0.12+atEdge*0.18);
 
   // Body grain — gentle medium-freq roughness throughout
   float grain=noise(uv*18.0+vec2(0.0,T*0.01));
