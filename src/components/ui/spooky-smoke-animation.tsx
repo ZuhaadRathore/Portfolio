@@ -55,11 +55,11 @@ void main(){
   float b=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
   float density=(r+g+b)/3.0;
 
-  // Charcoal: posterize density into 3 bands, scratch at edges, grain throughout
+  // Charcoal: compute smooth alpha first, then posterize it into 3 bands
+  float rawAlpha=smoothstep(0.52,1.1,density);
   float bandCount=3.0;
-  float bandT=density*bandCount;
-  float band=floor(bandT)/bandCount;
-  float alpha=smoothstep(0.52,1.1,band);
+  float bandT=rawAlpha*bandCount;
+  float alpha=floor(bandT)/bandCount;
 
   // Anisotropic scratch — stretched diagonally to simulate charcoal stroke direction
   vec2 scratchUV=vec2(uv.x*1.6-uv.y*0.5,uv.y*0.4+uv.x*0.2)*38.0;
