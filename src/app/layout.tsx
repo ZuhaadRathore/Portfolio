@@ -52,6 +52,21 @@ export default function RootLayout({
             </filter>
           </defs>
         </svg>
+        {/* Full-page film grain — tactile paper texture */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            pointerEvents: 'none',
+            backgroundImage: "url('/images/grain.svg')",
+            backgroundRepeat: 'repeat',
+            backgroundSize: '256px 256px',
+            opacity: 0.06,
+            mixBlendMode: 'overlay',
+          }}
+        />
         <PageTransitionProvider>
           {children}
         </PageTransitionProvider>
