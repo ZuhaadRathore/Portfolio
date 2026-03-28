@@ -56,10 +56,10 @@ void main(){
   float density=(r+g+b)/3.0;
 
   // Charcoal: compute smooth alpha first, then posterize it into 3 bands
-  float rawAlpha=smoothstep(0.52,1.1,density);
+  float rawAlpha=smoothstep(0.32,0.95,density);
   float bandCount=3.0;
   float bandT=rawAlpha*bandCount;
-  float alpha=floor(bandT)/bandCount;
+  float alpha=floor(bandT)/bandCount+fract(bandT)*0.25;
 
   // Anisotropic scratch — stretched diagonally to simulate charcoal stroke direction
   vec2 scratchUV=vec2(uv.x*1.6-uv.y*0.5,uv.y*0.4+uv.x*0.2)*38.0;
@@ -78,8 +78,8 @@ void main(){
   vec2 sc=FC/R;
   float d=min(min(length(sc),length(sc-vec2(1,0))),
               min(length(sc-vec2(0,1)),length(sc-vec2(1,1))));
-  float cornerRadius=mix(0.4,2.8,u_reveal);
-  float cornerPower=mix(0.8,4.0,u_reveal);
+  float cornerRadius=mix(0.4,0.7,u_reveal);
+  float cornerPower=mix(0.8,1.4,u_reveal);
   float cornerMask=pow(clamp(1.0-d*cornerRadius,0.0,1.0),cornerPower);
   alpha*=cornerMask;
 
@@ -89,7 +89,7 @@ void main(){
   // Text zone alpha suppression
   alpha*=(1.0-textEffect*0.8);
 
-  O=vec4(u_color,clamp(alpha*2.2,0.0,1.0));
+  O=vec4(u_color,clamp(alpha*3.5,0.0,1.0));
 }`
 
 const VERTEX_SOURCE =
