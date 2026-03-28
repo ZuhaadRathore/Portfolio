@@ -10,7 +10,6 @@ out vec4 O;
 uniform float time;
 uniform vec2 resolution;
 uniform vec3 u_color;
-uniform vec2 u_mouse;
 uniform float u_reveal;
 uniform vec2 u_text_center;
 uniform float u_text_radius;
@@ -27,15 +26,6 @@ void main(){
   vec2 uv=(FC-.5*R)/R.y;
   uv.x+=.25;
   uv*=vec2(2,1);
-
-  // Mouse repulsion — expanded radius and stronger push
-  vec2 mouseUV=(u_mouse-0.5)*vec2(R.x/R.y,1.0);
-  mouseUV.x+=0.25;
-  mouseUV*=vec2(2.0,1.0);
-  vec2 toMouse=uv-mouseUV;
-  float mouseDist=length(toMouse);
-  float mouseEffect=smoothstep(0.75,0.0,mouseDist);
-  uv+=normalize(toMouse+vec2(0.001,0.001))*mouseEffect*0.55;
 
   // Text repulsion — static void around name
   vec2 textUV=(u_text_center-0.5)*vec2(R.x/R.y,1.0);
@@ -83,9 +73,6 @@ void main(){
   float cornerMask=pow(clamp(1.0-d*cornerRadius,0.0,1.0),cornerPower);
   alpha*=cornerMask;
 
-  // Mouse alpha kill — near-total clear under cursor
-  alpha*=(1.0-mouseEffect*0.97);
-
   // Text zone alpha suppression
   alpha*=(1.0-textEffect*0.8);
 
@@ -115,7 +102,6 @@ class Renderer {
   private fs: WebGLShader | null = null
   private buffer: WebGLBuffer | null = null
   private color: [number, number, number] = [0.816, 0, 0]
-  private mouse: [number, number] = [-1, -1] // off-screen default
   private reveal: number = 0
   private textCenter: [number, number] = [0.5, 0.5]
   private textRadius: number = 0.32
@@ -134,10 +120,6 @@ class Renderer {
 
   updateColor(newColor: [number, number, number]) {
     this.color = newColor
-  }
-
-  updateMouse(x: number, y: number) {
-    this.mouse = [x, 1.0 - y] // flip y for WebGL
   }
 
   updateReveal(v: number) {
@@ -203,7 +185,6 @@ class Renderer {
     ;(program as any).resolution = gl.getUniformLocation(program, 'resolution')
     ;(program as any).time      = gl.getUniformLocation(program, 'time')
     ;(program as any).u_color   = gl.getUniformLocation(program, 'u_color')
-    ;(program as any).u_mouse   = gl.getUniformLocation(program, 'u_mouse')
     ;(program as any).u_reveal      = gl.getUniformLocation(program, 'u_reveal')
     ;(program as any).u_text_center = gl.getUniformLocation(program, 'u_text_center')
     ;(program as any).u_text_radius = gl.getUniformLocation(program, 'u_text_radius')
@@ -220,7 +201,6 @@ class Renderer {
     gl.uniform2f((program as any).resolution, canvas.width, canvas.height)
     gl.uniform1f((program as any).time, now * 1e-3)
     gl.uniform3fv((program as any).u_color, this.color)
-    gl.uniform2fv((program as any).u_mouse, this.mouse)
     gl.uniform1f((program as any).u_reveal,      this.reveal)
     gl.uniform2fv((program as any).u_text_center, this.textCenter)
     gl.uniform1f((program as any).u_text_radius,  this.textRadius)
@@ -258,15 +238,6 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
     handleResize()
     window.addEventListener('resize', handleResize)
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      renderer.updateMouse(
-        (e.clientX - rect.left) / rect.width,
-        (e.clientY - rect.top) / rect.height,
-      )
-    }
-    window.addEventListener('mousemove', handleMouseMove)
-
     let rafId: number
     const loop = (now: number) => {
       renderer.render(now)
@@ -277,7 +248,6 @@ export const SmokeBackground: React.FC<SmokeBackgroundProps> = ({
     return () => {
       cancelAnimationFrame(rafId)
       window.removeEventListener('resize', handleResize)
-      window.removeEventListener('mousemove', handleMouseMove)
       renderer.reset()
       rendererRef.current = null
     }
