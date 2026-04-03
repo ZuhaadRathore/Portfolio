@@ -1,0 +1,461 @@
+.navBack {
+  padding: 2rem 3rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+}
+
+.backLink {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 0;
+}
+
+.backLink:hover {
+  color: var(--red);
+}
+
+.projectHero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8rem 3rem 4rem 3rem;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4rem;
+  position: relative;
+  z-index: 10;
+}
+
+.projectHeader h1 {
+  font-family: var(--font-display);
+  font-size: 8rem;
+  line-height: 0.9;
+  margin-bottom: 4rem;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 2rem;
+}
+
+.metaItem h5 {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.metaItem p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+}
+
+.githubBtn {
+  display: inline-block;
+  border: 1px solid var(--ink);
+  padding: 1rem 2rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.githubBtn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.projectDesc h3 {
+  font-family: var(--font-mono);
+  color: var(--red);
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.projectDesc p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+/* ── Architecture Diagram ── */
+.techDiagramSection {
+  background-color: var(--paper);
+  padding: 6rem 3rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.blueprintGrid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  pointer-events: none;
+}
+
+.diagramHeader {
+  text-align: center;
+  margin-bottom: 5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.diagramHeader h3 {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.diagramHeader span {
+  font-family: var(--font-body);
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.systemMap {
+  position: relative;
+  width: 1000px;
+  height: 680px;
+  z-index: 10;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  transform-origin: center center;
+}
+
+.systemMapZoomOut {
+  transform: scale(1.8);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Sub-Graph View ── */
+.subGraphWrap {
+  position: relative;
+  width: 1000px;
+  z-index: 10;
+}
+
+.subGraphHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.subGraphBack {
+  background: none;
+  border: 1px solid var(--ink);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: background 0.2s, color 0.2s;
+}
+
+.subGraphBack:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.subGraphTitle {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+}
+
+.subGraphSubtitle {
+  font-family: var(--font-body);
+  color: #666;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+.subGraphMap {
+  position: relative;
+  width: 1000px;
+  height: 550px;
+  animation: subGraphEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes subGraphEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.subGraphExit {
+  animation: subGraphLeave 0.35s ease forwards;
+}
+
+@keyframes subGraphLeave {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+/* Drillable node indicator */
+.nodeDrillable::after {
+  content: '⤏';
+  position: absolute;
+  top: 0.4rem;
+  right: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--red);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.nodeDrillable:hover::after {
+  opacity: 0.7;
+}
+
+.connectionsLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wire {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 5, 5;
+  opacity: 0.3;
+  transition: opacity 0.3s, stroke 0.3s;
+  pointer-events: visibleStroke;
+}
+
+.dataDot {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2;
+  cursor: pointer;
+  pointer-events: all;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { stroke-width: 2; }
+  50% { stroke-width: 4; opacity: 0.6; }
+  100% { stroke-width: 2; }
+}
+
+.dataDot:hover {
+  fill: var(--red);
+  stroke: var(--red);
+  animation: none;
+}
+
+.node {
+  position: absolute;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  width: 200px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  z-index: 5;
+  pointer-events: all;
+  will-change: transform;
+}
+
+.node:hover {
+  box-shadow: 8px 8px 0px rgba(208, 0, 0, 0.1);
+  transform: translateY(-2px);
+  border-color: var(--red);
+}
+
+.nodeIcon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--ink);
+}
+
+.node:hover .nodeIcon svg {
+  color: var(--red);
+}
+
+.nodeLabel {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+/* ── Layer labels ── */
+.layerLabel {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--red);
+  opacity: 0.6;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ── Inspector ── */
+.inspectorPanel {
+  position: fixed;
+  bottom: 3rem;
+  right: 3rem;
+  width: 320px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 1.5rem;
+  z-index: 999;
+  box-shadow: 20px 20px 0px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-mono);
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.inspectorPanel.visible,
+.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.inspectorHeader {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.inspectorLabel {
+  color: var(--red);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.inspectorTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.inspectorDesc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.inspectorData {
+  margin-top: 1rem;
+  background: #f4f4f4;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  color: #666;
+  border-left: 2px solid var(--ink);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .systemMap {
+    transform: scale(0.7);
+    transform-origin: top center;
+    width: 100%;
+    height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navBack {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .projectHero {
+    grid-template-columns: 1fr;
+    padding: 6rem 1.25rem 3rem;
+    gap: 2rem;
+  }
+
+  .projectHeader h1 {
+    font-size: 4rem;
+  }
+
+  .systemMap {
+    display: none;
+  }
+
+  .diagramHeader {
+    display: none;
+  }
+
+  .techDiagramSection {
+    height: 100px;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .techDiagramSection::after {
+    content: 'View on Desktop for Interactive Map';
+    font-family: var(--font-mono);
+    color: var(--red);
+  }
+
+  .inspectorPanel {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+  }
+}

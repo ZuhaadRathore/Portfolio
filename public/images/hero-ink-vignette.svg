@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="58%" r="68%">
+      <stop offset="48%" stop-color="#1a1410" stop-opacity="0" />
+      <stop offset="100%" stop-color="#1a1410" stop-opacity="0.32" />
+    </radialGradient>
+    <filter id="edge-grit">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="8" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#vignette)" filter="url(#edge-grit)" />
+</svg>
